@@ -40,3 +40,8 @@ git checkout -b feature/login (예시)
 
 - 브랜치는 병합 후 삭제
 - 다음 작업은 다시 main에서 새 브랜치 생성
+
+### Fonts
+
+Pretendard is licensed under the SIL Open Font License 1.1.  
+https://github.com/orioncactus/pretendard
