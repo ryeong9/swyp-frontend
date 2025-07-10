@@ -1,17 +1,19 @@
-// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
-export const content = ['./src/**/*.{js,ts,jsx,tsx}'];
-export const theme = {
-  extend: {
-    fontFamily: {
-      sans: ["'Pretendard'", 'sans-serif'],
-      heading: ["'Archivo Black'", 'sans-serif'],
-    },
-    colors: {
-      primary: '#1e40af', // 예: 파란색 계열
-      secondary: '#f43f5e', // 예: 핑크 계열
-      'bg-main': '#fefce8', // 밝은 배경색
+module.exports = {
+  content: ['./src/app/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}'],
+
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Pretendard', 'sans-serif'],
+        serif: ['Gowun Batang', 'serif'],
+      },
+      colors: {
+        primary: '#9BC99F',
+        secondary: '#D2DEF4',
+        sub: '#FFF9F1',
+      },
     },
   },
+  plugins: [],
 };
-export const plugins = [];
