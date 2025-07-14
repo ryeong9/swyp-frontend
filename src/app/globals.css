@@ -33,5 +33,5 @@
 }
 
 body {
-  @apply font-sans bg-white text-black;
+  @apply font-sans bg-background text-black;
 }
