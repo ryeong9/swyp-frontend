@@ -18,7 +18,7 @@ export default function FixedFooter() {
         />
         <div className='w-[295px] flex flex-col py-0.5 ml-[18px]'>
           <p className='font-serif font-bold text-gray-900 text-2xl'>당신의 감정을 들려주세요</p>
-          <p className='font-sans font-medium text-gray-700 text-base mt-2'>
+          <p className='font-sans font-medium text-gray-700 text-base mt-2 leading-[25px]'>
             기록은 습관이 될수록 더 깊어져요.
             <br />
             하루 인덱스 하나, 한 줄이면 충분해요.
