@@ -61,8 +61,16 @@ export default function SearchBar() {
           if (category === '감정') setShowEmojiDropDown(true);
         }}
         onChange={handleKeywordChange}
+        value={keyword}
       />
-      {showEmojiDropDown && <EmojiDropDown />}
+      {showEmojiDropDown && (
+        <EmojiDropDown
+          keyword={keyword}
+          setKeyword={setKeyword}
+          showEmojiDropDown={showEmojiDropDown}
+          setShowEmojiDropDown={setShowEmojiDropDown}
+        />
+      )}
       <button className='ml-3.5'>
         <img
           src='/icons/search.svg'
