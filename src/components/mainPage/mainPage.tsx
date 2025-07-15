@@ -1,5 +1,5 @@
 import FixedFooter from './fixedFooter';
-import Header from './header';
+import Header from './header/header';
 import HeroSection from './heroSection';
 
 export default function MainPage() {
