@@ -1,3 +1,4 @@
+import BookReport from './bookReport';
 import BookShelfSection from './bookShelfSection';
 import DeskSection from './deskSection';
 import FixedFooter from './fixedFooter';
@@ -12,6 +13,7 @@ export default function MainPage() {
         <HeroSection />
         <DeskSection />
         <BookShelfSection />
+        <BookReport />
       </div>
       <div className='w-full h-[323px] bg-[#383838]'></div>
       <FixedFooter />
