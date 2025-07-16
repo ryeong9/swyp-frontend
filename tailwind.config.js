@@ -9,21 +9,21 @@ module.exports = {
         serif: ['Gowun Batang', 'serif'],
       },
       colors: {
-        // primary color
-        primary: '#9BC99F',
-        primaryDark: '#6FA974',
+        primary: {
+          DEFAULT: '#9BC99F',
+          dark: '#6FA974',
+        },
         secondary: '#D2DEF4',
-        bgColor: '#F9F7F0',
-
-        // state color
-        error: '#F56767',
-        success: '#9BC99F', // primary랑 동일
-        disabled: '#D9D9D9',
-
-        inputBgWhite: '#FCFCFC',
-        sub: '#FFF9F1',
-
-        // gray system
+        background: {
+          DEFAULT: '#F9F7F0',
+          input: '#FCFCFC',
+          sub: '#FFF9F1',
+        },
+        state: {
+          error: '#F56767',
+          success: '#9BC99F',
+          disabled: '#D9D9D9',
+        },
         gray: {
           900: '#2A2A2A',
           700: '#6B6B6B',
