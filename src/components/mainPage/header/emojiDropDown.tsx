@@ -13,20 +13,25 @@ export default function EmojiDropDown({
 }: KeywordSelectProps) {
   const emotionList = [
     '감동',
-    '슬픔',
-    '재미',
-    '공감',
-    '무서움',
-    '따뜻함',
-    '충격',
-    '분노',
-    '위로',
-    '안타까움',
-    '경이로움',
-    '짜증',
-    '허탈함',
     '설렘',
+    '희망',
+    '공감',
+    '위로',
+    '슬픔',
+    '분노',
     '혼란',
+    '불안',
+    '답답함',
+    '차분함',
+    '공허함',
+    '아쉬움',
+    '평온함',
+    '충격',
+    '깨달음',
+    '통찰',
+    '의문',
+    '영감',
+    '반성',
   ];
 
   const handleClickEmotion = (item: string) => {
@@ -35,7 +40,7 @@ export default function EmojiDropDown({
   };
 
   return (
-    <div className='absolute grid grid-cols-6 grid-rows-3 gap-x-[22.8px] gap-y-[15.5px] top-14 right-14 w-[540px] h-[327px] bg-background-input drop-shadow-sm rounded-[8px] z-10 px-6 py-4'>
+    <div className='absolute grid grid-cols-6 grid-rows-3 gap-x-[22.8px] gap-y-[15.5px] top-14 right-14 w-[540px] bg-background-input drop-shadow-sm rounded-[8px] z-10 px-6 py-4'>
       {emotionList.map((item, index) => (
         <div
           key={index}

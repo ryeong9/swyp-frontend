@@ -14,6 +14,8 @@ export default function SearchBar() {
     if (category === '도서명') setKeyword(e.target.value);
   };
 
+  const handleSubmitSearchData = () => {};
+
   console.log(category);
   console.log(keyword);
 
@@ -21,7 +23,7 @@ export default function SearchBar() {
     <div className='relative w-[715px] h-[50px] rounded-[60px] bg-background-input py-[16px] px-[24px] flex items-center'>
       <button
         className='flex items-center'
-        onClick={() => setShowFilterDropDown(true)}
+        onClick={() => setShowFilterDropDown((prev) => !prev)}
       >
         <p className='w-[45px] mr-[18px] font-sans font-semibold text-gray-900 text-sm text-left'>
           {category}
@@ -42,8 +44,9 @@ export default function SearchBar() {
         <FilterDropDown
           category={category}
           setCategory={setCategory}
-          showFilterDropDown={showFilterDropDown}
           setShowFilterDropDown={setShowFilterDropDown}
+          setKeyword={setKeyword}
+          setShowEmojiDropDown={setShowEmojiDropDown}
         />
       )}
       <img
@@ -71,7 +74,10 @@ export default function SearchBar() {
           setShowEmojiDropDown={setShowEmojiDropDown}
         />
       )}
-      <button className='ml-3.5'>
+      <button
+        className='ml-3.5'
+        onSubmit={handleSubmitSearchData}
+      >
         <img
           src='/icons/search.svg'
           alt='돋보기 아이콘'

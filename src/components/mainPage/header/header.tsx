@@ -9,7 +9,7 @@ export default function Header() {
         className='w-[190px] h-[50px] bg-gray-200 mr-5'
       />
       <SearchBar />
-      <div className='flex ml-[23px] pr-[23px items-center'>
+      <div className='flex ml-[23px] pr-[23px] items-center'>
         <img
           src='/icons/notification.svg'
           alt='알림함 아이콘'
