@@ -8,7 +8,7 @@ type ButtonProps = {
 export default function Button({
   children,
   size = 'md',
-  disabled = true,
+  disabled = false,
   type = 'submit',
   onClick,
 }: ButtonProps) {
