@@ -9,7 +9,7 @@ export default function FixedFooter() {
   };
 
   return (
-    <div className='fixed bottom-0 h-[177px] py-[38.5px] px-[310px] bg-background-input z-20'>
+    <div className='fixed bottom-0 h-[177px] py-[38.5px] px-[310px] bg-background-input z-10'>
       <div className='flex w-[820px] h-[100px] items-center'>
         <img
           src='/'

@@ -9,7 +9,7 @@ export default function EntryAuthModal() {
   };
 
   return (
-    <div className='fixed inset-0 flex justify-center items-center bg-black/50'>
+    <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-20'>
       <div className='w-[820px] h-auto min-h-[25rem] flex'>
         <section className='relative w-1/2 py-12 px-[55px] bg-white rounded-l-2xl overflow-hidden'>
           <p className='font-serif font-bold text-base leading-[27px]'>
