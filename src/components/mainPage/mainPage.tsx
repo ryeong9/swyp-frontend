@@ -2,7 +2,7 @@ import BookReport from './bookReport';
 import BookShelfSection from './bookShelfSection';
 import DeskSection from './deskSection';
 import FixedFooter from './fixedFooter';
-import Header from './header/header';
+import Header from '../header/header';
 import HeroSection from './heroSection';
 
 export default function MainPage() {
