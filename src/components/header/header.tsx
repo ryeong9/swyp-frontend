@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import SearchBar from './searchBar';
 import ProfileDropDown from './profileDropDwon';
+import NotificationDropDown from './notificationDropDown';
 
 export default function Header() {
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
+  const [showNotificationDropDown, setShowNotificationDropDown] = useState(false);
 
   return (
     <div className='w-full h-[50px] mt-6 flex'>
@@ -16,12 +18,16 @@ export default function Header() {
       />
       <SearchBar />
       <div className='relative flex ml-[23px] pr-[23px] items-center'>
-        <button className='w-[20px] h-[20px] mr-[18px]'>
+        <button
+          className='w-[20px] h-[20px] mr-[18px]'
+          onClick={() => setShowNotificationDropDown((prev) => !prev)}
+        >
           <img
             src='/icons/notification.svg'
             alt='알림함 아이콘'
           />
         </button>
+        {showNotificationDropDown && <NotificationDropDown />}
         <button
           className='w-[20px] h-[20px]'
           onClick={() => setShowProfileDropDown((prev) => !prev)}
