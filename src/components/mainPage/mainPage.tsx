@@ -6,7 +6,7 @@ import HeroSection from './heroSection';
 
 export default function MainPage() {
   return (
-    <div className='pb-[177px]'>
+    <div>
       <div className='w-[1030px] flex flex-col mx-auto'>
         <Header />
         <HeroSection />
