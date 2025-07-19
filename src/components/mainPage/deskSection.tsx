@@ -1,17 +1,12 @@
-'use client';
-
-import { useState } from 'react';
-
 export default function DeskSection() {
   const data = [
-    { type: 'reading', book: { id: 1, title: '읽는 중1' } },
-    { type: 'reading', book: { id: 2, title: '읽는 중2' } },
-    { type: 'recommend', book: { id: 3, title: '추천1' } },
-    { type: 'recommend', book: { id: 4, title: '추천2' } },
-    { type: 'recommend', book: { id: 5, title: '추천3' } },
+    { type: 'recommend', book: { id: 1, title: '추천1' } },
+    { type: 'recommend', book: { id: 2, title: '추천2' } },
+    { type: 'reading', book: { id: 3, title: '읽는 중1' } },
+    { type: 'reading', book: { id: 4, title: '읽는 중2' } },
+    { type: 'reading', book: { id: 5, title: '읽는 중3' } },
   ];
 
-  const [active, setActive] = useState(2);
   return (
     <div className='flex flex-col'>
       <div className='mb-8'>
@@ -30,29 +25,27 @@ export default function DeskSection() {
         </div>
       </div>
       <div>
-        <div className='flex justify-between items-center mb-6 px-[27px]'>
-          {data.map((item, index) => {
-            const isActive = index === active;
+        <div className='flex justify-between items-center mb-6 px-10'>
+          {data.map((item) => {
             return (
               <div
                 key={item.book.id}
-                className={`w-[172px] h-[246px] bg-gray-500 rounded-[8px] ${isActive ? 'w-[220px] h-[290px] drop-shadow-[0_0_8px_rgba(0,0,0,0.2)]' : 'w-[172px] h-[246px]'} transition duration-300`}
-                onClick={() => setActive(index)}
+                className='relative w-[172px] h-[246px] bg-gray-500 rounded-[8px]'
               >
                 {item.book.title}
+                {item.type === 'recommend' ? (
+                  <div
+                    className='absolute flex justify-center w-[50px] h-[80px] top-[-10px] right-[10px] bg-[#D2DEF4]/80 z-10 rounded-t-[2px]'
+                    style={{
+                      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%)',
+                    }}
+                  />
+                ) : (
+                  ''
+                )}
               </div>
             );
           })}
-        </div>
-        <div className='flex justify-center w-full gap-2'>
-          {data.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setActive(index)}
-              className={`w-[8px] h-[8px] rounded-full transition
-              ${index === active ? 'bg-gray-700 scale-110' : 'bg-gray-300'}`}
-            />
-          ))}
         </div>
       </div>
     </div>
