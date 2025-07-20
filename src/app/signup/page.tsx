@@ -36,14 +36,15 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 export default function SignUpPage() {
-  const [isNicknameDeleted, setIsNicknameDeleted] = useState(false);
-  const [isEmailDeleted, setIsEmailDeleted] = useState(false);
-  const [isVerificationCodeDeleted, setIsVerificationCodeDeleted] = useState(false);
+  const { timeLeft, isActive, startTimer, formatTime } = useVerificationTimer(300);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     watch,
+    setValue,
+    clearErrors,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -56,8 +57,6 @@ export default function SignUpPage() {
       confirmPassword: '',
     },
   });
-
-  const { timeLeft, isActive, startTimer, formatTime } = useVerificationTimer(300);
 
   const nickname = watch('nickname');
   const email = watch('email');
@@ -89,21 +88,21 @@ export default function SignUpPage() {
             <Input
               id='nickname'
               type='text'
-              placeholder='특수문자 및 공백 제외 2~10자.'
+              placeholder='특수문자 및 공백 제외 2~10자'
               size='md'
               {...register('nickname')}
               hasError={!!errors.nickname}
               isSuccess={!!nickname && !errors.nickname}
-              onDelete={() => setIsNicknameDeleted(true)}
-              onChange={(e) => {
-                setIsNicknameDeleted(false);
-                register('nickname').onChange(e);
+              onDelete={() => {
+                setValue('nickname', '');
+                clearErrors('nickname');
               }}
+              onChange={(e) => register('nickname').onChange(e)}
             />
             <Button
               type='button'
-              size='md'
-              disabled={!nickname || !!errors.nickname || isNicknameDeleted}
+              size='sm'
+              disabled={!nickname || !!errors.nickname}
             >
               중복 확인
             </Button>
@@ -112,7 +111,7 @@ export default function SignUpPage() {
         </div>
 
         {/* 이메일 */}
-        <div className='flex flex-col  w-[610px] gap-2'>
+        <div className='flex flex-col w-[610px] gap-2'>
           <label htmlFor='email'>이메일 주소</label>
           <div className='flex items-center justify-between '>
             <Input
@@ -125,16 +124,16 @@ export default function SignUpPage() {
               {...register('email')}
               hasError={!!errors.email}
               isSuccess={!!email && !errors.email}
-              onDelete={() => setIsEmailDeleted(true)}
-              onChange={(e) => {
-                setIsEmailDeleted(false);
-                register('email').onChange(e);
+              onDelete={() => {
+                setValue('email', '');
+                clearErrors('email');
               }}
+              onChange={(e) => register('email').onChange(e)}
             />
             <Button
               type='button'
-              size='md'
-              disabled={!email || !!errors.email || isEmailDeleted}
+              size='sm'
+              disabled={!email || !!errors.email}
               onClick={handleSendVerificationCode}
             >
               인증코드 전송
@@ -152,11 +151,11 @@ export default function SignUpPage() {
               {...register('verificationCode')}
               hasError={!!errors.verificationCode}
               isSuccess={!!verificationCode && !errors.verificationCode}
-              onDelete={() => setIsVerificationCodeDeleted(true)}
-              onChange={(e) => {
-                setIsVerificationCodeDeleted(false);
-                register('verificationCode').onChange(e);
+              onDelete={() => {
+                setValue('verificationCode', '');
+                clearErrors('verificationCode');
               }}
+              onChange={(e) => register('verificationCode').onChange(e)}
             />
             {isActive && (
               <span className='absolute right-3 top-1/2 transform -translate-y-1/2 text-sm font-medium text-[#F03E3E]'>
@@ -165,8 +164,8 @@ export default function SignUpPage() {
             )}
             <Button
               type='button'
-              size='md'
-              disabled={!verificationCode || !!errors.verificationCode || isVerificationCodeDeleted}
+              size='sm'
+              disabled={!verificationCode || !!errors.verificationCode}
             >
               확인
             </Button>
@@ -190,6 +189,11 @@ export default function SignUpPage() {
             {...register('password')}
             hasError={!!errors.password}
             isSuccess={!!password && !errors.password}
+            onDelete={() => {
+              setValue('password', '');
+              clearErrors('password');
+            }}
+            onChange={(e) => register('password').onChange(e)}
           />
           {errors.password && <p className='text-state-error text-sm'>{errors.password.message}</p>}
 
@@ -201,6 +205,11 @@ export default function SignUpPage() {
             {...register('confirmPassword')}
             hasError={!!errors.confirmPassword}
             isSuccess={!!confirmPassword && !errors.confirmPassword}
+            onDelete={() => {
+              setValue('confirmPassword', '');
+              clearErrors('confirmPassword');
+            }}
+            onChange={(e) => register('confirmPassword').onChange(e)}
           />
           {errors.confirmPassword && (
             <p className='text-state-error text-sm'>{errors.confirmPassword.message}</p>
