@@ -3,6 +3,7 @@ type ButtonProps = {
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
   size?: 'sm' | 'md' | 'lg';
+  className?: string;
   onClick?: () => void;
 };
 export default function Button({
@@ -10,6 +11,7 @@ export default function Button({
   size = 'md',
   disabled = false,
   type = 'submit',
+  className,
   onClick,
 }: ButtonProps) {
   const buttonClass =
@@ -25,7 +27,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={` ${buttonClass} text-sm rounded-2xl ${disabled ? disabledStyle : activeStyle}`}
+      className={` ${buttonClass} text-sm rounded-lg  ${disabled ? disabledStyle : activeStyle}`}
       disabled={disabled}
       onClick={onClick}
     >
