@@ -57,7 +57,6 @@ export default function LoginPage() {
           <p>인덱스가 그 순간들을 모아드릴게요</p>
         </div>
 
-        {/* 이메일 */}
         <div className='flex flex-col gap-2'>
           <Input
             id='email'
@@ -83,7 +82,6 @@ export default function LoginPage() {
           {errors.email && <p className='text-state-error text-sm'>{errors.email.message}</p>}
         </div>
 
-        {/* 비밀번호 */}
         <div className='flex flex-col gap-2'>
           <Input
             id='password'
@@ -133,7 +131,6 @@ export default function LoginPage() {
           <hr className='flex-grow border-t border-gray-700' />
         </div>
 
-        {/* 소셜 로그인 버튼들 */}
         <button
           type='button'
           onClick={() => console.log('구글 로그인')}
