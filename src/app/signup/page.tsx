@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
+import { useVerificationTimer } from '@/hooks/useVerificationTimer';
 
 const schema = z
   .object({
@@ -15,7 +16,6 @@ const schema = z
       .min(2, { message: '사용자 이름은 최소 2자 이상이어야 합니다.' })
       .max(10, { message: '사용자 이름은 최대 10자 이하여야 합니다.' }),
     email: z.string().email({ message: '유효한 이메일 주소를 입력하세요.' }),
-
     password: z
       .string()
       .min(8, { message: '8자 이상 입력해주세요.' })
@@ -57,9 +57,7 @@ export default function SignUpPage() {
     },
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log('회원가입 데이터:', data);
-  };
+  const { timeLeft, isActive, startTimer, formatTime } = useVerificationTimer(300);
 
   const nickname = watch('nickname');
   const email = watch('email');
@@ -67,9 +65,13 @@ export default function SignUpPage() {
   const password = watch('password');
   const confirmPassword = watch('confirmPassword');
 
-  const handleResendVerificationCode = () => {
-    console.log('인증코드 재전송');
-    // 여기에 인증코드 재전송 로직 추가예정
+  const onSubmit = (data: FormData) => {
+    console.log('회원가입 데이터:', data);
+  };
+
+  const handleSendVerificationCode = () => {
+    // API 호출 로직
+    startTimer();
   };
 
   return (
@@ -92,9 +94,7 @@ export default function SignUpPage() {
               {...register('nickname')}
               hasError={!!errors.nickname}
               isSuccess={!!nickname && !errors.nickname}
-              onDelete={() => {
-                setIsNicknameDeleted(true);
-              }}
+              onDelete={() => setIsNicknameDeleted(true)}
               onChange={(e) => {
                 setIsNicknameDeleted(false);
                 register('nickname').onChange(e);
@@ -125,9 +125,7 @@ export default function SignUpPage() {
               {...register('email')}
               hasError={!!errors.email}
               isSuccess={!!email && !errors.email}
-              onDelete={() => {
-                setIsEmailDeleted(true);
-              }}
+              onDelete={() => setIsEmailDeleted(true)}
               onChange={(e) => {
                 setIsEmailDeleted(false);
                 register('email').onChange(e);
@@ -137,6 +135,7 @@ export default function SignUpPage() {
               type='button'
               size='md'
               disabled={!email || !!errors.email || isEmailDeleted}
+              onClick={handleSendVerificationCode}
             >
               인증코드 전송
             </Button>
@@ -144,7 +143,7 @@ export default function SignUpPage() {
           {errors.email && <p className='text-state-error text-sm'>{errors.email.message}</p>}
 
           {/* 인증코드 */}
-          <div className='flex items-center justify-between gap-2'>
+          <div className='flex items-center justify-between gap-2 relative'>
             <Input
               id='verificationCode'
               type='text'
@@ -153,14 +152,17 @@ export default function SignUpPage() {
               {...register('verificationCode')}
               hasError={!!errors.verificationCode}
               isSuccess={!!verificationCode && !errors.verificationCode}
-              onDelete={() => {
-                setIsVerificationCodeDeleted(true);
-              }}
+              onDelete={() => setIsVerificationCodeDeleted(true)}
               onChange={(e) => {
                 setIsVerificationCodeDeleted(false);
                 register('verificationCode').onChange(e);
               }}
             />
+            {isActive && (
+              <span className='absolute right-3 top-1/2 transform -translate-y-1/2 text-sm font-medium text-[#F03E3E]'>
+                {formatTime(timeLeft)}
+              </span>
+            )}
             <Button
               type='button'
               size='md'
@@ -170,19 +172,10 @@ export default function SignUpPage() {
             </Button>
           </div>
           <div className='flex flex-row items-center justify-between w-[400px] gap-2'>
-            <p
-              className={`text-sm text-state-error ${
-                errors.verificationCode ? 'visible' : 'invisible'
-              }`}
-            >
-              {errors.verificationCode?.message || 'placeholder'}
+            <p className='text-sm text-state-error'>
+              {errors.verificationCode?.message || '\u00A0'}
             </p>
-            <p
-              className='text-sm text-gray-700 cursor-pointer underline'
-              onClick={handleResendVerificationCode}
-            >
-              재전송
-            </p>
+            <p className='text-sm text-gray-700 cursor-pointer underline'>재전송</p>
           </div>
         </div>
 
