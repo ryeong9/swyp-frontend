@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
+import AutoLoginCheckbox from '@/components/checkbox/page';
 
 const schema = z.object({
   email: z.string().email({ message: '이메일을 다시 확인해주세요' }),
@@ -50,8 +51,8 @@ export default function LoginPage() {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
-      <form className='flex flex-col w-[400px] h-[658px] gap-6'>
-        <div className='text-center mb-8 font-serif text-xl'>
+      <form className='flex flex-col w-[400px] h-full gap-6'>
+        <div className='text-center h-[58px] font-serif text-xl'>
           <p>찰나의 감정을 오래 꺼내볼 수 있도록 기록해요</p>
           <p>인덱스가 그 순간들을 모아드릴게요</p>
         </div>
@@ -107,16 +108,8 @@ export default function LoginPage() {
           {errors.password && <p className='text-state-error text-sm'>{errors.password.message}</p>}
         </div>
 
-        <div className='flex flex-col items-center gap-4'>
-          <div className='flex justify-center items-center gap-2.5'>
-            <input
-              type='checkbox'
-              name='자동로그인'
-              value='자동로그인'
-              className='w-[22px] h-[23px]'
-            />
-            <p className='text-sm text-gray-500'>자동 로그인/로그인 상태 유지</p>
-          </div>
+        <div className='flex flex-col justify-center items-center gap-4'>
+          <AutoLoginCheckbox />
           <a
             href='./signup'
             className='text-gray-700 underline'
