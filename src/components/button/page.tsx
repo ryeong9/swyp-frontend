@@ -2,7 +2,7 @@ type ButtonProps = {
   children: React.ReactNode;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
-  size?: 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
 };
 export default function Button({
@@ -13,7 +13,13 @@ export default function Button({
   onClick,
 }: ButtonProps) {
   const buttonClass =
-    size === 'lg' ? 'w-[610px] h-[50px]' : size === 'md' ? 'w-[190px] h-[50px]' : '';
+    size === 'lg'
+      ? 'w-[610px] h-[50px]'
+      : size === 'md'
+        ? 'w-[400px] h-[50px]'
+        : size === 'sm'
+          ? 'w-[190px] h-[50px]'
+          : '';
   const activeStyle = 'bg-state-success text-background-input';
   const disabledStyle = 'bg-state-disabled cursor-not-allowed text-gray-700';
   return (

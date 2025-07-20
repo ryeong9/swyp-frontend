@@ -102,7 +102,7 @@ export default function SignUpPage() {
             />
             <Button
               type='button'
-              size='md'
+              size='sm'
               disabled={!nickname || !!errors.nickname || isNicknameDeleted}
             >
               중복 확인
@@ -133,7 +133,7 @@ export default function SignUpPage() {
             />
             <Button
               type='button'
-              size='md'
+              size='sm'
               disabled={!email || !!errors.email || isEmailDeleted}
               onClick={handleSendVerificationCode}
             >
@@ -165,7 +165,7 @@ export default function SignUpPage() {
             )}
             <Button
               type='button'
-              size='md'
+              size='sm'
               disabled={!verificationCode || !!errors.verificationCode || isVerificationCodeDeleted}
             >
               확인
