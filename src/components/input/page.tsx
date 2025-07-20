@@ -76,42 +76,39 @@ export default function Input({
         onChange={handleChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className={`${sizeClass} ${baseStyle} ${borderColor} ${showRightIcon ? 'pr-10' : ''}`}
+        className={`${sizeClass} ${baseStyle} ${borderColor} ${showRightIcon ? 'pr-10' : ''} outline-none `}
       />
 
       {showRightIcon && (
-        <>
-          {showStatusIcon ? (
-            hasError ? (
-              <Image
-                src={ErrorIcon}
-                alt='error'
-                className='absolute right-3 top-1/2 transform -translate-y-1/2'
-                width={20}
-                height={20}
-              />
-            ) : isSuccess ? (
-              <Image
-                src={CheckIcon}
-                alt='check'
-                className='absolute right-3 top-1/2 transform -translate-y-1/2'
-                width={20}
-                height={20}
-              />
-            ) : null
-          ) : (
-            showDeleteIcon && (
-              <Image
-                src={DeleteIcon}
-                alt='delete'
-                onClick={handleDelete}
-                className='absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer'
-                width={20}
-                height={20}
-              />
-            )
+        <div className='absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-2 items-center'>
+          {showStatusIcon && (
+            <>
+              {hasError ? (
+                <Image
+                  src={ErrorIcon}
+                  alt='error'
+                  width={20}
+                  height={20}
+                />
+              ) : isSuccess ? (
+                <Image
+                  src={CheckIcon}
+                  alt='check'
+                  width={20}
+                  height={20}
+                />
+              ) : null}
+            </>
           )}
-        </>
+          <Image
+            src={DeleteIcon}
+            alt='delete'
+            onClick={handleDelete}
+            className='cursor-pointer'
+            width={20}
+            height={20}
+          />
+        </div>
       )}
     </div>
   );

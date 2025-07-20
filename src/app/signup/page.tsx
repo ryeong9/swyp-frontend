@@ -15,13 +15,17 @@ const schema = z
       .min(2, { message: '사용자 이름은 최소 2자 이상이어야 합니다.' })
       .max(10, { message: '사용자 이름은 최대 10자 이하여야 합니다.' }),
     email: z.string().email({ message: '유효한 이메일 주소를 입력하세요.' }),
+
     password: z
       .string()
       .min(8, { message: '8자 이상 입력해주세요.' })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/, {
         message: '대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.',
       }),
-    verificationCode: z.string().min(1, { message: '인증코드를 다시 입력해주세요.' }),
+    verificationCode: z
+      .string()
+      .min(1, { message: '인증코드를 다시 입력해주세요.' })
+      .regex(/^\d+$/, { message: '숫자만 입력해주세요.' }),
     confirmPassword: z.string().min(8, { message: '비밀번호를 다시 확인해주세요.' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -63,18 +67,23 @@ export default function SignUpPage() {
   const password = watch('password');
   const confirmPassword = watch('confirmPassword');
 
+  const handleResendVerificationCode = () => {
+    console.log('인증코드 재전송');
+    // 여기에 인증코드 재전송 로직 추가예정
+  };
+
   return (
     <div className='flex flex-col items-center justify-center h-screen font-sans'>
       <h1 className='text-2xl font-semibold mb-6'>회원가입</h1>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col gap-6 p-4 mx-auto max-w-[610px] h-[581px]'
+        className='flex flex-col gap-6 p-4 mx-auto'
       >
         {/* 닉네임 */}
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col w-[610px] gap-2'>
           <label htmlFor='nickname'>닉네임</label>
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center justify-between'>
             <Input
               id='nickname'
               type='text'
@@ -103,9 +112,9 @@ export default function SignUpPage() {
         </div>
 
         {/* 이메일 */}
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col  w-[610px] gap-2'>
           <label htmlFor='email'>이메일 주소</label>
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center justify-between '>
             <Input
               id='email'
               type='email'
@@ -135,7 +144,7 @@ export default function SignUpPage() {
           {errors.email && <p className='text-state-error text-sm'>{errors.email.message}</p>}
 
           {/* 인증코드 */}
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center justify-between gap-2'>
             <Input
               id='verificationCode'
               type='text'
@@ -160,9 +169,21 @@ export default function SignUpPage() {
               확인
             </Button>
           </div>
-          {errors.verificationCode && (
-            <p className='text-state-error text-sm'>{errors.verificationCode.message}</p>
-          )}
+          <div className='flex flex-row items-center justify-between w-[400px] gap-2'>
+            <p
+              className={`text-sm text-state-error ${
+                errors.verificationCode ? 'visible' : 'invisible'
+              }`}
+            >
+              {errors.verificationCode?.message || 'placeholder'}
+            </p>
+            <p
+              className='text-sm text-gray-700 cursor-pointer underline'
+              onClick={handleResendVerificationCode}
+            >
+              재전송
+            </p>
+          </div>
         </div>
 
         {/* 비밀번호 */}
@@ -179,7 +200,6 @@ export default function SignUpPage() {
           />
           {errors.password && <p className='text-state-error text-sm'>{errors.password.message}</p>}
 
-          <label htmlFor='confirmPassword'>비밀번호 확인</label>
           <Input
             id='confirmPassword'
             type='password'
