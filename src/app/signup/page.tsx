@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
-import { useVerificationTimer } from '@/hooks/useVerificationTimer';
+import { useVerificationTimer } from '@/hooks/signup/useVerificationTimer';
 
 const schema = z
   .object({
