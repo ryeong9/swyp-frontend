@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
 import AutoLoginCheckbox from '@/components/checkbox/page';
-
+import { BASE_URL } from '@/constants/env';
 const schema = z.object({
   email: z.string().email({ message: '이메일을 다시 확인해주세요' }),
   password: z
@@ -161,7 +161,9 @@ export default function LoginPage() {
 
         <button
           type='button'
-          onClick={() => console.log('네이버 로그인')}
+          onClick={() => {
+            window.location.href = `${BASE_URL}/oauth2/authorization/naver`;
+          }}
           className='flex items-center justify-center gap-3 bg-[#00DE5A] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
           <Image
