@@ -147,7 +147,7 @@ export default function LoginPage() {
 
         <button
           type='button'
-          onClick={() => console.log('카카오 로그인')}
+          onClick={() => (window.location.href = `${BASE_URL}/oauth2/authorization/kakao`)}
           className='flex items-center justify-center gap-3 bg-[#FFE812] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
           <Image
