@@ -13,7 +13,7 @@ const defaultInstance = axios.create({
 });
 
 // Auth 전용 instance
-const authInstance = axios.create({
+export const authInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 2000,
   headers: {
