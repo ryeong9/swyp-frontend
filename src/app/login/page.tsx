@@ -133,7 +133,7 @@ export default function LoginPage() {
 
         <button
           type='button'
-          onClick={() => `${BASE_URL}/oauth2/authorization/google`}
+          onClick={() => (window.location.href = `${BASE_URL}/oauth2/authorization/google`)}
           className='flex items-center justify-center gap-3 bg-[#F2F2F2] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
           <Image
