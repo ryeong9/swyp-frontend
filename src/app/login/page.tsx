@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
 import AutoLoginCheckbox from '@/components/checkbox/page';
-import { BASE_URL, REDIRECT_URI } from '@/constants/env';
+import { BASE_URL } from '@/constants/env';
 
 const schema = z.object({
   email: z.string().email({ message: '이메일을 다시 확인해주세요' }),
@@ -27,11 +27,8 @@ export default function LoginPage() {
   const [isPasswordDeleted, setIsPasswordDeleted] = useState(false);
 
   const handleSocialLogin = (provider: 'google' | 'kakao' | 'naver') => {
-    const authUrl = `${BASE_URL}/oauth2/authorization/${provider}?redirect_uri=${REDIRECT_URI}`;
-    console.log('REDIRECT_URI:', process.env.NEXT_PUBLIC_REDIRECT_URI);
-
+    const authUrl = `${BASE_URL}/oauth2/authorization/${provider}`;
     window.location.href = authUrl;
-    console.log(authUrl);
   };
 
   const {
