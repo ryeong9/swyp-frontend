@@ -8,7 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
 import AutoLoginCheckbox from '@/components/checkbox/page';
-import { BASE_URL } from '@/constants/env';
+import { BASE_URL, REDIRECT_URI } from '@/constants/env';
+
 const schema = z.object({
   email: z.string().email({ message: '이메일을 다시 확인해주세요' }),
   password: z
@@ -24,6 +25,14 @@ type FormData = z.infer<typeof schema>;
 export default function LoginPage() {
   const [isEmailDeleted, setIsEmailDeleted] = useState(false);
   const [isPasswordDeleted, setIsPasswordDeleted] = useState(false);
+
+  const handleSocialLogin = (provider: 'google' | 'kakao' | 'naver') => {
+    const authUrl = `${BASE_URL}/oauth2/authorization/${provider}?redirect_uri=${REDIRECT_URI}`;
+    console.log('REDIRECT_URI:', process.env.NEXT_PUBLIC_REDIRECT_URI);
+
+    window.location.href = authUrl;
+    console.log(authUrl);
+  };
 
   const {
     register,
@@ -133,7 +142,7 @@ export default function LoginPage() {
 
         <button
           type='button'
-          onClick={() => (window.location.href = `${BASE_URL}/oauth2/authorization/google`)}
+          onClick={() => handleSocialLogin('google')}
           className='flex items-center justify-center gap-3 bg-[#F2F2F2] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
           <Image
@@ -147,7 +156,7 @@ export default function LoginPage() {
 
         <button
           type='button'
-          onClick={() => (window.location.href = `${BASE_URL}/oauth2/authorization/kakao`)}
+          onClick={() => handleSocialLogin('kakao')}
           className='flex items-center justify-center gap-3 bg-[#FFE812] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
           <Image
@@ -161,9 +170,7 @@ export default function LoginPage() {
 
         <button
           type='button'
-          onClick={() => {
-            window.location.href = `${BASE_URL}/oauth2/authorization/naver`;
-          }}
+          onClick={() => handleSocialLogin('naver')}
           className='flex items-center justify-center gap-3 bg-[#00DE5A] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
           <Image
