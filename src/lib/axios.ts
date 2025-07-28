@@ -41,16 +41,15 @@ authInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && error.response.data?.message === 'ACCESS_TOKEN_EXPIRED') {
       try {
         const res = await authInstance.post(`${BASE_URL}/api/users/refresh`);
-
         const newAccessToken = res.data.accessToken;
-        localStorage.setItem('access_token', newAccessToken);
+        localStorage.setItem('accessToken', newAccessToken);
 
         // 원래 요청 재시도
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-        return axios(error.config);
+        return authInstance(error.config);
       } catch (refreshError) {
         // 재로그인 유도
         window.location.href = '/login';
