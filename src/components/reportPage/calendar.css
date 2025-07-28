@@ -1,0 +1,97 @@
+/* 전체 테두리 제거 */
+.fc .fc-daygrid-day,
+.fc .fc-col-header-cell,
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-scrollgrid {
+  border: none !important;
+}
+
+/* 화살표 버튼의 배경 지우기 */
+.fc .fc-button {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #a0a0a0 !important;
+}
+
+/* 년도 및 월 스타일 적용 */
+.fc .fc-toolbar-title {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 40px;
+}
+
+/* 날짜 셀 간격 확보 */
+.fc .fc-daygrid-day {
+  padding: 3px;
+  box-sizing: border-box;
+  width: 130px;
+  height: auto;
+}
+
+/* 이번 달에만 배경색 저용 */
+.fc .fc-daygrid-day:not(.fc-day-other) .fc-daygrid-day-frame {
+  position: relative;
+  padding: 12px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* 날짜 왼쪽 상단으로 변경 */
+.fc .fc-daygrid-day-number {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 12px;
+  color: #6b6b6b;
+}
+
+/* 요일 글씨 스타일 */
+.fc .fc-col-header-cell {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+}
+.fc .fc-col-header-cell .fc-scrollgrid-sync-inner {
+  display: flex;
+  justify-content: start;
+  padding: 10px;
+}
+
+/* 일요일만 빨간색 */
+.fc .fc-col-header-cell:nth-child(7),
+.fc .fc-day-sun .fc-daygrid-day-number {
+  color: #f56767;
+}
+
+/* 오늘 날짜 배경 제거 */
+.fc-day-today {
+  background-color: transparent !important;
+}
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-frame {
+  background-color: #f0f0f0 !important;
+  border-radius: 8px;
+}
+
+/* 오늘 날짜 숫자 옆에 SVG 아이콘 표시 */
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 4px;
+  background-image: url('/icons/todayDot.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: middle;
+  transform: translateY(-1px);
+}

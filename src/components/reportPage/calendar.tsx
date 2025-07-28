@@ -1,6 +1,6 @@
 'use client';
 
-import './Calendar.css';
+import './calendar.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 
@@ -11,11 +11,11 @@ export default function Calendar() {
         plugins={[dayGridPlugin]}
         firstDay={1}
         fixedWeekCount={false}
-        events={[
-          { title: 'Event A', date: '2025-07-08' },
-          { title: 'Event B', date: '2025-07-15' },
-          { title: 'Event C', date: '2025-07-25' },
-        ]}
+        // events={[
+        //   { title: 'Event A', date: '2025-07-08' },
+        //   { title: 'Event B', date: '2025-07-15' },
+        //   { title: 'Event C', date: '2025-07-25' },
+        // ]}
         headerToolbar={{
           left: 'prev',
           center: 'title',

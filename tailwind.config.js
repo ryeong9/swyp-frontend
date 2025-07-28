@@ -16,7 +16,7 @@ module.exports = {
         secondary: '#D2DEF4',
         background: {
           DEFAULT: '#F9F7F0',
-          input: '#FCFCFC',
+          input: '#FFFFFF',
           sub: '#FFF9F1',
         },
         state: {
