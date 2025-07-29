@@ -1,3 +1,7 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
 // 임의의 타입 지정이라 후에 지울 예정
 type Book = {
   coverImg: string;
@@ -10,6 +14,12 @@ type Book = {
 };
 
 export default function MyBookHistory() {
+  const router = useRouter();
+  const handleClickWriteBtn = () => {
+    router.push('/write');
+  };
+
+  // 목데이터
   const data: Book[] = [
     // {
     //   coverImg: '/',
@@ -52,7 +62,10 @@ export default function MyBookHistory() {
           <p className='font-serif font-bold text-base text-gray-700 mb-6'>
             이 달의 감정 기록이 아직 없어요.
           </p>
-          <button className='w-[190px] h-[50px] bg-primary rounded-[8px] font-sans font-medium text-base text-background-input'>
+          <button
+            onClick={handleClickWriteBtn}
+            className='w-[190px] h-[50px] bg-primary rounded-[8px] font-sans font-medium text-base text-background-input'
+          >
             기록하기
           </button>
         </div>
