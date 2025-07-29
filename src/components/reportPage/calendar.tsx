@@ -27,6 +27,32 @@ export default function Calendar() {
           return `${year}.${month}`;
         }}
       />
+      <div className='flex pl-2 mt-5'>
+        <img
+          src='/icons/RectangleStart.svg'
+          alt='독서 시작 표시 색상'
+          className='mr-2'
+        />
+        <span className='mr-8'>독서 시작</span>
+        <img
+          src='/icons/RectangleFinish.svg'
+          alt='독서 완료 표시 색상'
+          className='mr-2'
+        />
+        <span className='mr-8'>독서 완료</span>
+        <img
+          src='/icons/RectangleWrite.svg'
+          alt='감정 기록 표시 색상'
+          className='mr-2'
+        />
+        <span className='mr-8'>감정 기록</span>
+        <img
+          src='/icons/todayDot.svg'
+          alt='오늘 표시 색상'
+          className='mr-2'
+        />
+        <span className='mr-8'>오늘</span>
+      </div>
     </div>
   );
 }
