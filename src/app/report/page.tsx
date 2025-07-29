@@ -4,7 +4,7 @@ import MyBookHistory from '@/components/reportPage/myBookHistory';
 
 export default function ReportPage() {
   return (
-    <div className='w-[1030px] flex flex-col mx-auto'>
+    <div className='w-[1030px] flex flex-col mx-auto pb-14'>
       <Header />
       <Calendar />
       <div className='flex flex-col mb-7'>
