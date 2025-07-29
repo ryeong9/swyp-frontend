@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -8,6 +8,9 @@ import { z } from 'zod';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
 import { useVerificationTimer } from '@/hooks/signup/useVerificationTimer';
+import { useNicknameCheck } from '@/hooks/signup/useNicknameCheck';
+import { useMutation } from '@tanstack/react-query';
+import { emailAvailable } from '@/apis/auth/authApi';
 
 const schema = z
   .object({
@@ -37,6 +40,10 @@ type FormData = z.infer<typeof schema>;
 
 export default function SignUpPage() {
   const { timeLeft, isActive, startTimer, formatTime } = useVerificationTimer(300);
+  const [nicknameStatus, setNicknameStatus] = useState<string | null>(null);
+  const [emailStatus, setEmailStatus] = useState<string | null>(null);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const [hasNicknameError, setHasNicknameError] = useState(false); // 에러 상태
 
   const {
     register,
@@ -64,13 +71,55 @@ export default function SignUpPage() {
   const password = watch('password');
   const confirmPassword = watch('confirmPassword');
 
-  const onSubmit = (data: FormData) => {
-    console.log('회원가입 데이터:', data);
+  // 닉네임 중복 확인 훅
+  const {
+    data: nicknameCheckData,
+    isLoading: nicknameLoading,
+    refetch: refetchNicknameCheck,
+  } = useNicknameCheck(nickname, false);
+
+  // 중복 확인 결과 반영
+  useEffect(() => {
+    if (nicknameCheckData) {
+      setIsNicknameChecked(true);
+      if (!nicknameCheckData.available) {
+        setNicknameStatus('중복되는 닉네임입니다');
+        setHasNicknameError(true); // 중복이면 에러
+      } else {
+        setNicknameStatus(null);
+        setHasNicknameError(false); // 중복이 아니면 에러 해제
+      }
+    }
+  }, [nicknameCheckData]);
+
+  const handleNicknameDuplication = async () => {
+    if (!nickname || errors.nickname) return;
+    await refetchNicknameCheck();
   };
 
+  // 이메일 중복 확인 (Mutation 사용)
+  const emailMutation = useMutation({
+    mutationFn: emailAvailable,
+    onSuccess: (data) => {
+      if (data.available) {
+        setEmailStatus('사용 가능한 이메일입니다');
+        startTimer();
+      } else {
+        setEmailStatus('이미 사용 중인 이메일입니다');
+      }
+    },
+    onError: () => {
+      setEmailStatus('이메일 중복 확인 중 오류 발생');
+    },
+  });
+
   const handleSendVerificationCode = () => {
-    // API 호출 로직
-    startTimer();
+    if (!email || errors.email) return;
+    emailMutation.mutate(email);
+  };
+
+  const onSubmit = (data: FormData) => {
+    console.log('회원가입 데이터:', data);
   };
 
   return (
@@ -89,36 +138,41 @@ export default function SignUpPage() {
               id='nickname'
               type='text'
               placeholder='특수문자 및 공백 제외 2~10자'
-              size='md'
+              inputSize='md'
               {...register('nickname')}
-              hasError={!!errors.nickname}
-              isSuccess={!!nickname && !errors.nickname}
+              hasError={hasNicknameError || !!errors.nickname} // 중복 또는 유효성 에러
+              isSuccess={isNicknameChecked && !!nickname && !errors.nickname && !nicknameStatus}
+              showStatusIcon={isNicknameChecked} // 중복 여부와 관계없이 표시
               onDelete={() => {
                 setValue('nickname', '');
                 clearErrors('nickname');
+                setNicknameStatus(null);
+                setIsNicknameChecked(false);
+                setHasNicknameError(false);
               }}
-              onChange={(e) => register('nickname').onChange(e)}
             />
             <Button
               type='button'
               size='sm'
-              disabled={!nickname || !!errors.nickname}
+              disabled={!nickname || !!errors.nickname || nicknameLoading}
+              onClick={handleNicknameDuplication}
             >
               중복 확인
             </Button>
           </div>
           {errors.nickname && <p className='text-state-error text-sm'>{errors.nickname.message}</p>}
+          {nicknameStatus && <p className='text-state-error text-sm'>{nicknameStatus}</p>}
         </div>
 
         {/* 이메일 */}
-        <div className='flex flex-col w-[610px] gap-2'>
+        <div className='flex flex-col gap-2'>
           <label htmlFor='email'>이메일 주소</label>
-          <div className='flex items-center justify-between '>
+          <div className='flex items-center justify-between'>
             <Input
               id='email'
               type='email'
               placeholder='이메일 주소를 입력해주세요'
-              size='md'
+              inputSize='md'
               autoComplete='email'
               autoFocus
               {...register('email')}
@@ -127,19 +181,30 @@ export default function SignUpPage() {
               onDelete={() => {
                 setValue('email', '');
                 clearErrors('email');
+                setEmailStatus(null);
               }}
-              onChange={(e) => register('email').onChange(e)}
             />
             <Button
               type='button'
               size='sm'
-              disabled={!email || !!errors.email}
+              disabled={!email || !!errors.email || emailMutation.isPending}
               onClick={handleSendVerificationCode}
             >
               인증코드 전송
             </Button>
           </div>
           {errors.email && <p className='text-state-error text-sm'>{errors.email.message}</p>}
+          {emailStatus && (
+            <p
+              className={
+                emailStatus.includes('사용 가능')
+                  ? 'text-green-500 text-sm'
+                  : 'text-state-error text-sm'
+              }
+            >
+              {emailStatus}
+            </p>
+          )}
 
           {/* 인증코드 */}
           <div className='flex items-center justify-between gap-2 relative'>
@@ -147,7 +212,7 @@ export default function SignUpPage() {
               id='verificationCode'
               type='text'
               placeholder='인증코드를 입력해주세요.'
-              size='md'
+              inputSize='md'
               {...register('verificationCode')}
               hasError={!!errors.verificationCode}
               isSuccess={!!verificationCode && !errors.verificationCode}
@@ -155,7 +220,6 @@ export default function SignUpPage() {
                 setValue('verificationCode', '');
                 clearErrors('verificationCode');
               }}
-              onChange={(e) => register('verificationCode').onChange(e)}
             />
             {isActive && (
               <span className='absolute right-3 top-1/2 transform -translate-y-1/2 text-sm font-medium text-[#F03E3E]'>
@@ -185,7 +249,7 @@ export default function SignUpPage() {
             id='password'
             type='password'
             placeholder='영문(대소문자) + 숫자 포함 8자 이상'
-            size='lg'
+            inputSize='lg'
             {...register('password')}
             hasError={!!errors.password}
             isSuccess={!!password && !errors.password}
@@ -193,7 +257,6 @@ export default function SignUpPage() {
               setValue('password', '');
               clearErrors('password');
             }}
-            onChange={(e) => register('password').onChange(e)}
           />
           {errors.password && <p className='text-state-error text-sm'>{errors.password.message}</p>}
 
@@ -201,7 +264,7 @@ export default function SignUpPage() {
             id='confirmPassword'
             type='password'
             placeholder='비밀번호를 다시 한 번 적어주세요.'
-            size='lg'
+            inputSize='lg'
             {...register('confirmPassword')}
             hasError={!!errors.confirmPassword}
             isSuccess={!!confirmPassword && !errors.confirmPassword}
@@ -209,7 +272,6 @@ export default function SignUpPage() {
               setValue('confirmPassword', '');
               clearErrors('confirmPassword');
             }}
-            onChange={(e) => register('confirmPassword').onChange(e)}
           />
           {errors.confirmPassword && (
             <p className='text-state-error text-sm'>{errors.confirmPassword.message}</p>

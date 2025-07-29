@@ -1,115 +1,127 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import Image from 'next/image';
 import CheckIcon from '@/assets/icons/check.svg';
 import ErrorIcon from '@/assets/icons/error.svg';
 import DeleteIcon from '@/assets/icons/delete.svg';
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hasError?: boolean;
   isSuccess?: boolean;
   showStatusIcon?: boolean;
-  type?: 'text' | 'email' | 'password';
-  size?: 'md' | 'lg';
-  id?: string;
-  placeholder?: string;
-  className?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputSize?: 'md' | 'lg'; // 'size' 대신 'inputSize'로 변경
   onDelete?: () => void;
-  disabled?: boolean;
-  autoComplete?: string;
-  autoFocus?: boolean;
 }
 
-export default function Input({
-  hasError = false,
-  isSuccess = false,
-  showStatusIcon = false,
-  className = '',
-  size = 'md',
-  value: controlledValue,
-  onChange: controlledOnChange,
-  onDelete,
-  ...props
-}: InputProps) {
-  const [isFocused, setIsFocused] = useState(false);
-  const [localValue, setLocalValue] = useState(controlledValue || '');
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      hasError = false,
+      isSuccess = false,
+      showStatusIcon = false,
+      className = '',
+      inputSize = 'md', // 'size' 대신 'inputSize' 사용
+      onDelete,
+      value: controlledValue,
+      onChange,
+      ...props
+    },
+    ref,
+  ) => {
+    const [isFocused, setIsFocused] = useState(false);
+    const isControlled = controlledValue !== undefined;
+    const [localValue, setLocalValue] = useState(isControlled ? controlledValue : '');
 
-  useEffect(() => {
-    setLocalValue(controlledValue || '');
-  }, [controlledValue]);
+    useEffect(() => {
+      if (isControlled) {
+        setLocalValue(controlledValue);
+      }
+    }, [controlledValue, isControlled]);
 
-  const sizeClass =
-    size === 'lg' ? 'w-[610px] h-[50px]' : size === 'md' ? 'w-[400px] h-[50px]' : '';
-  const baseStyle = 'text-base rounded-lg border p-[10px] px-[24px] bg-[#FFFFFF]';
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!isControlled) {
+        setLocalValue(e.target.value);
+      }
+      onChange?.(e);
+    };
 
-  const borderColor =
-    localValue.length === 0
-      ? 'border-gray-300'
-      : hasError
-        ? 'border-state-error'
-        : isSuccess
-          ? 'border-state-success'
-          : 'border-gray-300';
+    const handleDelete = () => {
+      if (!isControlled) {
+        setLocalValue('');
+      }
+      onChange?.({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
+      onDelete?.();
+    };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLocalValue(e.target.value);
-    controlledOnChange?.(e);
-  };
+    const value = isControlled ? controlledValue : localValue;
 
-  const handleDelete = () => {
-    setLocalValue('');
-    controlledOnChange?.({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
-    onDelete?.();
-  };
+    const sizeClass =
+      inputSize === 'lg' ? 'w-[610px] h-[50px]' : inputSize === 'md' ? 'w-[400px] h-[50px]' : ''; // 'inputSize' 사용
+    const baseStyle = 'text-base rounded-lg border p-[10px] px-[24px] bg-[#FFFFFF]';
 
-  const showDeleteIcon = isFocused || localValue.length > 0;
-  const showRightIcon = showDeleteIcon || showStatusIcon;
+    const borderColor =
+      (value as string).length === 0
+        ? 'border-gray-300'
+        : hasError
+          ? 'border-state-error'
+          : isSuccess
+            ? 'border-state-success'
+            : 'border-gray-300';
 
-  return (
-    <div className={`relative ${className}`}>
-      <input
-        {...props}
-        value={controlledValue !== undefined ? controlledValue : localValue}
-        onChange={handleChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        className={`${sizeClass} ${baseStyle} ${borderColor} ${showRightIcon ? 'pr-10' : ''} outline-none `}
-      />
+    const showDeleteIcon = isFocused || (value as string).length > 0;
+    const showRightIcon = showDeleteIcon || showStatusIcon;
 
-      {showRightIcon && (
-        <div className='absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-2 items-center'>
-          {showStatusIcon && (
-            <>
-              {hasError ? (
-                <Image
-                  src={ErrorIcon}
-                  alt='error'
-                  width={20}
-                  height={20}
-                />
-              ) : isSuccess ? (
-                <Image
-                  src={CheckIcon}
-                  alt='check'
-                  width={20}
-                  height={20}
-                />
-              ) : null}
-            </>
-          )}
-          <Image
-            src={DeleteIcon}
-            alt='delete'
-            onClick={handleDelete}
-            className='cursor-pointer'
-            width={20}
-            height={20}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
+    return (
+      <div className={`relative ${className}`}>
+        <input
+          {...props}
+          ref={ref}
+          value={value}
+          onChange={handleChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className={`${sizeClass} ${baseStyle} ${borderColor} ${showRightIcon ? 'pr-10' : ''} outline-none`}
+        />
+
+        {showRightIcon && (
+          <div className='absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-2 items-center'>
+            {showStatusIcon && (
+              <>
+                {hasError ? (
+                  <Image
+                    src={ErrorIcon}
+                    alt='error'
+                    width={20}
+                    height={20}
+                  />
+                ) : isSuccess ? (
+                  <Image
+                    src={CheckIcon}
+                    alt='check'
+                    width={20}
+                    height={20}
+                  />
+                ) : null}
+              </>
+            )}
+            {showDeleteIcon && (
+              <Image
+                src={DeleteIcon}
+                alt='delete'
+                onClick={handleDelete}
+                className='cursor-pointer'
+                width={20}
+                height={20}
+              />
+            )}
+          </div>
+        )}
+      </div>
+    );
+  },
+);
+
+Input.displayName = 'Input';
+
+export default Input;
