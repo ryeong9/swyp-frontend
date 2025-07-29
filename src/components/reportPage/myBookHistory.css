@@ -1,0 +1,29 @@
+/* swiper 화살표 스타일링 */
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  color: #a0a0a0;
+  width: 40px;
+  height: 40px;
+  top: auto;
+  bottom: 0;
+  z-index: 50;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 24px; /* 아이콘 크기 */
+  font-weight: bold;
+}
+
+/* swiper 닷 스타일링 */
+.swiper-pagination-bullet {
+  background-color: #d9d9d9;
+  opacity: 1;
+  width: 10px;
+  height: 10px;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #5a5a5a;
+}

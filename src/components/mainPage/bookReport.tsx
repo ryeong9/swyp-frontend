@@ -1,4 +1,13 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
 export default function BookReport() {
+  const router = useRouter();
+  const handleClickMoreBtn = () => {
+    router.push('/report');
+  };
+
   return (
     <div className='flex flex-col mb-14'>
       <div className='mb-8'>
@@ -9,7 +18,10 @@ export default function BookReport() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금까지의 기록들을 바탕으로 리포트를 작성해보았어요
           </p>
-          <button className='flex'>
+          <button
+            className='flex'
+            onClick={handleClickMoreBtn}
+          >
             <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
             <img
               src='/icons/arrowRight.svg'
