@@ -10,7 +10,11 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hasError?: boolean;
   isSuccess?: boolean;
   showStatusIcon?: boolean;
-  inputSize?: 'md' | 'lg'; // 'size' 대신 'inputSize'로 변경
+  showTimer?: boolean;
+  timeLeft?: number;
+  isActive?: boolean;
+  formatTime?: (seconds: number) => string;
+  inputSize?: 'md' | 'lg';
   onDelete?: () => void;
 }
 
@@ -20,8 +24,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       hasError = false,
       isSuccess = false,
       showStatusIcon = false,
+      showTimer = false,
+      timeLeft = 0,
+      isActive = false,
+      formatTime = () => '',
       className = '',
-      inputSize = 'md', // 'size' 대신 'inputSize' 사용
+      inputSize = 'md',
       onDelete,
       value: controlledValue,
       onChange,
@@ -57,7 +65,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const value = isControlled ? controlledValue : localValue;
 
     const sizeClass =
-      inputSize === 'lg' ? 'w-[610px] h-[50px]' : inputSize === 'md' ? 'w-[400px] h-[50px]' : ''; // 'inputSize' 사용
+      inputSize === 'lg' ? 'w-[610px] h-[50px]' : inputSize === 'md' ? 'w-[400px] h-[50px]' : '';
     const baseStyle = 'text-base rounded-lg border p-[10px] px-[24px] bg-[#FFFFFF]';
 
     const borderColor =
@@ -70,7 +78,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             : 'border-gray-300';
 
     const showDeleteIcon = isFocused || (value as string).length > 0;
-    const showRightIcon = showDeleteIcon || showStatusIcon;
+    const showRightIcon = showDeleteIcon || showStatusIcon || (showTimer && isActive);
 
     return (
       <div className={`relative ${className}`}>
@@ -104,6 +112,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                   />
                 ) : null}
               </>
+            )}
+            {showTimer && isActive && (
+              <span className='text-sm font-medium text-state-error'>{formatTime(timeLeft)}</span>
             )}
             {showDeleteIcon && (
               <Image

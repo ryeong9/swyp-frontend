@@ -9,8 +9,10 @@ import Button from '@/components/button/page';
 import Input from '@/components/input/page';
 import { useVerificationTimer } from '@/hooks/signup/useVerificationTimer';
 import { useNicknameCheck } from '@/hooks/signup/useNicknameCheck';
-import { useMutation } from '@tanstack/react-query';
-import { emailAvailable } from '@/apis/auth/authApi';
+import { useEmailCheck } from '@/hooks/signup/useEmailCheck';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { emailAvailable, sendVerificationCode } from '@/apis/auth/authApi';
+import { useSendVerificationCode } from '@/hooks/signup/useSendVerificationCode';
 
 const schema = z
   .object({
@@ -43,7 +45,10 @@ export default function SignUpPage() {
   const [nicknameStatus, setNicknameStatus] = useState<string | null>(null);
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
-  const [hasNicknameError, setHasNicknameError] = useState(false); // 에러 상태
+  const [hasNicknameError, setHasNicknameError] = useState(false);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [hasEmailError, setHasEmailError] = useState(false);
+  const [showEmailTimer, setShowEmailTimer] = useState(false);
 
   const {
     register,
@@ -78,44 +83,82 @@ export default function SignUpPage() {
     refetch: refetchNicknameCheck,
   } = useNicknameCheck(nickname, false);
 
+  // 이메일 중복 확인 훅
+  const {
+    data: emailCheckData,
+    isLoading: emailLoading,
+    refetch: refetchEmailCheck,
+  } = useEmailCheck(email, false);
+
+  // 이메일 인증코드 발송 mutation
+  const sendVerificationMutation = useSendVerificationCode();
+
   // 중복 확인 결과 반영
   useEffect(() => {
     if (nicknameCheckData) {
       setIsNicknameChecked(true);
       if (!nicknameCheckData.available) {
         setNicknameStatus('중복되는 닉네임입니다');
-        setHasNicknameError(true); // 중복이면 에러
+        setHasNicknameError(true);
       } else {
         setNicknameStatus(null);
-        setHasNicknameError(false); // 중복이 아니면 에러 해제
+        setHasNicknameError(false);
       }
     }
   }, [nicknameCheckData]);
+
+  useEffect(() => {
+    if (emailCheckData) {
+      setIsEmailChecked(true);
+      if (!emailCheckData.available) {
+        setEmailStatus('이미 사용 중인 이메일입니다');
+        setHasEmailError(true);
+      } else {
+        setEmailStatus(null);
+        setHasEmailError(false);
+      }
+    }
+  }, [emailCheckData]);
+
+  useEffect(() => {
+    if (emailStatus === '인증코드가 전송되었습니다' && isActive) {
+      setShowEmailTimer(true);
+    } else if (!isActive) {
+      setShowEmailTimer(false);
+    }
+  }, [emailStatus, isActive]);
 
   const handleNicknameDuplication = async () => {
     if (!nickname || errors.nickname) return;
     await refetchNicknameCheck();
   };
 
-  // 이메일 중복 확인 (Mutation 사용)
-  const emailMutation = useMutation({
-    mutationFn: emailAvailable,
-    onSuccess: (data) => {
-      if (data.available) {
-        setEmailStatus('사용 가능한 이메일입니다');
-        startTimer();
+  const handleSendVerificationCode = async () => {
+    if (!email || errors.email) return;
+
+    try {
+      // 1. 이메일 중복 확인
+      console.log('Refetching email check...');
+      const { data } = await refetchEmailCheck();
+      console.log('Email Check Data:', data);
+
+      // 2. 중복 확인 결과 체크
+      if (data?.available) {
+        console.log('Email is available, sending verification code...');
+        // 3. 인증코드 발송
+        const result = await sendVerificationMutation.mutateAsync(email);
+        console.log('Send Verification Result:', result);
+        setEmailStatus('인증코드가 전송되었습니다');
+        startTimer(); // 타이머 시작
+        console.log('Timer started:', { timeLeft, isActive });
       } else {
+        console.log('Email is not available:', data);
         setEmailStatus('이미 사용 중인 이메일입니다');
       }
-    },
-    onError: () => {
-      setEmailStatus('이메일 중복 확인 중 오류 발생');
-    },
-  });
-
-  const handleSendVerificationCode = () => {
-    if (!email || errors.email) return;
-    emailMutation.mutate(email);
+    } catch (error) {
+      console.error('Authentication Error:', error);
+      setEmailStatus('인증코드 전송 중 오류 발생');
+    }
   };
 
   const onSubmit = (data: FormData) => {
@@ -140,9 +183,9 @@ export default function SignUpPage() {
               placeholder='특수문자 및 공백 제외 2~10자'
               inputSize='md'
               {...register('nickname')}
-              hasError={hasNicknameError || !!errors.nickname} // 중복 또는 유효성 에러
+              hasError={hasNicknameError || !!errors.nickname}
               isSuccess={isNicknameChecked && !!nickname && !errors.nickname && !nicknameStatus}
-              showStatusIcon={isNicknameChecked} // 중복 여부와 관계없이 표시
+              showStatusIcon={true}
               onDelete={() => {
                 setValue('nickname', '');
                 clearErrors('nickname');
@@ -154,7 +197,7 @@ export default function SignUpPage() {
             <Button
               type='button'
               size='sm'
-              disabled={!nickname || !!errors.nickname || nicknameLoading}
+              disabled={!nickname || !!errors.nickname || nicknameLoading || !!nicknameStatus}
               onClick={handleNicknameDuplication}
             >
               중복 확인
@@ -176,18 +219,36 @@ export default function SignUpPage() {
               autoComplete='email'
               autoFocus
               {...register('email')}
-              hasError={!!errors.email}
-              isSuccess={!!email && !errors.email}
+              hasError={hasEmailError || !!errors.email}
+              isSuccess={
+                isEmailChecked &&
+                !!email &&
+                !errors.email &&
+                emailStatus === '인증코드가 전송되었습니다'
+              }
+              showStatusIcon={true}
+              showTimer={showEmailTimer}
+              timeLeft={timeLeft}
+              isActive={isActive}
+              formatTime={formatTime}
               onDelete={() => {
                 setValue('email', '');
                 clearErrors('email');
                 setEmailStatus(null);
+                setIsEmailChecked(false);
+                setHasEmailError(false);
               }}
             />
             <Button
               type='button'
               size='sm'
-              disabled={!email || !!errors.email || emailMutation.isPending}
+              disabled={
+                !email ||
+                !!errors.email ||
+                emailLoading ||
+                sendVerificationMutation.isPending ||
+                emailStatus === '인증코드가 전송되었습니다'
+              }
               onClick={handleSendVerificationCode}
             >
               인증코드 전송
@@ -197,7 +258,7 @@ export default function SignUpPage() {
           {emailStatus && (
             <p
               className={
-                emailStatus.includes('사용 가능')
+                emailStatus === '인증코드가 전송되었습니다'
                   ? 'text-green-500 text-sm'
                   : 'text-state-error text-sm'
               }

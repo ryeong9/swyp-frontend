@@ -3,7 +3,7 @@ import axios from 'axios';
 import { BASE_URL } from '@/constants/env';
 
 // 기본 instance
-const defaultInstance = axios.create({
+export const defaultInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 2000,
   headers: {
@@ -26,8 +26,10 @@ export const authInstance = axios.create({
 authInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('accessToken');
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
+      console.log(localStorage.getItem('accessToken'));
     }
     return config;
   },
