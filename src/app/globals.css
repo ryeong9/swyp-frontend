@@ -40,3 +40,47 @@
 body {
   @apply font-sans bg-background text-black;
 }
+
+@layer utilities {
+  /* radio 버튼 색상 custom - reading */
+  input[type='radio'].reading {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #c4c4c4;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type='radio'].reading:checked {
+    background-color: #9bc99f;
+    border: 4px solid white;
+    box-shadow: 0 0 0 2px #9bc99f;
+  }
+  input[type='radio'].reading:checked + span {
+    color: #9bc99f;
+  }
+
+  /* radio 버튼 색상 custom - finished */
+  input[type='radio'].finished {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #c4c4c4;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type='radio'].finished:checked {
+    background-color: #94a8d2;
+    border: 4px solid white;
+    box-shadow: 0 0 0 2px #94a8d2;
+  }
+  input[type='radio'].finished:checked + span {
+    color: #94a8d2;
+  }
+}
