@@ -40,7 +40,7 @@ export default function EmojiDropDown({
   };
 
   return (
-    <div className='absolute grid grid-cols-6 grid-rows-3 gap-x-[22.8px] gap-y-[15.5px] top-14 right-14 w-[540px] bg-background-input drop-shadow-sm rounded-[8px] z-10 px-6 py-4'>
+    <div className='absolute grid grid-cols-6 grid-rows-3 gap-x-[22.8px] gap-y-[15.5px] top-14 right-14 w-[540px] bg-background-input drop-shadow-sm rounded-lg z-10 px-6 py-4'>
       {emotionList.map((item, index) => (
         <div
           key={index}

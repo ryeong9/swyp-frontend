@@ -36,7 +36,7 @@ export default function BookShelfSection() {
         {data.map((item) => (
           <div
             key={item.id}
-            className='w-[172px] h-[246px] bg-gray-500 rounded-[8px]'
+            className='w-[172px] h-[246px] bg-gray-500 rounded-lg'
           >
             {item.title}
           </div>

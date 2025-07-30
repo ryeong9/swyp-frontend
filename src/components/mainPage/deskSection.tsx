@@ -33,7 +33,7 @@ export default function DeskSection() {
             return (
               <div
                 key={item.book.id}
-                className='relative w-[172px] h-[246px] bg-gray-500 rounded-[8px]'
+                className='relative w-[172px] h-[246px] bg-gray-500 rounded-lg'
               >
                 {item.book.title}
                 {item.type === 'recommend' ? (
