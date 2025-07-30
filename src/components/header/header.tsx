@@ -20,7 +20,7 @@ export default function Header() {
       <div className='relative flex ml-[23px] pr-[23px] items-center'>
         <button
           type='button'
-          className='w-[20px] h-[20px] mr-[18px]'
+          className='w-[20px] h-[20px] mr-[18px] cursor-pointer'
           onClick={() => setShowNotificationDropDown((prev) => !prev)}
         >
           <img
@@ -31,7 +31,7 @@ export default function Header() {
         {showNotificationDropDown && <NotificationDropDown />}
         <button
           type='button'
-          className='w-[20px] h-[20px]'
+          className='w-[20px] h-[20px] cursor-pointer'
           onClick={() => setShowProfileDropDown((prev) => !prev)}
         >
           <img

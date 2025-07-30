@@ -20,7 +20,7 @@ export default function BookReport() {
           </p>
           <button
             type='button'
-            className='flex'
+            className='flex cursor-pointer'
             onClick={handleClickMoreBtn}
           >
             <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>

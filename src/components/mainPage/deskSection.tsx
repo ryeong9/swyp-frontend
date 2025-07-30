@@ -17,7 +17,7 @@ export default function DeskSection() {
           </p>
           <button
             type='button'
-            className='flex'
+            className='flex cursor-pointer'
           >
             <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
             <img
@@ -33,7 +33,7 @@ export default function DeskSection() {
             return (
               <div
                 key={item.book.id}
-                className='relative w-[172px] h-[246px] bg-gray-500 rounded-lg'
+                className='relative w-[172px] h-[246px] bg-gray-500 rounded-lg cursor-pointer'
               >
                 {item.book.title}
                 {item.type === 'recommend' ? (

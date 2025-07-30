@@ -22,7 +22,7 @@ export default function SearchBar() {
   return (
     <div className='relative w-[715px] h-[50px] rounded-[60px] bg-background-input py-[16px] px-[24px] flex items-center'>
       <button
-        className='flex items-center'
+        className='flex items-center cursor-pointer'
         onClick={() => setShowFilterDropDown((prev) => !prev)}
       >
         <p className='w-[45px] mr-[18px] font-sans font-semibold text-gray-900 text-sm text-left'>
@@ -75,7 +75,7 @@ export default function SearchBar() {
         />
       )}
       <button
-        className='ml-3.5'
+        className='ml-3.5 cursor-pointer'
         onSubmit={handleSubmitSearchData}
       >
         <img

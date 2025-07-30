@@ -22,7 +22,7 @@ export default function BookShelfSection() {
           </p>
           <button
             type='button'
-            className='flex'
+            className='flex cursor-pointer'
           >
             <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
             <img
@@ -36,7 +36,7 @@ export default function BookShelfSection() {
         {data.map((item) => (
           <div
             key={item.id}
-            className='w-[172px] h-[246px] bg-gray-500 rounded-lg'
+            className='w-[172px] h-[246px] bg-gray-500 rounded-lg cursor-pointer'
           >
             {item.title}
           </div>

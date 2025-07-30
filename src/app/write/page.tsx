@@ -17,7 +17,7 @@ export default function WritePage() {
       <div className='w-full px-[205px] py-5 flex justify-end border-b-2 border-b-gray-200'>
         <button
           type='submit'
-          className='w-[190px] h-[50px] rounded-lg font-sans font-medium bg-primary text-background-input disabled:bg-gray-300 disabled:text-gray-500'
+          className='w-[190px] h-[50px] rounded-lg font-sans font-medium bg-primary text-background-input disabled:bg-gray-300 disabled:text-gray-500 cursor-pointer'
           disabled
         >
           등록하기
@@ -29,7 +29,7 @@ export default function WritePage() {
           <button
             type='button'
             onClick={() => setShowSelectModal((prev) => !prev)}
-            className='w-[145px] h-[46px] flex items-center justify-center bg-gray-700 mb-4 rounded-lg'
+            className='w-[145px] h-[46px] flex items-center justify-center bg-gray-700 mb-4 rounded-lg cursor-pointer'
           >
             <img
               src='/icons/plusIcon.svg'
@@ -73,7 +73,7 @@ export default function WritePage() {
             </div>
             <label
               htmlFor='reading'
-              className='flex font-sans font-medium text-gray-300'
+              className='flex font-sans font-medium text-gray-300 cursor-pointer'
             >
               <input
                 id='reading'
@@ -88,7 +88,7 @@ export default function WritePage() {
             </label>
             <label
               htmlFor='finished'
-              className='flex ml-5 font-sans font-medium text-gray-300'
+              className='flex ml-5 font-sans font-medium text-gray-300 cursor-pointer'
             >
               <input
                 id='finished'

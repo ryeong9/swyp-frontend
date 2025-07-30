@@ -49,7 +49,7 @@ export default function EmojiDropDown({
           <img
             src='/icons/imgExam.svg'
             alt='감정 이모지'
-            className='w-[63px] h-[63px] group-hover:bg-gray-200'
+            className='w-[63px] h-[63px] group-hover:bg-gray-200 cursor-pointer'
             onClick={() => handleClickEmotion(item)}
           />
           <p

@@ -36,7 +36,7 @@ export default function EntryAuthModal() {
           <button
             type='button'
             onClick={handleClickGotoLogin}
-            className='w-full mt-4 px-6 py-3 bg-primary rounded-lg font-sans font-medium text-base text-white'
+            className='w-full mt-4 px-6 py-3 bg-primary rounded-lg font-sans font-medium text-base text-white cursor-pointer'
           >
             로그인/회원가입 하기
           </button>
