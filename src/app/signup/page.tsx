@@ -251,7 +251,7 @@ export default function SignUpPage() {
               }
               onClick={handleSendVerificationCode}
             >
-              인증코드 전송
+              중복 확인
             </Button>
           </div>
           {errors.email && <p className='text-state-error text-sm'>{errors.email.message}</p>}
@@ -287,12 +287,19 @@ export default function SignUpPage() {
                 {formatTime(timeLeft)}
               </span>
             )}
+
             <Button
               type='button'
               size='sm'
-              disabled={!verificationCode || !!errors.verificationCode}
+              disabled={
+                !email ||
+                !!errors.email ||
+                emailLoading ||
+                sendVerificationMutation.isPending ||
+                emailStatus === '인증코드가 전송되었습니다'
+              }
             >
-              확인
+              인증코드 발송
             </Button>
           </div>
           <div className='flex flex-row items-center justify-between w-[400px] gap-2'>
@@ -300,6 +307,16 @@ export default function SignUpPage() {
               {errors.verificationCode?.message || '\u00A0'}
             </p>
             <p className='text-sm text-gray-700 cursor-pointer underline'>재전송</p>
+          </div>
+          <div className='flex items-center justify-between gap-2 relative'>
+            <Input type='hidden' />
+            <Button
+              type='button'
+              size='sm'
+              disabled={!verificationCode || !!errors.verificationCode}
+            >
+              확인
+            </Button>
           </div>
         </div>
 
