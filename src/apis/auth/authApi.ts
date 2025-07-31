@@ -45,3 +45,9 @@ export const postSignup = async (email: string, password: string, nickname: stri
   const res = await defaultInstance.post('/api/auth/signup', { email, password, nickname });
   return res.data;
 };
+
+//로그인
+export const postLogin = async (email: string, password: string) => {
+  const res = await defaultInstance.post('/api/auth/login', { email, password });
+  return res.data;
+};

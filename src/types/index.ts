@@ -16,3 +16,8 @@ export type VerificationCheck = {
   success: boolean;
   status: number;
 };
+
+export type Login = {
+  email: string;
+  password: string;
+};

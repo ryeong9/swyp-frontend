@@ -341,7 +341,6 @@ export default function SignUpPage() {
         >
           가입하기
         </Button>
-        {showErrorModal && <SignupErrorModal onClose={() => setShowErrorModal(false)} />}
       </form>
     </div>
   );
