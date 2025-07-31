@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -9,7 +10,12 @@ import Button from '@/components/button/page';
 import Input from '@/components/input/page';
 import AutoLoginCheckbox from '@/components/checkbox/page';
 import { BASE_URL } from '@/constants/env';
-
+import { useLogin } from '@/hooks/login/useLogin';
+import {
+  LoginErrorModal,
+  LoginAlreadyModal,
+  LoginDuplicationModal,
+} from '@/components/modal/login/page';
 const schema = z.object({
   email: z.string().email({ message: '이메일을 다시 확인해주세요' }),
   password: z
@@ -23,9 +29,13 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isEmailDeleted, setIsEmailDeleted] = useState(false);
   const [isPasswordDeleted, setIsPasswordDeleted] = useState(false);
-
+  const [isShowLoginError, setIsShowLoginError] = useState(true);
+  const [modalType, setModalType] = useState<
+    'none' | 'loginError' | 'loginAlready' | 'loginDuplicate'
+  >('none');
   const handleSocialLogin = (provider: 'google' | 'kakao' | 'naver') => {
     const authUrl = `${BASE_URL}/oauth2/authorization/${provider}`;
     window.location.href = authUrl;
@@ -49,15 +59,25 @@ export default function LoginPage() {
 
   const email = watch('email');
   const password = watch('password');
-
-  const onSubmit = (data: FormData) => {
-    console.log('로그인 데이터:', data);
-    // 로그인 요청 처리 추가 가능
+  const loginMutation = useLogin(setModalType);
+  //로그인 폼 제출
+  const onSubmit = async (data: FormData) => {
+    const { email, password } = data;
+    try {
+      const result = await loginMutation.mutateAsync({ email, password });
+      console.log('로그인 성공: ', result);
+      router.push('/');
+    } catch (error) {
+      //에러상황 useLogin에서 구현
+    }
   };
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
-      <form className='flex flex-col w-[400px] h-full gap-6'>
+      <form
+        className='flex flex-col w-[400px] h-full gap-6'
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className='text-center h-[58px] font-serif text-xl'>
           <p>찰나의 감정을 오래 꺼내볼 수 있도록 기록해요</p>
           <p>인덱스가 그 순간들을 모아드릴게요</p>
@@ -68,7 +88,7 @@ export default function LoginPage() {
             id='email'
             type='email'
             placeholder='이메일 주소를 입력해주세요'
-            size='md'
+            inputSize='md'
             autoComplete='email'
             autoFocus
             {...register('email')}
@@ -93,7 +113,7 @@ export default function LoginPage() {
             id='password'
             type='password'
             placeholder='비밀번호를 입력해주세요'
-            size='md'
+            inputSize='md'
             autoComplete='current-password'
             className='placeholder:text-gray-300 font-normal text-base font-sans'
             {...register('password')}
@@ -126,10 +146,15 @@ export default function LoginPage() {
           type='submit'
           disabled={!isValid}
           size='md'
-          onClick={handleSubmit(onSubmit)}
         >
           로그인
         </Button>
+
+        {modalType === 'loginError' && <LoginErrorModal onClose={() => setModalType('none')} />}
+        {modalType === 'loginAlready' && <LoginAlreadyModal onClose={() => setModalType('none')} />}
+        {modalType === 'loginDuplicate' && (
+          <LoginDuplicationModal onClose={() => setModalType('none')} />
+        )}
 
         <div className='flex items-center justify-center gap-4'>
           <hr className='flex-grow border-t border-gray-700' />

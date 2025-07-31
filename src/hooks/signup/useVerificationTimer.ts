@@ -1,30 +1,45 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export function useVerificationTimer(duration: number = 300) {
   const [timeLeft, setTimeLeft] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    if (!isActive || timeLeft <= 0) return;
+  const clearTimer = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
 
-    const interval = setInterval(() => {
+  const startTimer = useCallback(() => {
+    clearTimer(); // 기존 타이머 제거
+    setTimeLeft(duration);
+    setIsActive(true);
+
+    intervalRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          clearInterval(interval);
+          clearTimer();
           setIsActive(false);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isActive, timeLeft]);
-
-  const startTimer = useCallback(() => {
-    setTimeLeft(duration);
-    setIsActive(true);
   }, [duration]);
+
+  const stopTimer = useCallback(() => {
+    clearTimer();
+    setIsActive(false);
+    setTimeLeft(0);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      clearTimer(); // 컴포넌트 언마운트 시 정리
+    };
+  }, []);
 
   const formatTime = (seconds: number) => {
     const m = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -32,5 +47,11 @@ export function useVerificationTimer(duration: number = 300) {
     return `${m}:${s}`;
   };
 
-  return { timeLeft, isActive, startTimer, formatTime };
+  return {
+    timeLeft,
+    isActive,
+    startTimer,
+    stopTimer,
+    formatTime,
+  };
 }
