@@ -66,7 +66,7 @@ export default function WritePage() {
                   : status === '읽는 중'
                     ? 'bg-[#E6F2E6] text-primary'
                     : status === '다 읽음'
-                      ? 'bg-[#EEF2FA] text-[#94A8D2]'
+                      ? 'bg-primary-lightblue text-[#94A8D2]'
                       : 'bg-gray-100 text-gray-300'
               }`}
             >

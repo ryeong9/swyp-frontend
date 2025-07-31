@@ -3,7 +3,13 @@
 import { useState } from 'react';
 
 export default function IndexRecord() {
+  const positive = ['감동', '설렘', '유쾌한', '공감', '위로'];
+  const negative = ['슬픔', '분노', '혼란', '불쾌한', '공포'];
+  const neutrality = ['놀람', '당황한', '답답한', '아쉬운', '어색한'];
+  const thought = ['깨달음', '통찰', '의문', '영감', '성찰'];
+
   const [score, setScore] = useState(10);
+  const [showSelectEmotion, setShowSelectEmotion] = useState(false);
 
   const handleChangeScore = (e: React.ChangeEvent<HTMLInputElement>) => {
     setScore(Number(e.target.value));
@@ -15,10 +21,11 @@ export default function IndexRecord() {
       <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider mb-6'>
         인상 깊었던 부분에 감정 이모지를 추가해 점수를 선택해주세요. (최대 5개)
       </p>
-      <div className='flex items-center px-8 py-6 bg-gray-100 rounded-2xl'>
+      <div className='relative flex items-center px-8 py-6 bg-gray-100 rounded-2xl'>
         <button
           type='button'
           className='flex flex-col justify-center items-center pr-6 border-r-1 border-r-gray-300'
+          onClick={() => setShowSelectEmotion((prev) => !prev)}
         >
           <img
             src='/icons/plusIcon.svg'
@@ -27,7 +34,81 @@ export default function IndexRecord() {
           />
           <p className='font-sans text-sm text-gray-500'>감정 선택</p>
         </button>
-        <div className='w-[595px] px-6'>
+        {showSelectEmotion && (
+          <div className='absolute top-0 left-[129px] w-[530px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 p-6 flex flex-col justify-between'>
+            <div className='flex justify-between items-center'>
+              <p className='font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[24px]'>
+                긍정
+              </p>
+              {positive.map((item, index) => (
+                <button
+                  type='button'
+                  key={index}
+                >
+                  <img
+                    src='/icons/emotion/positiveIcon.svg'
+                    alt='긍정 아이콘'
+                    className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
+                  />
+                  <p className='font-sans text-sm text-gray-500'>{item}</p>
+                </button>
+              ))}
+            </div>
+            <div className='flex justify-between items-center'>
+              <p className='font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[24px]'>
+                부정
+              </p>
+              {negative.map((item, index) => (
+                <button
+                  type='button'
+                  key={index}
+                >
+                  <img
+                    src='/icons/emotion/negativeIcon.svg'
+                    alt='부정 아이콘'
+                    className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
+                  />
+                  <p className='font-sans text-sm text-gray-500'>{item}</p>
+                </button>
+              ))}
+            </div>
+            <div className='flex justify-between items-center'>
+              <p className='font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[24px]'>
+                중립
+              </p>
+              {neutrality.map((item, index) => (
+                <button
+                  type='button'
+                  key={index}
+                >
+                  <img
+                    src='/icons/emotion/neutralityIcon.svg'
+                    alt='중립 아이콘'
+                    className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
+                  />
+                  <p className='font-sans text-sm text-gray-500'>{item}</p>
+                </button>
+              ))}
+            </div>
+            <div className='flex justify-between items-center'>
+              <p className='font-sans font-medium text-base text-gray-700'>사고기반</p>
+              {thought.map((item, index) => (
+                <button
+                  type='button'
+                  key={index}
+                >
+                  <img
+                    src='/icons/emotion/thoughtIcon.svg'
+                    alt='사고기반 아이콘'
+                    className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
+                  />
+                  <p className='font-sans text-sm text-gray-500'>{item}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        <div className='w-[595px] px-5'>
           <input
             type='range'
             min='1'
