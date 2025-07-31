@@ -1,10 +1,11 @@
 'use client';
 
 import BookModal from '@/components/writePage/bookModal';
+import IndexRecord from '@/components/writePage/indexRecord';
 import { useState } from 'react';
 
 export default function WritePage() {
-  const [selectedBook, setSelectedBook] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(true);
   const [showSelectModal, setShowSelectModal] = useState(false);
   const [status, setStatus] = useState('독서 상태');
 
@@ -50,14 +51,14 @@ export default function WritePage() {
           </p>
         </section>
         {/* 독서 상태 선택하기 */}
-        <section className='w-full h-[257px] bg-background-input rounded-3xl mt-14 py-14 px-[105px]'>
+        <section className='w-full bg-background-input rounded-3xl mt-14 py-14 px-[105px]'>
           <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2'>
             독서 상태
           </h2>
           <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider'>
             독서 상태를 선택해주세요.
           </p>
-          <div className='flex items-center mt-8'>
+          <div className='flex items-center mt-8 mb-[56px]'>
             <div
               className={`w-[190px] h-[50px] flex justify-center items-center font-sans font-semibold leading-[30px] text-base rounded-lg mr-8 ${
                 !selectedBook
@@ -102,6 +103,46 @@ export default function WritePage() {
               <span>다 읽음</span>
             </label>
           </div>
+          {status === '읽는 중' ? (
+            <div className='w-full bg-background-input'>
+              <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2'>
+                페이지
+              </h2>
+              <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider mb-6'>
+                인덱스를 남기고 싶은 페이지를 입력해주세요.
+              </p>
+              <div className='relative'>
+                <p className='absolute top-[13px] left-[21px] font-sans text-base text-gray-700 px-4 border-r-1 border-r-gray-300'>
+                  P
+                </p>
+              </div>
+              <input
+                type='number'
+                className='appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none w-[190px] h-[50px] rounded-lg bg-gray-100 pl-[79px] text-gray-900  pr-6 outline-none border-2 border-gray-300 hover:border-primary mb-[56px]'
+                placeholder='페이지 입력'
+              />
+              <IndexRecord />
+            </div>
+          ) : status === '다 읽음' ? (
+            <>
+              <IndexRecord />
+              <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mt-[56px] mb-2'>
+                노트
+              </h2>
+              <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider mb-6'>
+                책을 다 읽은 뒤의 생각과 느낌을 자유롭게 적어주세요.
+              </p>
+              <div className='relative mt-6'>
+                <textarea
+                  placeholder='책의 감상을 적어주세요.'
+                  className='w-full h-[200px] bg-gray-100 text-gray-900 rounded-2xl outline-none border-2 pt-6 pb-[47px] px-8 border-gray-300 hover:border-primary resize-none'
+                />
+                <p className='absolute bottom-[24px] right-[32px] text-sm text-gray-500'>0/1500</p>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
         </section>
       </div>
     </>

@@ -83,4 +83,17 @@ body {
   input[type='radio'].finished:checked + span {
     color: #94a8d2;
   }
+
+  /* 감정 선택 슬라이더 커스텀 디자인 */
+  .slider-custom {
+    @apply w-full h-[25px] rounded-full appearance-none;
+  }
+
+  .slider-custom::-webkit-slider-runnable-track {
+    @apply rounded-full;
+  }
+
+  .slider-custom::-webkit-slider-thumb {
+    @apply appearance-none w-9 h-9 rounded-full bg-white shadow border border-gray-300;
+  }
 }
