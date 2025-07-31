@@ -165,7 +165,7 @@ export default function SignUpPage() {
     try {
       const result = await signupMutation.mutateAsync({ email, password, nickname });
       console.log('회원가입 성공: ', result);
-      router.push('/');
+      router.push('/login');
     } catch (error) {
       console.log('회원가입 실패: ', error);
       setShowErrorModal(true);

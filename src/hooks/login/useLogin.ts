@@ -13,8 +13,6 @@ export const useLogin = (onModalChange: (type: ModalType) => void) => {
         onModalChange('loginError');
       } else if (errorMessage.includes('기존 로그인 방식')) {
         onModalChange('loginAlready');
-      } else if (errorMessage.includes('이미 가입한 계정')) {
-        onModalChange('loginDuplicate');
       } else {
         onModalChange('loginError');
       }
