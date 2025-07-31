@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Button from '@/components/button/page';
+import { useRouter } from 'next/navigation';
 interface ModalProps {
   onClose: () => void;
 }
@@ -78,53 +78,6 @@ export const LoginAlreadyModal = ({ onClose }: ModalProps) => {
         >
           로그인 화면 돌아가기
         </button>
-      </div>
-    </div>
-  );
-};
-//계정 중복 모달
-export const LoginDuplicationModal = ({ onClose }: ModalProps) => {
-  const preventOffModal = (event: React.MouseEvent) => {
-    event.stopPropagation();
-  };
-
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
-
-  return (
-    <div
-      onClick={onClose}
-      className='fixed inset-0 flex justify-center items-center w-full h-full bg-gray-500/50'
-    >
-      <div
-        onClick={preventOffModal}
-        className='bg-white w-[412px] h-[288px] rounded-2xl flex flex-col items-center justify-center px-6'
-      >
-        <p className='font-semibold text-xl mb-4 text-center'>이미 가입한 계정이 있어요</p>
-
-        <div className='text-gray-700 text-sm text-center leading-relaxed mb-6'>
-          <p>기존 가입한 게정으로 로그인할까요?</p>
-        </div>
-        <div className='flex flex-col gap-2 items-center'>
-          <button
-            type='button'
-            onClick={onClose}
-            className='w-[300px] h-[50px] rounded-lg bg-state-success text-white'
-          >
-            네, 기존 계정으로 로그인 할게요
-          </button>
-          <button
-            type='button'
-            onClick={onClose}
-            className='w-[300px] h-[50px] rounded-lg bg-gray-200 text-gray-500'
-          >
-            아니오, 다른 계정으로 로그인할 할래요
-          </button>
-        </div>
       </div>
     </div>
   );

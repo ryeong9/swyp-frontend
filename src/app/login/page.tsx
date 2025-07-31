@@ -11,11 +11,8 @@ import Input from '@/components/input/page';
 import AutoLoginCheckbox from '@/components/checkbox/page';
 import { BASE_URL } from '@/constants/env';
 import { useLogin } from '@/hooks/login/useLogin';
-import {
-  LoginErrorModal,
-  LoginAlreadyModal,
-  LoginDuplicationModal,
-} from '@/components/modal/login/page';
+import { LoginErrorModal, LoginAlreadyModal } from '@/components/modal/login/page';
+
 const schema = z.object({
   email: z.string().email({ message: '이메일을 다시 확인해주세요' }),
   password: z
@@ -36,6 +33,7 @@ export default function LoginPage() {
   const [modalType, setModalType] = useState<
     'none' | 'loginError' | 'loginAlready' | 'loginDuplicate'
   >('none');
+
   const handleSocialLogin = (provider: 'google' | 'kakao' | 'naver') => {
     const authUrl = `${BASE_URL}/oauth2/authorization/${provider}`;
     window.location.href = authUrl;
@@ -60,6 +58,7 @@ export default function LoginPage() {
   const email = watch('email');
   const password = watch('password');
   const loginMutation = useLogin(setModalType);
+
   //로그인 폼 제출
   const onSubmit = async (data: FormData) => {
     const { email, password } = data;
@@ -152,9 +151,6 @@ export default function LoginPage() {
 
         {modalType === 'loginError' && <LoginErrorModal onClose={() => setModalType('none')} />}
         {modalType === 'loginAlready' && <LoginAlreadyModal onClose={() => setModalType('none')} />}
-        {modalType === 'loginDuplicate' && (
-          <LoginDuplicationModal onClose={() => setModalType('none')} />
-        )}
 
         <div className='flex items-center justify-center gap-4'>
           <hr className='flex-grow border-t border-gray-700' />
