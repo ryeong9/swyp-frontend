@@ -21,3 +21,23 @@ export type Login = {
   email: string;
   password: string;
 };
+
+// 감정 제외 전부 전송 타입
+export type RecordDataState = {
+  isbn: string;
+  status: string;
+  page?: number;
+  content: string;
+  finalNote?: string;
+};
+
+// 감정 상태관리 타입
+export type Emotions = {
+  emotionId: number;
+  score: number;
+};
+
+// 기록할 전체 데이터 타입
+export type RecordData = RecordDataState & {
+  emotions: Emotions[];
+};

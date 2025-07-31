@@ -1,13 +1,21 @@
 'use client';
 
 interface indexRecordProps {
-  score: number;
-  setScore: React.Dispatch<React.SetStateAction<number>>;
+  emotionData: Emotions;
+  setEmotionData: React.Dispatch<React.SetStateAction<Emotions>>;
+  onChange: (data: Partial<RecordDataState>) => void;
+  formData: RecordDataState;
 }
 
+import { Emotions, RecordDataState } from '@/types';
 import { useState } from 'react';
 
-export default function IndexRecord({ score, setScore }: indexRecordProps) {
+export default function IndexRecord({
+  emotionData,
+  setEmotionData,
+  onChange,
+  formData,
+}: indexRecordProps) {
   const positive = ['감동', '설렘', '유쾌한', '공감', '위로'];
   const negative = ['슬픔', '분노', '혼란', '불쾌한', '공포'];
   const neutrality = ['놀람', '당황한', '답답한', '아쉬운', '어색한'];
@@ -16,7 +24,11 @@ export default function IndexRecord({ score, setScore }: indexRecordProps) {
   const [showSelectEmotion, setShowSelectEmotion] = useState(false);
 
   const handleChangeScore = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setScore(Number(e.target.value));
+    setEmotionData((prev) => ({ ...prev, [e.target.name]: Number(e.target.value) }));
+  };
+
+  const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    onChange({ [e.target.name]: e.target.value });
   };
 
   return (
@@ -117,20 +129,21 @@ export default function IndexRecord({ score, setScore }: indexRecordProps) {
             type='range'
             min='1'
             max='10'
-            value={score}
+            name='score'
+            value={emotionData.score}
             onChange={handleChangeScore}
             className='slider-custom'
             style={{
               background: `linear-gradient(to right,#9BC99F ${
-                ((score - 1) / 9) * 100
-              }%, #F0F0F0 ${((score - 1) / 9) * 100}%)`,
+                ((emotionData.score - 1) / 9) * 100
+              }%, #F0F0F0 ${((emotionData.score - 1) / 9) * 100}%)`,
             }}
           />
           <div className='w-full flex justify-between mt-[9px] pl-2 pr-[18px] translate-x-[7px]'>
             {Array.from({ length: 10 }, (_, i) => (
               <span
                 key={i}
-                className={`font-sans text-sm ${score === i + 1 ? 'font-medium text-gray-900' : 'font-normal text-gray-500'}`}
+                className={`font-sans text-sm ${emotionData.score === i + 1 ? 'font-medium text-gray-900' : 'font-normal text-gray-500'}`}
               >
                 {i + 1}
               </span>
@@ -139,7 +152,8 @@ export default function IndexRecord({ score, setScore }: indexRecordProps) {
         </div>
         <div className='w-[84px] h-[51px] bg-[#EEF2FA] rounded-lg flex justify-center items-center'>
           <p className='font-sans font-medium text-base text-gray-900'>
-            {score} <span className='font-sans text-base font-normal text-gray-700'>점</span>
+            {emotionData.score}
+            <span className='font-sans text-base font-normal text-gray-700'>점</span>
           </p>
         </div>
       </div>
@@ -158,8 +172,13 @@ export default function IndexRecord({ score, setScore }: indexRecordProps) {
         <textarea
           placeholder='추가한 감정을 느낀 구절이나 생각을 남겨주세요.'
           className='w-full h-[200px] bg-gray-100 text-gray-900 rounded-2xl outline-none border-2 pt-6 pb-[47px] px-8 border-gray-300 hover:border-primary resize-none'
+          name='content'
+          onChange={handleChangeContent}
+          value={formData.content}
         />
-        <p className='absolute bottom-[24px] right-[32px] text-sm text-gray-500'>0/1000</p>
+        <p className='absolute bottom-[24px] right-[32px] text-sm text-gray-500'>
+          {formData.content.length}/1000
+        </p>
       </div>
     </div>
   );

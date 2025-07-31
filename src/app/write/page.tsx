@@ -2,16 +2,37 @@
 
 import BookModal from '@/components/writePage/bookModal';
 import IndexRecord from '@/components/writePage/indexRecord';
-import { useState } from 'react';
+import { Emotions, RecordDataState } from '@/types';
+import { useCallback, useState } from 'react';
 
 export default function WritePage() {
+  const [formData, setFormData] = useState<RecordDataState>({
+    isbn: '',
+    status: '독서 상태',
+    page: undefined,
+    content: '',
+    finalNote: '',
+  });
+
+  const [emotionData, setEmotionData] = useState<Emotions>({
+    emotionId: 0,
+    score: 10,
+  });
+
+  console.log(formData);
+  console.log(emotionData);
+
   const [selectedBook, setSelectedBook] = useState(true);
   const [showSelectModal, setShowSelectModal] = useState(false);
-  const [status, setStatus] = useState('독서 상태');
-  const [score, setScore] = useState(10);
 
-  const handleChangeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value);
+  const onChange = useCallback((data: Partial<RecordDataState>) => {
+    setFormData((prev) => ({ ...prev, ...data }));
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const typeValue = type === 'number' ? Number(value) : value;
+    onChange({ [name]: typeValue });
   };
 
   return (
@@ -64,14 +85,14 @@ export default function WritePage() {
               className={`w-[190px] h-[50px] flex justify-center items-center font-sans font-semibold leading-[30px] text-base rounded-lg mr-8 ${
                 !selectedBook
                   ? 'bg-gray-100 text-gray-300'
-                  : status === '읽는 중'
+                  : formData.status === '읽는 중'
                     ? 'bg-[#E6F2E6] text-primary'
-                    : status === '다 읽음'
+                    : formData.status === '다 읽음'
                       ? 'bg-primary-lightblue text-[#94A8D2]'
                       : 'bg-gray-100 text-gray-300'
               }`}
             >
-              {status}
+              {formData.status}
             </div>
             <label
               htmlFor='reading'
@@ -80,11 +101,11 @@ export default function WritePage() {
               <input
                 id='reading'
                 type='radio'
-                name='독서상태'
+                name='status'
                 value='읽는 중'
                 className='mr-2 reading'
                 disabled={!selectedBook}
-                onChange={handleChangeRadio}
+                onChange={handleChange}
               />
               <span>읽는 중</span>
             </label>
@@ -95,16 +116,16 @@ export default function WritePage() {
               <input
                 id='finished'
                 type='radio'
-                name='독서상태'
+                name='status'
                 value='다 읽음'
                 className='mr-2 finished'
                 disabled={!selectedBook}
-                onChange={handleChangeRadio}
+                onChange={handleChange}
               />
               <span>다 읽음</span>
             </label>
           </div>
-          {status === '읽는 중' ? (
+          {formData.status === '읽는 중' ? (
             <div className='w-full bg-background-input'>
               <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2'>
                 페이지
@@ -119,19 +140,26 @@ export default function WritePage() {
               </div>
               <input
                 type='number'
+                name='page'
                 className='appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none w-[190px] h-[50px] rounded-lg bg-gray-100 pl-[79px] text-gray-900  pr-6 outline-none border-2 border-gray-300 hover:border-primary mb-[56px]'
                 placeholder='페이지 입력'
+                onChange={handleChange}
+                value={formData.page ?? ''}
               />
               <IndexRecord
-                score={score}
-                setScore={setScore}
+                emotionData={emotionData}
+                setEmotionData={setEmotionData}
+                onChange={onChange}
+                formData={formData}
               />
             </div>
-          ) : status === '다 읽음' ? (
+          ) : formData.status === '다 읽음' ? (
             <>
               <IndexRecord
-                score={score}
-                setScore={setScore}
+                emotionData={emotionData}
+                setEmotionData={setEmotionData}
+                onChange={onChange}
+                formData={formData}
               />
               <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mt-[56px] mb-2'>
                 노트
@@ -143,8 +171,13 @@ export default function WritePage() {
                 <textarea
                   placeholder='책의 감상을 적어주세요.'
                   className='w-full h-[200px] bg-gray-100 text-gray-900 rounded-2xl outline-none border-2 pt-6 pb-[47px] px-8 border-gray-300 hover:border-primary resize-none'
+                  name='finalNote'
+                  onChange={handleChange}
+                  value={formData.finalNote}
                 />
-                <p className='absolute bottom-[24px] right-[32px] text-sm text-gray-500'>0/1500</p>
+                <p className='absolute bottom-[24px] right-[32px] text-sm text-gray-500'>
+                  {formData.finalNote?.length}/1500
+                </p>
               </div>
             </>
           ) : (
