@@ -1,6 +1,6 @@
 interface KeywordSelectProps {
   keyword: string;
-  setKeyword: (item: string) => void;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
   showEmojiDropDown: boolean;
   setShowEmojiDropDown: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -8,6 +8,7 @@ export default function WritePage() {
   const [selectedBook, setSelectedBook] = useState(true);
   const [showSelectModal, setShowSelectModal] = useState(false);
   const [status, setStatus] = useState('독서 상태');
+  const [score, setScore] = useState(10);
 
   const handleChangeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(e.target.value);
@@ -121,11 +122,17 @@ export default function WritePage() {
                 className='appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none w-[190px] h-[50px] rounded-lg bg-gray-100 pl-[79px] text-gray-900  pr-6 outline-none border-2 border-gray-300 hover:border-primary mb-[56px]'
                 placeholder='페이지 입력'
               />
-              <IndexRecord />
+              <IndexRecord
+                score={score}
+                setScore={setScore}
+              />
             </div>
           ) : status === '다 읽음' ? (
             <>
-              <IndexRecord />
+              <IndexRecord
+                score={score}
+                setScore={setScore}
+              />
               <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mt-[56px] mb-2'>
                 노트
               </h2>

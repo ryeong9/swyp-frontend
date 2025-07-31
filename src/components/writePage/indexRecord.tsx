@@ -1,14 +1,18 @@
 'use client';
 
+interface indexRecordProps {
+  score: number;
+  setScore: React.Dispatch<React.SetStateAction<number>>;
+}
+
 import { useState } from 'react';
 
-export default function IndexRecord() {
+export default function IndexRecord({ score, setScore }: indexRecordProps) {
   const positive = ['감동', '설렘', '유쾌한', '공감', '위로'];
   const negative = ['슬픔', '분노', '혼란', '불쾌한', '공포'];
   const neutrality = ['놀람', '당황한', '답답한', '아쉬운', '어색한'];
   const thought = ['깨달음', '통찰', '의문', '영감', '성찰'];
 
-  const [score, setScore] = useState(10);
   const [showSelectEmotion, setShowSelectEmotion] = useState(false);
 
   const handleChangeScore = (e: React.ChangeEvent<HTMLInputElement>) => {
