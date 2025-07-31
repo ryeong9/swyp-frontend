@@ -8,3 +8,11 @@ export type User = {
 export type DuplicationCheck = {
   available: boolean;
 };
+
+//이메일 인증코드 검사
+export type VerificationCheck = {
+  email: string;
+  authCode: string;
+  success: boolean;
+  status: number;
+};

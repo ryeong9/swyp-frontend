@@ -79,7 +79,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const showDeleteIcon = isFocused || (value as string).length > 0;
     const showRightIcon = showDeleteIcon || showStatusIcon || (showTimer && isActive);
-
+    const showTimerAbove = showTimer && isActive;
     return (
       <div className={`relative ${className}`}>
         <input

@@ -5,7 +5,7 @@ import { BASE_URL } from '@/constants/env';
 // 기본 instance
 export const defaultInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 2000,
+  timeout: 10000,
   headers: {
     accept: 'application/json',
     'Content-Type': 'application/json',
