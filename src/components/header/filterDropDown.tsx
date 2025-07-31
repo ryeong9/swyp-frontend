@@ -22,7 +22,7 @@ export default function FilterDropDown({
   };
 
   return (
-    <div className='absolute flex flex-col items-center top-14 left-0 w-[116px] h-[86px] bg-background-input drop-shadow-sm rounded-[8px] px-2 py-2 z-10'>
+    <div className='absolute flex flex-col items-center top-14 left-0 w-[116px] h-[86px] bg-background-input drop-shadow-sm rounded-lg px-2 py-2 z-10'>
       {categoryList.map((item, index) => (
         <li
           key={index}

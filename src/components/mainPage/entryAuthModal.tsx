@@ -34,8 +34,9 @@ export default function EntryAuthModal() {
         <section className='w-1/2 flex flex-col justify-center items-center py-12 px-[55px] bg-gray-200 rounded-r-2xl'>
           <img className='w-[300px] h-[238px] bg-gray-300' />
           <button
+            type='button'
             onClick={handleClickGotoLogin}
-            className='w-full mt-4 px-6 py-3 bg-primary rounded-lg font-sans font-medium text-base text-white'
+            className='w-full mt-4 px-6 py-3 bg-primary rounded-lg font-sans font-medium text-base text-white cursor-pointer'
           >
             로그인/회원가입 하기
           </button>

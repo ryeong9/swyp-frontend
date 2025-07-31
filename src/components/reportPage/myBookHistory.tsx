@@ -75,8 +75,9 @@ export default function MyBookHistory() {
             이 달의 감정 기록이 아직 없어요.
           </p>
           <button
+            type='button'
             onClick={handleClickWriteBtn}
-            className='w-[190px] h-[50px] bg-primary rounded-[8px] font-sans font-medium text-base text-background-input'
+            className='w-[190px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input'
           >
             기록하기
           </button>

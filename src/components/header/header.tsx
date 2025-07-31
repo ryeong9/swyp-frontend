@@ -19,7 +19,8 @@ export default function Header() {
       <SearchBar />
       <div className='relative flex ml-[23px] pr-[23px] items-center'>
         <button
-          className='w-[20px] h-[20px] mr-[18px]'
+          type='button'
+          className='w-[20px] h-[20px] mr-[18px] cursor-pointer'
           onClick={() => setShowNotificationDropDown((prev) => !prev)}
         >
           <img
@@ -29,7 +30,8 @@ export default function Header() {
         </button>
         {showNotificationDropDown && <NotificationDropDown />}
         <button
-          className='w-[20px] h-[20px]'
+          type='button'
+          className='w-[20px] h-[20px] cursor-pointer'
           onClick={() => setShowProfileDropDown((prev) => !prev)}
         >
           <img

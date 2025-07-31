@@ -20,7 +20,10 @@ export default function BookShelfSection() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금까지 읽었던 책들이 책장에 꽂혀 있어요
           </p>
-          <button className='flex'>
+          <button
+            type='button'
+            className='flex cursor-pointer'
+          >
             <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
             <img
               src='/icons/arrowRight.svg'
@@ -33,7 +36,7 @@ export default function BookShelfSection() {
         {data.map((item) => (
           <div
             key={item.id}
-            className='w-[172px] h-[246px] bg-gray-500 rounded-[8px]'
+            className='w-[172px] h-[246px] bg-gray-500 rounded-lg cursor-pointer'
           >
             {item.title}
           </div>

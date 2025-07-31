@@ -19,7 +19,8 @@ export default function BookReport() {
             지금까지의 기록들을 바탕으로 리포트를 작성해보았어요
           </p>
           <button
-            className='flex'
+            type='button'
+            className='flex cursor-pointer'
             onClick={handleClickMoreBtn}
           >
             <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>

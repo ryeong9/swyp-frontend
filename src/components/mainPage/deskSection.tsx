@@ -15,7 +15,10 @@ export default function DeskSection() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금 읽고 있는 책과 추천 책을 책상 위에 올려놔 보았어요
           </p>
-          <button className='flex'>
+          <button
+            type='button'
+            className='flex cursor-pointer'
+          >
             <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
             <img
               src='/icons/arrowRight.svg'
@@ -30,7 +33,7 @@ export default function DeskSection() {
             return (
               <div
                 key={item.book.id}
-                className='relative w-[172px] h-[246px] bg-gray-500 rounded-[8px]'
+                className='relative w-[172px] h-[246px] bg-gray-500 rounded-lg cursor-pointer'
               >
                 {item.book.title}
                 {item.type === 'recommend' ? (
