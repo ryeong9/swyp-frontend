@@ -129,7 +129,6 @@ export default function SignUpPage() {
     try {
       const result = await sendVerificationMutation.mutateAsync(email);
       console.log('Send Verification Result:', result);
-      setVerificationStatus('인증코드가 전송되었습니다');
       startTimer();
     } catch (error) {
       console.error('Send Verification Error:', error);
