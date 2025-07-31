@@ -44,7 +44,7 @@ const schema = z
 export default function SignUpPage() {
   const router = useRouter();
   const { timeLeft, isActive, startTimer, stopTimer, formatTime } = useVerificationTimer(300);
-  const [showErrorModal, setShowErrorModal] = useState(true);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [nicknameStatus, setNicknameStatus] = useState<string | null>(null);
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
@@ -85,7 +85,7 @@ export default function SignUpPage() {
   const sendVerificationMutation = useSendVerificationCode();
   const checkVerificationMutation = useCheckVerificationCode();
   const signupMutation = useSignup();
-  /** 🔹 닉네임 중복 확인 */
+  /**닉네임 중복 확인 */
   const handleNicknameDuplication = async () => {
     if (!nickname || errors.nickname) return;
     try {
@@ -103,7 +103,7 @@ export default function SignUpPage() {
     }
   };
 
-  /** 🔹 이메일 중복 확인 */
+  /**이메일 중복 확인 */
   const handleEmailDuplication = async () => {
     if (!email || errors.email) return;
 
@@ -122,7 +122,7 @@ export default function SignUpPage() {
     }
   };
 
-  /** 🔹 이메일 인증코드 발송 */
+  /**이메일 인증코드 발송 */
   const handleSendVerificationCode = async () => {
     if (!email || errors.email || !isEmailChecked || hasEmailError) return;
 
@@ -160,7 +160,7 @@ export default function SignUpPage() {
     }
   };
 
-  /** 🔹 폼 제출 */
+  /**폼 제출 */
   const onSubmit = async (data: any) => {
     const { email, password, nickname } = data;
     try {
