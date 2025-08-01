@@ -9,6 +9,7 @@ interface indexRecordProps {
 
 import { Emotions, RecordDataState } from '@/types';
 import { useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 
 export default function IndexRecord({
   emotionData,
@@ -28,6 +29,9 @@ export default function IndexRecord({
   };
 
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length > 1000) {
+      e.target.value = e.target.value.substring(0, 1000);
+    }
     onChange({ [e.target.name]: e.target.value });
   };
 
@@ -169,9 +173,11 @@ export default function IndexRecord({
         <p className='font-sans font-medium text-background-input'>감정 추가하기</p>
       </button>
       <div className='relative mt-10'>
-        <textarea
+        <TextareaAutosize
+          cacheMeasurements
+          minRows={6}
           placeholder='추가한 감정을 느낀 구절이나 생각을 남겨주세요.'
-          className='w-full h-[200px] bg-gray-100 text-gray-900 rounded-2xl outline-none border-2 pt-6 pb-[47px] px-8 border-gray-300 hover:border-primary resize-none'
+          className='w-full bg-gray-100 text-gray-900 rounded-2xl outline-none border-2 py-7 px-8 border-gray-300 hover:border-primary resize-none overflow-hidden'
           name='content'
           onChange={handleChangeContent}
           value={formData.content}

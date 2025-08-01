@@ -4,6 +4,7 @@ import BookModal from '@/components/writePage/bookModal';
 import IndexRecord from '@/components/writePage/indexRecord';
 import { Emotions, RecordDataState } from '@/types';
 import { useCallback, useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 
 export default function WritePage() {
   const [formData, setFormData] = useState<RecordDataState>({
@@ -31,8 +32,13 @@ export default function WritePage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    const typeValue = type === 'number' ? Number(value) : value;
-    onChange({ [name]: typeValue });
+    let newValue = type === 'number' ? Number(value) : value;
+
+    if (name === 'finalNote' && typeof newValue === 'string' && newValue.length > 1500) {
+      newValue = newValue.substring(0, 1500);
+    }
+
+    onChange({ [name]: newValue });
   };
 
   return (
@@ -168,14 +174,16 @@ export default function WritePage() {
                 책을 다 읽은 뒤의 생각과 느낌을 자유롭게 적어주세요.
               </p>
               <div className='relative mt-6'>
-                <textarea
+                <TextareaAutosize
+                  cacheMeasurements
+                  minRows={6}
                   placeholder='책의 감상을 적어주세요.'
-                  className='w-full h-[200px] bg-gray-100 text-gray-900 rounded-2xl outline-none border-2 pt-6 pb-[47px] px-8 border-gray-300 hover:border-primary resize-none'
+                  className='w-full bg-gray-100 text-gray-900 rounded-2xl outline-none border-2 py-7 px-8 border-gray-300 hover:border-primary resize-none overflow-hidden'
                   name='finalNote'
                   onChange={handleChange}
                   value={formData.finalNote}
                 />
-                <p className='absolute bottom-[24px] right-[32px] text-sm text-gray-500'>
+                <p className='absolute bottom-[18px] right-[32px] text-sm text-gray-500'>
                   {formData.finalNote?.length}/1500
                 </p>
               </div>
