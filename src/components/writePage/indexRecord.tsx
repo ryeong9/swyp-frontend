@@ -24,11 +24,9 @@ export default function IndexRecord({
   // 감정 선택 버튼 클릭 시
   const handleClickSelectBtn = (index: number) => {
     if (selectedIndex === index && showSelectEmotion) {
-      // 이미 열려있으면 닫기
       setShowSelectEmotion(false);
       setSelectedIndex(null);
     } else {
-      // 새로 열기
       setSelectedIndex(index);
       setShowSelectEmotion(true);
     }
@@ -60,12 +58,16 @@ export default function IndexRecord({
     );
   };
 
+  // 글자 제한
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > 1000) {
       e.target.value = e.target.value.substring(0, 1000);
     }
     onChange({ [e.target.name]: e.target.value });
   };
+
+  //emotionId에 맞는 감정 데이터 반환
+  const getEmotionById = (id: number) => emotions.find((emo) => emo.id === id);
 
   return (
     <div className='w-full bg-background-input'>
@@ -74,93 +76,112 @@ export default function IndexRecord({
         인상 깊었던 부분에 감정 이모지를 추가해 점수를 선택해주세요. (최대 5개)
       </p>
       <div className='flex flex-col'>
-        {emotionData.map((item, index) => (
-          <div
-            key={index}
-            className='relative flex items-center px-8 py-6 bg-gray-100 rounded-2xl mb-6'
-          >
-            <button
-              type='button'
-              className='w-[83px] flex flex-col justify-center items-center pr-[18px] border-r-1 border-r-gray-300'
-              onClick={() => handleClickSelectBtn(index)}
+        {emotionData.map((item, index) => {
+          const emotionInfo = getEmotionById(item.emotionId);
+          return (
+            <div
+              key={index}
+              className='relative flex items-center px-8 py-6 bg-gray-100 rounded-2xl mb-6'
             >
-              <img
-                src='/icons/plusIcon.svg'
-                alt='플러스 아이콘'
-                className='w-[44px] h-[44px] p-3 rounded-full bg-gray-300 mb-2'
-              />
-              <p className='font-sans text-sm text-gray-500'>감정 선택</p>
-            </button>
-            {showSelectEmotion && selectedIndex === index && (
-              <div className='absolute box-border top-0 left-[103px] w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 p-6 flex flex-col justify-between'>
-                <div className='w-full flex justify-between items-start'>
-                  <div className='flex flex-col'>
-                    <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
-                      긍정
-                    </p>
-                    <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
-                      부정
-                    </p>
-                    <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
-                      중립
-                    </p>
-                    <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px]'>
-                      사고기반
-                    </p>
-                  </div>
-                  <div className='grid grid-cols-5 grid-rows-4 gap-x-6 gap-y-5'>
-                    {emotions.map((item) => (
-                      <button
-                        type='button'
-                        key={item.id}
-                        onClick={() => handleClickEmotion(item.id)}
-                      >
-                        <img
-                          src={item.icon}
-                          alt='아이콘'
-                          className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
-                        />
-                        <p className='font-sans text-sm text-gray-500'>{item.name}</p>
-                      </button>
-                    ))}
+              <button
+                type='button'
+                className='w-[83px] flex flex-col justify-center items-center pr-[18px] border-r-1 border-r-gray-300'
+                onClick={() => handleClickSelectBtn(index)}
+              >
+                {item.emotionId === 0 ? (
+                  <>
+                    <img
+                      src='/icons/plusIcon.svg'
+                      alt='플러스 아이콘'
+                      className='w-[44px] h-[44px] p-3 rounded-full bg-gray-300 mb-2'
+                    />
+                    <p className='font-sans text-sm text-gray-500'>감정 선택</p>
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src={emotionInfo?.icon || '/icons/plusIcon.svg'}
+                      alt={emotionInfo?.name || '감정'}
+                      className='w-[44px] h-[44px] mb-2'
+                    />
+                    <p className='font-sans text-sm text-gray-900'>{emotionInfo?.name}</p>
+                  </>
+                )}
+              </button>
+              {showSelectEmotion && selectedIndex === index && (
+                <div className='absolute box-border top-0 left-[103px] w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 pl-6 pr-[17.5px] py-4 flex flex-col justify-between'>
+                  <div className='w-full flex justify-between items-start'>
+                    <div className='flex flex-col'>
+                      <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                        긍정
+                      </p>
+                      <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                        부정
+                      </p>
+                      <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                        중립
+                      </p>
+                      <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px]'>
+                        사고기반
+                      </p>
+                    </div>
+                    <div className='grid grid-cols-5 grid-rows-4 gap-x-[9px] gap-y-2'>
+                      {emotions.map((item) => (
+                        <button
+                          type='button'
+                          key={item.id}
+                          onClick={() => handleClickEmotion(item.id)}
+                          className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
+                        >
+                          <img
+                            src={item.icon}
+                            alt='아이콘'
+                            className='w-[60px] h-[60px] mb-2'
+                          />
+                          <p className='font-sans text-sm text-gray-500 group-hover:text-gray-900'>
+                            {item.name}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
+              )}
+              <div className='w-[601px] px-6'>
+                <input
+                  type='range'
+                  min='1'
+                  max='10'
+                  name='score'
+                  value={item.score}
+                  onChange={(e) => handleChangeScore(index, Number(e.target.value))}
+                  className='slider-custom'
+                  style={{
+                    background: `linear-gradient(to right,#9BC99F ${
+                      ((item.score - 1) / 9) * 100
+                    }%, #F0F0F0 ${((item.score - 1) / 9) * 100}%)`,
+                  }}
+                />
+                <div className='w-full flex justify-between mt-[2px] pl-2 pr-[18px] translate-x-[6px]'>
+                  {Array.from({ length: 10 }, (_, i) => (
+                    <span
+                      key={i}
+                      className={`font-sans text-sm ${item.score === i + 1 ? 'font-medium text-gray-900' : 'font-normal text-gray-500'}`}
+                    >
+                      {i + 1}
+                    </span>
+                  ))}
+                </div>
               </div>
-            )}
-            <div className='w-[601px] px-6'>
-              <input
-                type='range'
-                min='1'
-                max='10'
-                name='score'
-                value={item.score}
-                onChange={(e) => handleChangeScore(index, Number(e.target.value))}
-                className='slider-custom'
-                style={{
-                  background: `linear-gradient(to right,#9BC99F ${
-                    ((item.score - 1) / 9) * 100
-                  }%, #F0F0F0 ${((item.score - 1) / 9) * 100}%)`,
-                }}
-              />
-              <div className='w-full flex justify-between mt-[2px] pl-2 pr-[18px] translate-x-[6px]'>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <span
-                    key={i}
-                    className={`font-sans text-sm ${item.score === i + 1 ? 'font-medium text-gray-900' : 'font-normal text-gray-500'}`}
-                  >
-                    {i + 1}
-                  </span>
-                ))}
+              <div className='w-[84px] h-[51px] bg-[#EEF2FA] rounded-lg flex justify-center items-center'>
+                <p className='font-sans font-medium text-base text-gray-900'>
+                  {item.score}
+                  <span className='font-sans text-base font-normal text-gray-700'>점</span>
+                </p>
               </div>
             </div>
-            <div className='w-[84px] h-[51px] bg-[#EEF2FA] rounded-lg flex justify-center items-center'>
-              <p className='font-sans font-medium text-base text-gray-900'>
-                {item.score}
-                <span className='font-sans text-base font-normal text-gray-700'>점</span>
-              </p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <button
         type='button'
