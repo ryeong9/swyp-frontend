@@ -41,3 +41,16 @@ export type Emotions = {
 export type RecordData = RecordDataState & {
   emotions: Emotions[];
 };
+
+// 도서 응답값
+export type Book = {
+  bookshelfId: number;
+  status: string;
+  isbn: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  publisher: string;
+  category: string;
+  publishedDate: string;
+};
