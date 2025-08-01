@@ -15,10 +15,7 @@ export default function WritePage() {
     finalNote: '',
   });
 
-  const [emotionData, setEmotionData] = useState<Emotions>({
-    emotionId: 0,
-    score: 10,
-  });
+  const [emotionData, setEmotionData] = useState<Emotions[]>([{ emotionId: 0, score: 10 }]);
 
   console.log(formData);
   console.log(emotionData);

@@ -1,12 +1,13 @@
 'use client';
 
 interface indexRecordProps {
-  emotionData: Emotions;
-  setEmotionData: React.Dispatch<React.SetStateAction<Emotions>>;
+  emotionData: Emotions[];
+  setEmotionData: React.Dispatch<React.SetStateAction<Emotions[]>>;
   onChange: (data: Partial<RecordDataState>) => void;
   formData: RecordDataState;
 }
 
+import { emotions } from '@/constants/emotion';
 import { Emotions, RecordDataState } from '@/types';
 import { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -17,15 +18,46 @@ export default function IndexRecord({
   onChange,
   formData,
 }: indexRecordProps) {
-  const positive = ['감동', '설렘', '유쾌한', '공감', '위로'];
-  const negative = ['슬픔', '분노', '혼란', '불쾌한', '공포'];
-  const neutrality = ['놀람', '당황한', '답답한', '아쉬운', '어색한'];
-  const thought = ['깨달음', '통찰', '의문', '영감', '성찰'];
-
   const [showSelectEmotion, setShowSelectEmotion] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const handleChangeScore = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmotionData((prev) => ({ ...prev, [e.target.name]: Number(e.target.value) }));
+  // 감정 선택 버튼 클릭 시
+  const handleClickSelectBtn = (index: number) => {
+    if (selectedIndex === index && showSelectEmotion) {
+      // 이미 열려있으면 닫기
+      setShowSelectEmotion(false);
+      setSelectedIndex(null);
+    } else {
+      // 새로 열기
+      setSelectedIndex(index);
+      setShowSelectEmotion(true);
+    }
+  };
+
+  // 감정 추가하기 버튼 클릭 시
+  const handleClickPlusBtn = () => {
+    if (emotionData.length >= 5) return;
+    const newIndex = emotionData.length;
+
+    setEmotionData((prev) => [...prev, { emotionId: 0, score: 10 }]);
+    setSelectedIndex(newIndex);
+  };
+
+  // 감정 클릭 시
+  const handleClickEmotion = (id: number) => {
+    if (selectedIndex === null) return;
+    setEmotionData((prev) =>
+      prev.map((item, index) => (index === selectedIndex ? { ...item, emotionId: id } : item)),
+    );
+    setShowSelectEmotion(false);
+    setSelectedIndex(null);
+  };
+
+  // 슬라이더 점수 변경
+  const handleChangeScore = (index: number, newScore: number) => {
+    setEmotionData((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, score: newScore } : item)),
+    );
   };
 
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -41,136 +73,113 @@ export default function IndexRecord({
       <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider mb-6'>
         인상 깊었던 부분에 감정 이모지를 추가해 점수를 선택해주세요. (최대 5개)
       </p>
-      <div className='relative flex items-center px-8 py-6 bg-gray-100 rounded-2xl'>
-        <button
-          type='button'
-          className='flex flex-col justify-center items-center pr-6 border-r-1 border-r-gray-300'
-          onClick={() => setShowSelectEmotion((prev) => !prev)}
-        >
-          <img
-            src='/icons/plusIcon.svg'
-            alt='플러스 아이콘'
-            className='w-[44px] h-[44px] p-3 rounded-full bg-gray-300 mb-2'
-          />
-          <p className='font-sans text-sm text-gray-500'>감정 선택</p>
-        </button>
-        {showSelectEmotion && (
-          <div className='absolute top-0 left-[129px] w-[530px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 p-6 flex flex-col justify-between'>
-            <div className='flex justify-between items-center'>
-              <p className='font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[24px]'>
-                긍정
-              </p>
-              {positive.map((item, index) => (
-                <button
-                  type='button'
-                  key={index}
-                >
-                  <img
-                    src='/icons/emotion/positiveIcon.svg'
-                    alt='긍정 아이콘'
-                    className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
-                  />
-                  <p className='font-sans text-sm text-gray-500'>{item}</p>
-                </button>
-              ))}
+      <div className='flex flex-col'>
+        {emotionData.map((item, index) => (
+          <div
+            key={index}
+            className='relative flex items-center px-8 py-6 bg-gray-100 rounded-2xl mb-6'
+          >
+            <button
+              type='button'
+              className='w-[83px] flex flex-col justify-center items-center pr-[18px] border-r-1 border-r-gray-300'
+              onClick={() => handleClickSelectBtn(index)}
+            >
+              <img
+                src='/icons/plusIcon.svg'
+                alt='플러스 아이콘'
+                className='w-[44px] h-[44px] p-3 rounded-full bg-gray-300 mb-2'
+              />
+              <p className='font-sans text-sm text-gray-500'>감정 선택</p>
+            </button>
+            {showSelectEmotion && selectedIndex === index && (
+              <div className='absolute box-border top-0 left-[103px] w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 p-6 flex flex-col justify-between'>
+                <div className='w-full flex justify-between items-start'>
+                  <div className='flex flex-col'>
+                    <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                      긍정
+                    </p>
+                    <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                      부정
+                    </p>
+                    <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                      중립
+                    </p>
+                    <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px]'>
+                      사고기반
+                    </p>
+                  </div>
+                  <div className='grid grid-cols-5 grid-rows-4 gap-x-6 gap-y-5'>
+                    {emotions.map((item) => (
+                      <button
+                        type='button'
+                        key={item.id}
+                        onClick={() => handleClickEmotion(item.id)}
+                      >
+                        <img
+                          src={item.icon}
+                          alt='아이콘'
+                          className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
+                        />
+                        <p className='font-sans text-sm text-gray-500'>{item.name}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className='w-[601px] px-6'>
+              <input
+                type='range'
+                min='1'
+                max='10'
+                name='score'
+                value={item.score}
+                onChange={(e) => handleChangeScore(index, Number(e.target.value))}
+                className='slider-custom'
+                style={{
+                  background: `linear-gradient(to right,#9BC99F ${
+                    ((item.score - 1) / 9) * 100
+                  }%, #F0F0F0 ${((item.score - 1) / 9) * 100}%)`,
+                }}
+              />
+              <div className='w-full flex justify-between mt-[2px] pl-2 pr-[18px] translate-x-[6px]'>
+                {Array.from({ length: 10 }, (_, i) => (
+                  <span
+                    key={i}
+                    className={`font-sans text-sm ${item.score === i + 1 ? 'font-medium text-gray-900' : 'font-normal text-gray-500'}`}
+                  >
+                    {i + 1}
+                  </span>
+                ))}
+              </div>
             </div>
-            <div className='flex justify-between items-center'>
-              <p className='font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[24px]'>
-                부정
+            <div className='w-[84px] h-[51px] bg-[#EEF2FA] rounded-lg flex justify-center items-center'>
+              <p className='font-sans font-medium text-base text-gray-900'>
+                {item.score}
+                <span className='font-sans text-base font-normal text-gray-700'>점</span>
               </p>
-              {negative.map((item, index) => (
-                <button
-                  type='button'
-                  key={index}
-                >
-                  <img
-                    src='/icons/emotion/negativeIcon.svg'
-                    alt='부정 아이콘'
-                    className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
-                  />
-                  <p className='font-sans text-sm text-gray-500'>{item}</p>
-                </button>
-              ))}
-            </div>
-            <div className='flex justify-between items-center'>
-              <p className='font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[24px]'>
-                중립
-              </p>
-              {neutrality.map((item, index) => (
-                <button
-                  type='button'
-                  key={index}
-                >
-                  <img
-                    src='/icons/emotion/neutralityIcon.svg'
-                    alt='중립 아이콘'
-                    className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
-                  />
-                  <p className='font-sans text-sm text-gray-500'>{item}</p>
-                </button>
-              ))}
-            </div>
-            <div className='flex justify-between items-center'>
-              <p className='font-sans font-medium text-base text-gray-700'>사고기반</p>
-              {thought.map((item, index) => (
-                <button
-                  type='button'
-                  key={index}
-                >
-                  <img
-                    src='/icons/emotion/thoughtIcon.svg'
-                    alt='사고기반 아이콘'
-                    className='w-[60px] h-[60px] px-3 py-1 bg-primary-lightblue rounded-full border-1 border-primary-light mb-2'
-                  />
-                  <p className='font-sans text-sm text-gray-500'>{item}</p>
-                </button>
-              ))}
             </div>
           </div>
-        )}
-        <div className='w-[595px] px-5'>
-          <input
-            type='range'
-            min='1'
-            max='10'
-            name='score'
-            value={emotionData.score}
-            onChange={handleChangeScore}
-            className='slider-custom'
-            style={{
-              background: `linear-gradient(to right,#9BC99F ${
-                ((emotionData.score - 1) / 9) * 100
-              }%, #F0F0F0 ${((emotionData.score - 1) / 9) * 100}%)`,
-            }}
-          />
-          <div className='w-full flex justify-between mt-[9px] pl-2 pr-[18px] translate-x-[7px]'>
-            {Array.from({ length: 10 }, (_, i) => (
-              <span
-                key={i}
-                className={`font-sans text-sm ${emotionData.score === i + 1 ? 'font-medium text-gray-900' : 'font-normal text-gray-500'}`}
-              >
-                {i + 1}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className='w-[84px] h-[51px] bg-[#EEF2FA] rounded-lg flex justify-center items-center'>
-          <p className='font-sans font-medium text-base text-gray-900'>
-            {emotionData.score}
-            <span className='font-sans text-base font-normal text-gray-700'>점</span>
-          </p>
-        </div>
+        ))}
       </div>
       <button
         type='button'
-        className='w-[158px] h-[46px] flex items-center justify-center bg-gray-700 rounded-lg mt-6'
+        className={`w-[158px] h-[46px] flex items-center justify-center rounded-lg ${emotionData.length >= 5 ? 'bg-gray-300 cursor-not-allowed' : 'bg-gray-700 cursor-pointer'}`}
+        onClick={handleClickPlusBtn}
+        disabled={emotionData.length >= 5}
       >
         <img
-          src='/icons/plusIcon.svg'
+          src={emotionData.length >= 5 ? '/icons/plusIconDisabled.svg' : '/icons/plusIcon.svg'}
           alt='플러스 아이콘'
           className='mr-2'
         />
-        <p className='font-sans font-medium text-background-input'>감정 추가하기</p>
+        <p
+          className={`font-sans font-medium ${
+            emotionData.length >= 5 ? 'text-gray-500' : 'text-background-input'
+          }`}
+        >
+          감정 추가하기
+        </p>
       </button>
       <div className='relative mt-10'>
         <TextareaAutosize
