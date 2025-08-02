@@ -44,6 +44,9 @@ export default function IndexRecord({
   // 감정 클릭 시
   const handleClickEmotion = (id: number) => {
     if (selectedIndex === null) return;
+    if (emotionData.some((emotion) => emotion.emotionId === id)) {
+      return;
+    }
     setEmotionData((prev) =>
       prev.map((item, index) => (index === selectedIndex ? { ...item, emotionId: id } : item)),
     );
@@ -128,23 +131,26 @@ export default function IndexRecord({
                       </p>
                     </div>
                     <div className='grid grid-cols-5 grid-rows-4 gap-x-[9px] gap-y-2'>
-                      {emotions.map((item) => (
-                        <button
-                          type='button'
-                          key={item.id}
-                          onClick={() => handleClickEmotion(item.id)}
-                          className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
-                        >
-                          <img
-                            src={item.icon}
-                            alt='아이콘'
-                            className='w-[60px] h-[60px] mb-2'
-                          />
-                          <p className='font-sans text-sm text-gray-500 group-hover:text-gray-900'>
-                            {item.name}
-                          </p>
-                        </button>
-                      ))}
+                      {emotions.map((item) => {
+                        const isUsed = emotionData.some((emo) => item.id === emo.emotionId);
+                        return (
+                          <button
+                            type='button'
+                            key={item.id}
+                            onClick={() => handleClickEmotion(item.id)}
+                            className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
+                          >
+                            <img
+                              src={item.icon}
+                              alt='아이콘'
+                              className='w-[60px] h-[60px] mb-2'
+                            />
+                            <p className='font-sans text-sm text-gray-500 group-hover:text-gray-900'>
+                              {item.name}
+                            </p>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
