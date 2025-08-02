@@ -22,6 +22,17 @@ export type Login = {
   password: string;
 };
 
+// 로컬 로그인 정보
+export type LoginResponse = {
+  accessToken: string;
+  userResponse: {
+    userId: number;
+    email: string;
+    nickname: string;
+    provider: string;
+  };
+};
+
 // 감정 제외 전부 전송 타입
 export type RecordDataState = {
   isbn: string;
