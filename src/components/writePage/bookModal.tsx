@@ -1,5 +1,6 @@
 'use client';
 
+import useGetDeskData from '@/hooks/main/useGetDeskData';
 import { Book } from '@/types';
 import { useState } from 'react';
 
@@ -8,66 +9,8 @@ interface BookModalProps {
   setShowSelectModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// 목데이터
-const data: Book[] = [
-  {
-    bookshelfId: 1,
-    status: 'READING',
-    isbn: '9791191136979',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    bookshelfId: 2,
-    status: 'READING',
-    isbn: '9791191136971',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    bookshelfId: 3,
-    status: 'READING',
-    isbn: '9791191136972',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    bookshelfId: 4,
-    status: 'READING',
-    isbn: '9791191136973',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    bookshelfId: 5,
-    status: 'READING',
-    isbn: '9791191136974',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-];
-
 export default function BookModal({ setSelectedBook, setShowSelectModal }: BookModalProps) {
+  const { data: deskData } = useGetDeskData();
   const [tempSelectedBook, setTempSelectedBook] = useState<Book | null>(null);
 
   const handleClickAddBtn = () => {
@@ -98,7 +41,7 @@ export default function BookModal({ setSelectedBook, setShowSelectModal }: BookM
         </div>
         <div className='h-[503px] overflow-y-scroll'>
           <div className='grid grid-cols-5 gap-x-[24px] gap-y-[24px] py-8 px-[56px] bg-background-input'>
-            {data.map((item) => (
+            {deskData?.map((item) => (
               <div
                 key={item.isbn}
                 className='cursor-pointer'
