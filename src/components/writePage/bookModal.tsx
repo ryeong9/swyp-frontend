@@ -1,20 +1,26 @@
 'use client';
 
 import useGetDeskData from '@/hooks/main/useGetDeskData';
-import { Book } from '@/types';
+import { Book, RecordDataState } from '@/types';
 import { useState } from 'react';
 
 interface BookModalProps {
   setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
   setShowSelectModal: React.Dispatch<React.SetStateAction<boolean>>;
+  onChange: (data: Partial<RecordDataState>) => void;
 }
 
-export default function BookModal({ setSelectedBook, setShowSelectModal }: BookModalProps) {
+export default function BookModal({
+  setSelectedBook,
+  setShowSelectModal,
+  onChange,
+}: BookModalProps) {
   const { data: deskData } = useGetDeskData();
   const [tempSelectedBook, setTempSelectedBook] = useState<Book | null>(null);
 
   const handleClickAddBtn = () => {
     setSelectedBook(tempSelectedBook);
+    onChange({ isbn: tempSelectedBook?.isbn });
     setShowSelectModal(false);
   };
 

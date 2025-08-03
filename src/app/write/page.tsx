@@ -2,6 +2,8 @@
 
 import BookModal from '@/components/writePage/bookModal';
 import IndexRecord from '@/components/writePage/indexRecord';
+import RoutingPopUp from '@/components/writePage/routingPopUp';
+import usePostRecordData from '@/hooks/write/usePostRecordData';
 import { Book, Emotions, RecordDataState } from '@/types';
 import { useCallback, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -40,13 +42,39 @@ export default function WritePage() {
 
   console.log(selectedBook);
 
+  const isSubmitEnabled = formData.isbn !== '' && formData.status !== '독서 상태';
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const { mutate } = usePostRecordData(() => setShowSuccessModal(true));
+
+  const handleClickSubmitBtn = () => {
+    if (!isSubmitEnabled) return;
+    mutate({
+      isbn: formData.isbn,
+      status: formData.status === '읽는 중' ? 'READING' : 'FINISHED',
+      page: formData.page,
+      content: formData.content,
+      finalNote: formData.finalNote,
+      emotions: emotionData.map((item) => ({
+        emotionId: item.emotionId,
+        score: item.score,
+      })),
+    });
+  };
+
   return (
     <>
       <div className='w-full px-[205px] py-5 flex justify-end border-b-2 border-b-gray-200'>
         <button
           type='submit'
-          className='w-[190px] h-[50px] rounded-lg font-sans font-medium bg-primary text-background-input disabled:bg-gray-300 disabled:text-gray-500 cursor-pointer'
-          disabled
+          className={`w-[190px] h-[50px] rounded-lg font-sans font-medium ${
+            isSubmitEnabled
+              ? 'bg-primary text-background-input cursor-pointer'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+          disabled={!isSubmitEnabled}
+          onClick={handleClickSubmitBtn}
         >
           등록하기
         </button>
@@ -119,6 +147,7 @@ export default function WritePage() {
           <BookModal
             setSelectedBook={setSelectedBook}
             setShowSelectModal={setShowSelectModal}
+            onChange={onChange}
           />
         )}
         {/* 독서 상태 선택하기 */}
@@ -238,6 +267,7 @@ export default function WritePage() {
           )}
         </section>
       </div>
+      {showSuccessModal && <RoutingPopUp setShowSuccessModal={setShowSuccessModal} />}
     </>
   );
 }
