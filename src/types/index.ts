@@ -65,6 +65,7 @@ export type Book = {
   category: string;
   publishedDate: string;
 };
+
 //제목 검색
 export type TitleSearch = {
   page: number;
