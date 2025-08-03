@@ -1,7 +1,7 @@
 // 일반 로그인, 회원가입 관련 get/post.. api들 모음
 
 import { defaultInstance, authInstance } from '@/lib/axios';
-import { DuplicationCheck, User, VerificationCheck } from '@/types';
+import { DuplicationCheck, TitleSearch, User, VerificationCheck } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 // 로그인 유저 확인
 export const fetchUser = async (): Promise<User> => {
@@ -49,5 +49,15 @@ export const postSignup = async (email: string, password: string, nickname: stri
 //로그인
 export const postLogin = async (email: string, password: string) => {
   const res = await defaultInstance.post('/api/auth/login', { email, password });
+  return res.data;
+};
+//검색결과
+export const getBooksSearch = async (keyword: string, startIndex: number): Promise<TitleSearch> => {
+  const res = await defaultInstance.get('/api/books/search/title', {
+    params: {
+      keyword,
+      startIndex,
+    },
+  });
   return res.data;
 };
