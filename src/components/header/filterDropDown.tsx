@@ -1,10 +1,11 @@
 interface CategorySelectProps {
   category: string;
-  setCategory: (item: string) => void;
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
   setShowFilterDropDown: React.Dispatch<React.SetStateAction<boolean>>;
-  setKeyword: (item: string) => void;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
   setShowEmojiDropDown: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 export default function FilterDropDown({
   category,
   setCategory,

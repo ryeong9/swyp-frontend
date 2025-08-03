@@ -1,131 +1,36 @@
+'use client';
+
+import useGetDeskData from '@/hooks/main/useGetDeskData';
+import { Book, RecordDataState } from '@/types';
+import { useState } from 'react';
+
 interface BookModalProps {
-  setSelectedBook: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
   setShowSelectModal: React.Dispatch<React.SetStateAction<boolean>>;
+  onChange: (data: Partial<RecordDataState>) => void;
 }
 
-// 임의의 타입 지정이라 지울 예정
-type deskData = {
-  bookId: number;
-  title: string;
-  author: string;
-  coverImage: string;
-  genre: string;
-  publisher: string;
-  publishedDate: string;
-}[];
+export default function BookModal({
+  setSelectedBook,
+  setShowSelectModal,
+  onChange,
+}: BookModalProps) {
+  const { data: deskData } = useGetDeskData();
+  const [tempSelectedBook, setTempSelectedBook] = useState<Book | null>(null);
 
-// 목데이터
-const data: deskData = [
-  {
-    bookId: 1,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 2,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 3,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 4,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 5,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 6,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
+  const handleClickAddBtn = () => {
+    setSelectedBook(tempSelectedBook);
+    onChange({ isbn: tempSelectedBook?.isbn });
+    setShowSelectModal(false);
+  };
 
-  {
-    bookId: 7,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 8,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 9,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 10,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-  {
-    bookId: 11,
-    title: '데미안',
-    author: '헤르만 헤세',
-    coverImage: 'https://image.aladin.co.kr/product/26/0/coversum/s742633278_2.jpg',
-    genre: '국내도서>소설/시/희곡>독일소설',
-    publisher: '민음사',
-    publishedDate: '2000-12-19',
-  },
-];
-
-export default function BookModal({ setSelectedBook, setShowSelectModal }: BookModalProps) {
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-20'>
       <div className='w-[763px] h-[740px] bg-background-input rounded-2xl'>
         <div className='relative pt-[58px] px-[56px] pb-2 bg-background-input drop-shadow-sm rounded-t-2xl'>
           <button
             type='button'
-            className='absolute top-[24px] right-[24px] cursor-pointer'
+            className='absolute top-6 right-6 cursor-pointer'
             onClick={() => setShowSelectModal((prev) => !prev)}
           >
             <img
@@ -142,13 +47,16 @@ export default function BookModal({ setSelectedBook, setShowSelectModal }: BookM
         </div>
         <div className='h-[503px] overflow-y-scroll'>
           <div className='grid grid-cols-5 gap-x-[24px] gap-y-[24px] py-8 px-[56px] bg-background-input'>
-            {data.map((item) => (
+            {deskData?.map((item) => (
               <div
-                key={item.bookId}
+                key={item.isbn}
                 className='cursor-pointer'
+                onClick={() => {
+                  setTempSelectedBook(item);
+                }}
               >
                 <img
-                  src={item.coverImage}
+                  src={item.coverImageUrl}
                   alt='표지 사진'
                   className='w-[111px] h-[160px] mb-2'
                 />
@@ -159,7 +67,10 @@ export default function BookModal({ setSelectedBook, setShowSelectModal }: BookM
           </div>
         </div>
         <div className='flex justify-center'>
-          <button className='w-[300px] h-[50px] font-sans font-medium text-base text-background-input rounded-lg bg-primary mt-5 cursor-pointer'>
+          <button
+            onClick={handleClickAddBtn}
+            className='w-[300px] h-[50px] font-sans font-medium text-base text-background-input rounded-lg bg-primary mt-5 cursor-pointer'
+          >
             추가하기
           </button>
         </div>

@@ -29,7 +29,6 @@ authInstance.interceptors.request.use(
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
-      console.log(localStorage.getItem('accessToken'));
     }
     return config;
   },
