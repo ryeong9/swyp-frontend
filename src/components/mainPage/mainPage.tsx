@@ -1,12 +1,19 @@
+'use client';
+
 import BookReport from './bookReport';
 import BookShelfSection from './bookShelfSection';
 import DeskSection from './deskSection';
 import Header from '../header/header';
 import HeroSection from './heroSection';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function MainPage() {
+  const router = useRouter();
+  const [showSpeechBubble, setShowSpeechBubble] = useState(true);
+
   return (
-    <div>
+    <div className='relative'>
       <div className='w-[1030px] flex flex-col mx-auto'>
         <Header />
         <HeroSection />
@@ -108,6 +115,46 @@ export default function MainPage() {
         <p className='text-center font-sans text-xs text-[#94A8D2] leading-[15px] tracking-wider'>
           © 2025 INDEX. All rights reserved.
         </p>
+      </div>
+      <div className='fixed bottom-[60px] right-[205px] flex flex-col items-end drop-shadow-sm'>
+        {showSpeechBubble && (
+          <div className='flex flex-col items-end relative -top-4 -right-3'>
+            <div className='relative w-[321px] h-[150px] bg-background-input rounded-2xl p-8'>
+              <button
+                type='button'
+                className='w-[10px] absolute top-4 right-4'
+                onClick={() => setShowSpeechBubble(false)}
+              >
+                <img
+                  src='/icons/closeIcon.svg'
+                  alt='닫기 아이콘'
+                />
+              </button>
+              <h2 className='font-serif font-bold text-xl text-gray-900'>
+                당신의 감정을 들려주세요.
+              </h2>
+              <p className='font-serif font-normal text-base leading-[25px] mt-[10px]'>
+                기록은 습관이 될수록 더 깊어져요. <br />
+                하루 인덱스 하나, 한 줄이면 충분해요.
+              </p>
+            </div>
+            <img
+              src='/icons/polygon.svg'
+              alt='말풍선 삼각형'
+              className='w-[35px] relative right-[26px] -top-1 rotate-180'
+            />
+          </div>
+        )}
+        <button
+          type='button'
+          onClick={() => router.push('/write')}
+        >
+          <img
+            src='icons/plusIcon.svg'
+            alt='글쓰기 버튼'
+            className='w-[60px] h-[60px] bg-primary rounded-full p-[15px]'
+          />
+        </button>
       </div>
     </div>
   );
