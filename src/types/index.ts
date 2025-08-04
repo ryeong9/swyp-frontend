@@ -97,3 +97,17 @@ export type TitleSearch = {
     }>;
   }>;
 };
+
+// 달력 데이터 응답값
+export type CalendarData = {
+  date: string;
+  books: {
+    isbn: string;
+    title: string;
+    coverImage: string;
+    status: 'READING' | 'COMPLETE';
+    emotionsId: number[];
+    startDate: boolean;
+    finishDate: boolean;
+  }[];
+}[];
