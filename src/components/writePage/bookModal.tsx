@@ -1,6 +1,6 @@
 'use client';
 
-import useGetDeskData from '@/hooks/main/useGetDeskData';
+import useGetOnlyDeskData from '@/hooks/write/useGetOnlyDeskData';
 import { Book, RecordDataState } from '@/types';
 import { useState } from 'react';
 
@@ -15,7 +15,7 @@ export default function BookModal({
   setShowSelectModal,
   onChange,
 }: BookModalProps) {
-  const { data: deskData } = useGetDeskData();
+  const { data: deskData } = useGetOnlyDeskData();
   const [tempSelectedBook, setTempSelectedBook] = useState<Book | null>(null);
 
   const handleClickAddBtn = () => {
@@ -46,11 +46,11 @@ export default function BookModal({
           </p>
         </div>
         <div className='h-[503px] overflow-y-scroll'>
-          <div className='grid grid-cols-5 gap-x-[24px] gap-y-[24px] py-8 px-[56px] bg-background-input'>
+          <div className='grid grid-cols-5 justify-items-center py-5 px-11 bg-background-input'>
             {deskData?.map((item) => (
               <div
                 key={item.isbn}
-                className='cursor-pointer'
+                className={`w-[135px] flex flex-col justify-center p-3 rounded-lg cursor-pointer ${tempSelectedBook?.isbn === item.isbn ? 'bg-[#E6F2E6]' : ''}`}
                 onClick={() => {
                   setTempSelectedBook(item);
                 }}
@@ -60,8 +60,12 @@ export default function BookModal({
                   alt='표지 사진'
                   className='w-[111px] h-[160px] mb-2'
                 />
-                <p className='font-sans font-medium text-base text-gray-900 mb-1'>{item.title}</p>
-                <p className='font-sans font-medium text-sm text-gray-700'>{item.author}</p>
+                <p className='font-sans font-medium text-base text-gray-900 mb-1 truncate w-[111px]'>
+                  {item.title}
+                </p>
+                <p className='font-sans font-medium text-sm text-gray-700 truncate w-[111px]'>
+                  {item.author}
+                </p>
               </div>
             ))}
           </div>

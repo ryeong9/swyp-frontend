@@ -7,6 +7,12 @@ export const getDeskData = async (): Promise<Book[]> => {
   return response.data;
 };
 
+// 책 추가하기 모달 api
+export const getOnlyDeskData = async (): Promise<Book[]> => {
+  const response = await authInstance.get('/api/desk/reading-only');
+  return response.data;
+};
+
 // 읽는 중 기록하기 api 호출
 export const postRecordReadingData = async (
   recordData: RecordReadingData,
