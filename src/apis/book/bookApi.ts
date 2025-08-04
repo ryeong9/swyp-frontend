@@ -1,5 +1,5 @@
 import { authInstance } from '@/lib/axios';
-import { Book, RecordData } from '@/types';
+import { Book, RecordFinishedData, RecordReadingData } from '@/types';
 
 // 책상 api 호출
 export const getDeskData = async (): Promise<Book[]> => {
@@ -7,8 +7,18 @@ export const getDeskData = async (): Promise<Book[]> => {
   return response.data;
 };
 
-// 기록하기 api 호출
-export const postRecordData = async (recordData: RecordData): Promise<RecordData> => {
+// 읽는 중 기록하기 api 호출
+export const postRecordReadingData = async (
+  recordData: RecordReadingData,
+): Promise<RecordReadingData> => {
   const response = await authInstance.post('/api/records/pages', recordData);
+  return response.data;
+};
+
+// 다 읽음 기록하기 api 호출
+export const postRecordFinishedData = async (
+  recordData: RecordFinishedData,
+): Promise<RecordFinishedData> => {
+  const response = await authInstance.post('/api/records/completion', recordData);
   return response.data;
 };

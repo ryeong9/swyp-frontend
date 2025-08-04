@@ -1,3 +1,5 @@
+import { number } from 'zod';
+
 // 로그인 유저 확인
 export type User = {
   name: string;
@@ -33,7 +35,7 @@ export type LoginResponse = {
   };
 };
 
-// 감정 제외 전부 전송 타입
+// 감정 제외 상태관리 타입
 export type RecordDataState = {
   isbn: string;
   status: string;
@@ -41,15 +43,24 @@ export type RecordDataState = {
   content: string;
   finalNote?: string;
 };
-
 // 감정 상태관리 타입
 export type Emotions = {
   emotionId: number;
   score: number;
 };
 
-// 기록할 전체 데이터 타입
-export type RecordData = RecordDataState & {
+// 읽는 중인 책 기록 요청값
+export type RecordReadingData = {
+  isbn: string;
+  page: number | null;
+  content: string | null;
+  emotions: Emotions[];
+};
+// 다 읽은 책 기록 요청값
+export type RecordFinishedData = {
+  isbn: string;
+  content: string | null;
+  finalNote: string | null;
   emotions: Emotions[];
 };
 

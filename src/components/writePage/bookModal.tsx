@@ -42,7 +42,7 @@ export default function BookModal({
             책 선택
           </h2>
           <p className='font-sans text-base text-gray-500 leading-[25px]'>
-            책상과 책바구니에 있는 책들 중에 기록할 책을 선택해주세요.
+            나의 책상에서 기록할 책을 선택해주세요.
           </p>
         </div>
         <div className='h-[503px] overflow-y-scroll'>
