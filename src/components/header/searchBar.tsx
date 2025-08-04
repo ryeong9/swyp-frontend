@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import FilterDropDown from './filterDropDown';
 import EmojiDropDown from './emojiDropDown';
 
 export default function SearchBar() {
+  const router = useRouter();
   const [category, setCategory] = useState('감정');
   const [keyword, setKeyword] = useState('');
   const [showFilterDropDown, setShowFilterDropDown] = useState(false);
@@ -14,7 +16,19 @@ export default function SearchBar() {
     if (category === '도서명') setKeyword(e.target.value);
   };
 
-  const handleSubmitSearchData = () => {};
+  const handleSubmitSearchData = () => {
+    if (!keyword) {
+      console.log('검색어를 입력해주세요.');
+      return;
+    }
+
+    const query = new URLSearchParams({
+      keyword: keyword,
+      type: category === '도서명' ? 'title' : 'emotion',
+      startIndex: '1',
+    }).toString();
+    router.push(`/result?${query}`);
+  };
 
   console.log(category);
   console.log(keyword);
@@ -31,7 +45,7 @@ export default function SearchBar() {
         {showFilterDropDown ? (
           <img
             src='/icons/arrowUp.svg'
-            alt='아래 화살표 아이콘'
+            alt='위 화살표 아이콘'
           />
         ) : (
           <img
@@ -76,7 +90,7 @@ export default function SearchBar() {
       )}
       <button
         className='ml-3.5 cursor-pointer'
-        onSubmit={handleSubmitSearchData}
+        onClick={handleSubmitSearchData}
       >
         <img
           src='/icons/search.svg'
