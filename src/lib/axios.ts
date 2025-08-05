@@ -42,9 +42,9 @@ authInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error.response?.status === 401 && error.response.data?.message === 'ACCESS_TOKEN_EXPIRED') {
+    if (error.response?.status === 401 && error.response.data?.code === 'TOKEN_EXPIRED') {
       try {
-        const res = await authInstance.post(`${BASE_URL}/api/users/refresh`);
+        const res = await authInstance.post(`${BASE_URL}/api/auth/refresh`);
         const newAccessToken = res.data.accessToken;
         localStorage.setItem('accessToken', newAccessToken);
 
