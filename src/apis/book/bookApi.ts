@@ -1,9 +1,22 @@
 import { authInstance } from '@/lib/axios';
-import { Book, CalendarData, RecordFinishedData, RecordReadingData } from '@/types';
+import {
+  Book,
+  CalendarData,
+  GraphData,
+  RankingData,
+  RecordFinishedData,
+  RecordReadingData,
+} from '@/types';
 
 // 책상 api
 export const getDeskData = async (): Promise<Book[]> => {
   const response = await authInstance.get<Book[]>('/api/desk/reading');
+  return response.data;
+};
+
+// 책장 api
+export const getBookshelfData = async (): Promise<Book[]> => {
+  const response = await authInstance.get<Book[]>('/api/bookshelf/finished');
   return response.data;
 };
 
@@ -40,5 +53,17 @@ export const getCalendarData = async (year: number, month: number): Promise<Cale
       month: month,
     },
   });
+  return response.data;
+};
+
+// 감정 랭킹 top3 api
+export const getRankingData = async (): Promise<RankingData> => {
+  const response = await authInstance.get<RankingData>('/api/reports/ranking');
+  return response.data;
+};
+
+// 6개월 그래프 데이터 api
+export const getGraphData = async (): Promise<GraphData> => {
+  const response = await authInstance.get<GraphData>('/api/stats/monthly-reading-days');
   return response.data;
 };

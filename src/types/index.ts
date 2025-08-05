@@ -111,3 +111,17 @@ export type CalendarData = {
     finishDate: boolean;
   }[];
 }[];
+
+// ranking top3
+export type RankingData = {
+  emotionId: number;
+  emotionName: string;
+  score: number;
+}[];
+
+// 월별 그래프 api
+export type GraphData = {
+  year: number;
+  month: number;
+  readingDays: number;
+}[];
