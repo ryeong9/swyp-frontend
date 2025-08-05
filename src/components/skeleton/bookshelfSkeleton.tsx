@@ -1,11 +1,4 @@
-import useGetBookshelfData from '@/hooks/main/useGetBookshelfData';
-import BookshelfSkeleton from '../skeleton/bookshelfSkeleton';
-
-export default function BookShelfSection() {
-  const { data: bookshelfData, isLoading } = useGetBookshelfData();
-
-  if (isLoading) return <BookshelfSkeleton />;
-
+export default function BookshelfSkeleton() {
   return (
     <div className='flex flex-col my-14'>
       <div className='mb-8'>
@@ -27,17 +20,11 @@ export default function BookShelfSection() {
         </div>
       </div>
       <div className='w-full h-[596px] grid grid-cols-5 grid-rows-2 gap-x-[22.5px] gap-y-6 bg-background-input rounded-3xl p-10'>
-        {bookshelfData?.map((item) => (
+        {Array.from({ length: 10 }, (_, i) => (
           <div
-            key={item.isbn}
-            className='w-[172px] h-[246px] cursor-pointer'
-          >
-            <img
-              src={item.coverImageUrl}
-              alt='도서 표지'
-              className='w-full h-full rounded-lg'
-            />
-          </div>
+            key={i}
+            className='w-[172px] h-[246px] rounded-lg bg-gray-200'
+          ></div>
         ))}
       </div>
     </div>

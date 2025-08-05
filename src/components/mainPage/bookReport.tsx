@@ -5,33 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Bar } from 'react-chartjs-2';
 import '../../lib/chart';
 import { TooltipItem, ScriptableScaleContext, ChartOptions } from 'chart.js';
-
-const emotionRanking = [
-  {
-    emotionId: 3,
-    emotionName: '유쾌한',
-    score: 42,
-  },
-  {
-    emotionId: 12,
-    emotionName: '당황한',
-    score: 38,
-  },
-  {
-    emotionId: 20,
-    emotionName: '성찰',
-    score: 12,
-  },
-];
-
-const data = [
-  { year: 2025, month: 3, readingDays: 5 },
-  { year: 2025, month: 4, readingDays: 10 },
-  { year: 2025, month: 5, readingDays: 7 },
-  { year: 2025, month: 6, readingDays: 12 },
-  { year: 2025, month: 7, readingDays: 3 },
-  { year: 2025, month: 8, readingDays: 8 },
-];
+import useGetRankingData from '@/hooks/main/useGetRankingData';
+import useGetGraphData from '@/hooks/main/useGetGraphData';
+import ReportSkeleton from '../skeleton/reportSkeleton';
 
 export default function BookReport() {
   const router = useRouter();
@@ -39,8 +15,14 @@ export default function BookReport() {
     router.push('/report');
   };
 
+  const { data: emotionRanking, isLoading } = useGetRankingData();
+  const { data: graphData, isLoading: loading } = useGetGraphData();
+
+  const isReportLoading = isLoading || loading;
+  if (isReportLoading) return <ReportSkeleton />;
+
   // 감정 랭킹 감정 아이콘 매칭하여 데이터에 추가
-  const mappedEmotions = emotionRanking.map((item) => {
+  const mappedEmotions = emotionRanking?.map((item) => {
     const emotionInfo = emotions.find((e) => e.id === item.emotionId);
 
     return {
@@ -50,8 +32,8 @@ export default function BookReport() {
   });
 
   // 막대 그래프 관련 코드
-  const labels = data.map((item) => `${item.month}월`);
-  const chartDataArray = data.map((item) => item.readingDays);
+  const labels = graphData?.map((item) => `${item.month}월`) ?? [];
+  const chartDataArray = graphData?.map((item) => item.readingDays) ?? [];
 
   const maxValue = Math.max(...chartDataArray);
   const maxIndex = chartDataArray.indexOf(maxValue);
@@ -127,7 +109,7 @@ export default function BookReport() {
         <section className='box-border flex flex-col w-[499px] h-[302px] py-8 px-12 bg-background-input rounded-3xl mr-8'>
           <h2 className='font-sans font-medium text-base text-gray-900 mb-6'>감정 랭킹</h2>
           <div className='flex justify-between'>
-            {mappedEmotions.map((item, index) => (
+            {mappedEmotions?.map((item, index) => (
               <div
                 key={index}
                 className='relative flex flex-col justify-center items-center w-[116px] h-[139px] px-8 py-6 bg-gray-100 rounded-lg'
@@ -150,7 +132,7 @@ export default function BookReport() {
           <p className='font-sans text-base text-gray-700 text-center mt-8'>
             가장 많이 기록한 감정은{' '}
             <span className='font-sans font-medium text-primary-dark'>
-              {mappedEmotions[0].emotionName}
+              {mappedEmotions?.[0]?.emotionName}
             </span>
             이에요.
           </p>
