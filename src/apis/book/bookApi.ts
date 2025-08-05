@@ -2,6 +2,7 @@ import { authInstance } from '@/lib/axios';
 import {
   Book,
   CalendarData,
+  DeskDataWithRec,
   GraphData,
   RankingData,
   RecordFinishedData,
@@ -9,8 +10,8 @@ import {
 } from '@/types';
 
 // 책상 api
-export const getDeskData = async (): Promise<Book[]> => {
-  const response = await authInstance.get<Book[]>('/api/desk/reading');
+export const getDeskData = async (): Promise<DeskDataWithRec> => {
+  const response = await authInstance.get<DeskDataWithRec>('/api/desk/reading');
   return response.data;
 };
 

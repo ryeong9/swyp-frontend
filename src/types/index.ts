@@ -1,6 +1,6 @@
 // 로그인 유저 확인
 export type User = {
-  name: string;
+  nickname: string;
   email: string;
 };
 
@@ -123,3 +123,15 @@ export type GraphData = {
   month: number;
   readingDays: number;
 }[];
+
+// 책상 api 응답값
+export type SimpleBook = Omit<Book, 'bookshelfId'>;
+// 추천 도서 타입
+export type RecommendedBook = SimpleBook & {
+  emotionName: string;
+};
+// 전체 데이터 타입
+export type DeskDataWithRec = {
+  readingBooks: SimpleBook[];
+  recommendedBooks: RecommendedBook[];
+};
