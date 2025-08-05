@@ -135,7 +135,7 @@ export default function WritePage() {
                   alt='닫기 아이콘'
                 />
               </button>
-              <h2 className='font-sans font-semibold text-2xl text-gray-900 mb-2'>
+              <h2 className='font-sans font-semibold text-2xl text-gray-900 mb-2 truncate max-w-[600px]'>
                 {selectedBook.title}
               </h2>
               <p className='font-sans font-medium text-base text-gray-700 mb-4'>
