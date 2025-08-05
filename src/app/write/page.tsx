@@ -3,7 +3,8 @@
 import BookModal from '@/components/writePage/bookModal';
 import IndexRecord from '@/components/writePage/indexRecord';
 import RoutingPopUp from '@/components/writePage/routingPopUp';
-import usePostRecordData from '@/hooks/write/usePostRecordData';
+import usePostRecordFinishedData from '@/hooks/write/usePostRecordFinishedData';
+import usePostRecordReadingData from '@/hooks/write/usePostRecordReadingData';
 import { Book, Emotions, RecordDataState } from '@/types';
 import { useCallback, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -46,21 +47,33 @@ export default function WritePage() {
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { mutate } = usePostRecordData(() => setShowSuccessModal(true));
+  const { mutate: onSubmitReading } = usePostRecordReadingData(() => setShowSuccessModal(true));
+  const { mutate: onSubmitFinished } = usePostRecordFinishedData(() => setShowSuccessModal(true));
 
   const handleClickSubmitBtn = () => {
     if (!isSubmitEnabled) return;
-    mutate({
-      isbn: formData.isbn,
-      status: formData.status === '읽는 중' ? 'READING' : 'FINISHED',
-      page: formData.page,
-      content: formData.content,
-      finalNote: formData.finalNote,
-      emotions: emotionData.map((item) => ({
-        emotionId: item.emotionId,
-        score: item.score,
-      })),
-    });
+    if (formData.status === '읽는 중') {
+      onSubmitReading({
+        isbn: formData.isbn,
+        page: formData.page ?? null,
+        content: formData.content || null,
+        emotions: emotionData.map((item) => ({
+          emotionId: item.emotionId,
+          score: item.score,
+        })),
+      });
+    }
+    if (formData.status === '다 읽음') {
+      onSubmitFinished({
+        isbn: formData.isbn,
+        content: formData.content || null,
+        finalNote: formData.finalNote || null,
+        emotions: emotionData.map((item) => ({
+          emotionId: item.emotionId,
+          score: item.score,
+        })),
+      });
+    }
   };
 
   return (
@@ -122,7 +135,7 @@ export default function WritePage() {
                   alt='닫기 아이콘'
                 />
               </button>
-              <h2 className='font-sans font-semibold text-2xl text-gray-900 mb-2'>
+              <h2 className='font-sans font-semibold text-2xl text-gray-900 mb-2 truncate max-w-[600px]'>
                 {selectedBook.title}
               </h2>
               <p className='font-sans font-medium text-base text-gray-700 mb-4'>

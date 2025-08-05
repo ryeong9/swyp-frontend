@@ -21,7 +21,6 @@
   font-size: 24px;
   font-weight: 500;
 }
-
 .fc .fc-toolbar.fc-header-toolbar {
   margin-bottom: 40px;
 }
@@ -31,7 +30,20 @@
   padding: 3px;
   box-sizing: border-box;
   width: 130px;
-  height: auto;
+  height: 144px;
+}
+/* 내부 아이템들 정렬 */
+.fc .fc-daygrid-day-frame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* 기본 이벤트 영역 제거 */
+.fc-daygrid-day-events {
+  display: none !important;
 }
 
 /* 이번 달에만 배경색 저용 */
@@ -43,6 +55,12 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+}
+
+/* 이전 및 다음 달 흐리게 처리 */
+.fc .fc-daygrid-day.fc-day-other .fc-daygrid-day-frame {
+  border-radius: 8px;
+  opacity: 0.3;
 }
 
 /* 날짜 왼쪽 상단으로 변경 */
@@ -94,4 +112,35 @@
   background-position: center;
   vertical-align: middle;
   transform: translateY(-1px);
+}
+
+/* 오늘 + 독서 시작(감정 없음) */
+.fc .fc-daygrid-day.fc-day-today.cell-start .fc-daygrid-day-frame {
+  background-color: #9bc99f !important;
+}
+
+/* 오늘 + 감정 기록 */
+.fc .fc-daygrid-day.fc-day-today.cell-emotion .fc-daygrid-day-frame {
+  background-color: #e6f2e6 !important;
+}
+
+/* 오늘 + 독서 완료 */
+.fc .fc-daygrid-day.fc-day-today.cell-complete .fc-daygrid-day-frame {
+  background-color: #d2def4 !important;
+}
+
+/* 책 표지 및 감정 아이콘 */
+.book-cover {
+  width: 54px;
+  height: 72px;
+  border-radius: 2px;
+}
+.emotions {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+.emotion-icon {
+  width: 16px;
+  height: 16px;
 }

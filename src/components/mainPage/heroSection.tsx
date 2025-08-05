@@ -1,14 +1,23 @@
+import useUser from '@/hooks/login/useUser';
+import useGetCalendarData from '@/hooks/report/useGetCalendarData';
+import HeroSkeleton from '../skeleton/heroSkeleton';
+
 export default function HeroSection() {
-  const { nickName, count } = {
-    nickName: '용감한모험가',
-    count: 5,
-  };
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth() + 1;
+
+  const { user, loading } = useUser(true);
+  const { data: calendarData, isLoading } = useGetCalendarData(year, month);
+
+  const isHeroLoading = loading || isLoading;
+
+  if (isHeroLoading) return <HeroSkeleton />;
 
   return (
     <section className='relative mt-4 mb-14 px-12 py-10 w-full h-[462px] bg-gray-200 rounded-3xl'>
       <div className='absolute bottom-[40px] flex flex-col w-[400px]'>
         <h1 className='mb-4 font-serif font-bold text-[32px]'>
-          {nickName}님, 이번 달에는 <br /> 총 {count}권의 책을 읽었어요.
+          {user?.nickname}님, 이번 달에는 <br /> 총 {calendarData?.length}권의 책을 읽었어요.
         </h1>
         <p className='font-sans font-normal text-xl text-gray-900 tracking-wider leading-[30px]'>
           흐릿해지는 기억 속에서도 감정은 선명히 남아요 <br />

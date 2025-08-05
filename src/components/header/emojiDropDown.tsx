@@ -1,3 +1,5 @@
+import { emotions } from '@/constants/emotion';
+
 interface KeywordSelectProps {
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
@@ -11,54 +13,50 @@ export default function EmojiDropDown({
   showEmojiDropDown,
   setShowEmojiDropDown,
 }: KeywordSelectProps) {
-  const emotionList = [
-    '감동',
-    '설렘',
-    '희망',
-    '공감',
-    '위로',
-    '슬픔',
-    '분노',
-    '혼란',
-    '불안',
-    '답답함',
-    '차분함',
-    '공허함',
-    '아쉬움',
-    '평온함',
-    '충격',
-    '깨달음',
-    '통찰',
-    '의문',
-    '영감',
-    '반성',
-  ];
-
   const handleClickEmotion = (item: string) => {
     setKeyword(item);
     setShowEmojiDropDown(!showEmojiDropDown);
   };
 
   return (
-    <div className='absolute grid grid-cols-6 grid-rows-3 gap-x-[22.8px] gap-y-[15.5px] top-14 right-14 w-[540px] bg-background-input drop-shadow-sm rounded-lg z-10 px-6 py-4'>
-      {emotionList.map((item, index) => (
-        <div
-          key={index}
-          className='group flex flex-col w-full items-center justify-center'
-        >
-          <img
-            src='/icons/imgExam.svg'
-            alt='감정 이모지'
-            className='w-[63px] h-[63px] group-hover:bg-gray-200 cursor-pointer'
-            onClick={() => handleClickEmotion(item)}
-          />
-          <p
-            className={`font-sans text-sm text-gray-500 mt-2 group-hover:text-gray-900 ${keyword === item ? 'text-gray-900' : 'text-gray-500'}`}
-          >
-            {item}
+    <div className='absolute box-border top-14 right-14 w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 pl-6 pr-[17.5px] py-4 flex flex-col justify-between'>
+      <div className='w-full flex justify-between items-start'>
+        <div className='flex flex-col'>
+          <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+            긍정
+          </p>
+          <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+            부정
+          </p>
+          <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+            중립
+          </p>
+          <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px]'>
+            사고기반
           </p>
         </div>
-      ))}
+        <div className='grid grid-cols-5 grid-rows-4 gap-x-[9px] gap-y-2'>
+          {emotions.map((item) => {
+            return (
+              <button
+                type='button'
+                key={item.id}
+                onClick={() => handleClickEmotion(item.name)}
+                className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
+              >
+                <img
+                  src={item.icon}
+                  alt='아이콘'
+                  className='w-[60px] h-[60px] mb-2'
+                />
+                <p className='font-sans text-sm text-gray-500 group-hover:text-gray-900'>
+                  {item.name}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

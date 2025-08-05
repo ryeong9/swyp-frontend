@@ -1,8 +1,24 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
 interface RoutingPopUpProps {
   setShowSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function RoutingPopUp({ setShowSuccessModal }: RoutingPopUpProps) {
+  const router = useRouter();
+
+  const handleClickGotoNewRecord = () => {
+    setShowSuccessModal(false);
+    router.push('/write');
+  };
+
+  const handleClickGotoMain = () => {
+    setShowSuccessModal(false);
+    router.push('/');
+  };
+
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black/50'>
       <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
@@ -10,10 +26,18 @@ export default function RoutingPopUp({ setShowSuccessModal }: RoutingPopUpProps)
         <p className='font-sans font-medium text-sm text-gray-700 leading-[20px] mb-6'>
           다른 페이지로 이동하시겠어요?
         </p>
-        <button className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'>
+        <button
+          type='button'
+          className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'
+          onClick={handleClickGotoNewRecord}
+        >
           다른 책 기록하기
         </button>
-        <button className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans font-medium text-base text-gray-700'>
+        <button
+          type='button'
+          className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans font-medium text-base text-gray-700'
+          onClick={handleClickGotoMain}
+        >
           랜딩 페이지로 돌아가기
         </button>
       </div>

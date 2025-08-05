@@ -12,9 +12,9 @@ export default function Header() {
   return (
     <div className='w-full h-[50px] mt-6 flex'>
       <img
-        src='/'
-        alt='로고?'
-        className='w-[190px] h-[50px] bg-gray-200 mr-5'
+        src='/icons/logo.svg'
+        alt='로고'
+        className='w-[190px] h-[50px] mr-5'
       />
       <SearchBar />
       <div className='relative flex ml-[23px] pr-[23px] items-center'>

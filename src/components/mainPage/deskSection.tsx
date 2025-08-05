@@ -1,11 +1,23 @@
+import useGetDeskData from '@/hooks/main/useGetDeskDataWithRec';
+import DeskSkeleton from '../skeleton/deskSkeleton';
+
 export default function DeskSection() {
-  const data = [
-    { type: 'recommend', book: { id: 1, title: '추천1' } },
-    { type: 'recommend', book: { id: 2, title: '추천2' } },
-    { type: 'reading', book: { id: 3, title: '읽는 중1' } },
-    { type: 'reading', book: { id: 4, title: '읽는 중2' } },
-    { type: 'reading', book: { id: 5, title: '읽는 중3' } },
-  ];
+  const { data: deskData, isLoading } = useGetDeskData();
+
+  if (isLoading) return <DeskSkeleton />;
+
+  const mergedBooks = deskData
+    ? [
+        ...deskData.recommendedBooks.map((book) => ({
+          type: 'recommend' as const,
+          book,
+        })),
+        ...deskData.readingBooks.map((book) => ({
+          type: 'reading' as const,
+          book,
+        })),
+      ]
+    : [];
 
   return (
     <div className='flex flex-col'>
@@ -28,14 +40,18 @@ export default function DeskSection() {
         </div>
       </div>
       <div>
-        <div className='flex justify-between items-center mb-6 px-10'>
-          {data.map((item) => {
+        <div className='grid grid-cols-5 grid-rows-1 gap-x-[22.5px] mb-6 px-10'>
+          {mergedBooks.map((item) => {
             return (
               <div
-                key={item.book.id}
-                className='relative w-[172px] h-[246px] bg-gray-500 rounded-lg cursor-pointer'
+                key={item.book.isbn}
+                className='relative w-[172px] h-[246px] cursor-pointer'
               >
-                {item.book.title}
+                <img
+                  src={item.book.coverImageUrl}
+                  alt='도서 이미지'
+                  className='w-full h-full rounded-lg'
+                />
                 {item.type === 'recommend' ? (
                   <div
                     className='absolute flex justify-center w-[50px] h-[80px] top-[-10px] right-[10px] bg-[#D2DEF4]/80 z-10 rounded-t-[2px]'

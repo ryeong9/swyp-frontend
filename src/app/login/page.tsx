@@ -163,7 +163,7 @@ export default function LoginPage() {
           onClick={() => handleSocialLogin('google')}
           className='flex items-center justify-center gap-3 bg-[#F2F2F2] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
-          <Image
+          <img
             src='/icons/google.svg'
             alt='google icon'
             width={20}
@@ -177,7 +177,7 @@ export default function LoginPage() {
           onClick={() => handleSocialLogin('kakao')}
           className='flex items-center justify-center gap-3 bg-[#FFE812] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
-          <Image
+          <img
             src='/icons/kakao.svg'
             alt='kakao icon'
             width={20}
@@ -191,7 +191,7 @@ export default function LoginPage() {
           onClick={() => handleSocialLogin('naver')}
           className='flex items-center justify-center gap-3 bg-[#00DE5A] text-black w-[400px] h-[50px] text-base rounded-lg'
         >
-          <Image
+          <img
             src='/icons/naver.svg'
             alt='naver icon'
             width={20}
