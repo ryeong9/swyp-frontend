@@ -25,7 +25,9 @@ export const authInstance = axios.create({
 
 authInstance.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem('accessToken');
+    const testToken =
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzU0MTk2NDQ4LCJleHAiOjQ5MDc3OTY0NDh9.CYUSytXdd5u8dID5APUX-GB33NXUiwFFPscySsttpIk';
+    const accessToken = localStorage.getItem('accessToken') || testToken;
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;

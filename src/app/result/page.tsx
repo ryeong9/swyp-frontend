@@ -58,7 +58,7 @@ export default function ResultSearchPage() {
       <div className='flex flex-row gap-5'>
         <Header />
       </div>
-      <div className='flex flex-col pt-8'>
+      <div className='flex flex-col mt-14'>
         <p>도서명 검색결과 '{data?.pages[0]?.totalResults || 0}'건</p>
         {rawBooks.length > 0 ? (
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
@@ -95,35 +95,31 @@ export default function ResultSearchPage() {
                   </div>
 
                   {/* 감정 요약 */}
-                  <div className='flex flex-col w-[279px] h-[161px] rounded-lg bg-gray-100 p-5 gap-4 items-center justify-between'>
-                    <p>
-                      "이 책에{' '}
-                      <span className='text-state-success font-semibold'>
-                        {book.totalEmotionCount ?? 0}
-                      </span>
-                      명이 감정을 기록했어요"
-                    </p>
-
-                    {/* 감정 퍼센트 및 아이콘 */}
+                  <div className='flex flex-col w-[279px] h-[161px] rounded-lg bg-gray-100 p-5 gap-4 items-center justify-center'>
                     {book.emotions && book.emotions.length > 0 ? (
+                      // 감정 데이터 있을 때
                       <div className='w-[220px] h-[91px] flex flex-row justify-between items-center gap-4'>
                         {book.emotions
                           .slice()
                           .sort((a, b) => b.percentage - a.percentage)
                           .map((e, idx) => {
                             const emotion = emotions.find((em: any) => em.id === e.id);
-                            const isTop = idx === 0; //젤 높은 감정
+                            const isTop = idx === 0;
                             return (
                               <div
                                 key={e.id}
-                                className='flex flex-col items-center justify-between '
+                                className='flex flex-col items-center justify-between'
                               >
                                 <p
-                                  className={`${isTop ? 'text-green-700 font-semibold' : 'text-gray-700 font-normal'} text-sm mb-1`}
+                                  className={`${
+                                    isTop
+                                      ? 'text-green-700 font-semibold'
+                                      : 'text-gray-700 font-normal'
+                                  } text-sm mb-1`}
                                 >
                                   {Math.round(e.percentage * 100)}%
                                 </p>
-                                <div className='w-[44px] h-[44px]  border-0 flex items-center justify-center mb-1'>
+                                <div className='w-[44px] h-[44px] flex items-center justify-center mb-1'>
                                   {emotion?.icon && (
                                     <Image
                                       src={emotion.icon}
@@ -143,7 +139,19 @@ export default function ResultSearchPage() {
                           })}
                       </div>
                     ) : (
-                      <p className='text-gray-400 text-sm'>감정 기록이 없습니다.</p>
+                      // 감정 데이터 없을 때
+                      <div className='flex flex-col items-center justify-center gap-4'>
+                        <img
+                          src='/icons/noEmotionData.svg'
+                          alt='감정 없음'
+                          width={60}
+                          height={57.17}
+                        />
+                        <div className='flex flex-col font-serif  text-gray-700 font-bold text-xs  '>
+                          <p>아직 감정 데이터가 없어요.</p>
+                          <p>이 책의 첫 감정 기록을 도와주세요!</p>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -151,15 +159,17 @@ export default function ResultSearchPage() {
             ))}
           </div>
         ) : (
-          <div className='flex flex-col items-center justify-center font-serif font-bold text-gray-700 text-base leading-[25px] gap-4'>
+          <div className='flex flex-col w-full min-h-screen mt-14 items-center justify-center font-serif font-bold text-gray-700 text-base leading-[25px] gap-6'>
             <img
-              src='/icons/noSearchIcon.svg'
+              src='/icons/noEmotionData.svg'
               alt='noResult'
-              width='34.75'
-              height='40.35'
+              width={101.62}
+              height={96.83}
             />
-            <p>검색 결과가 없어요.</p>
-            <p>다른 도서명으로 검색하거나 새로운 책을 기록해주세요!</p>
+            <div className='flex flex-col items-center'>
+              <p>검색 결과가 없어요.</p>
+              <p>다른 도서명으로 검색하거나 새로운 책을 기록해주세요!</p>
+            </div>
           </div>
         )}
         {isFetchingNextPage && <div>로딩 중...</div>}
