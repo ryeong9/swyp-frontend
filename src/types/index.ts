@@ -80,7 +80,7 @@ export type TitleSearch = {
   page: number;
   totalResults: number;
   books: Array<{
-    isbn?: string;
+    isbn: string;
     title: string;
     author: string;
     coverImageUrl: string;
