@@ -135,3 +135,28 @@ export type DeskDataWithRec = {
   readingBooks: SimpleBook[];
   recommendedBooks: RecommendedBook[];
 };
+
+//상세페이지
+export type Emotion = {
+  id: number;
+  name: string;
+  scoreSum: number;
+  percentage: number;
+};
+
+export type BookDetail = {
+  isbn: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  publishedDate: string;
+  description: string;
+  publisher: string;
+  category: string;
+  totalEmotionCount: number;
+  emotions: Emotion[];
+};
+
+export type BookStatus = {
+  status: 'NONE' | 'WISH' | 'READING' | 'FINISHED';
+};
