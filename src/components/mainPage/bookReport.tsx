@@ -1,5 +1,3 @@
-'use client';
-
 import { emotions } from '@/constants/emotion';
 import { useRouter } from 'next/navigation';
 import { Bar } from 'react-chartjs-2';
@@ -30,6 +28,8 @@ export default function BookReport() {
       icon: emotionInfo?.icon || '',
     };
   });
+
+  const isEmptyEmotion = mappedEmotions?.length === 0;
 
   // 막대 그래프 관련 코드
   const labels = graphData?.map((item) => `${item.month}월`) ?? [];
@@ -82,6 +82,8 @@ export default function BookReport() {
     },
   };
 
+  const isEmptyGraph = graphData?.every((item) => item.readingDays === 0);
+
   return (
     <div className='flex flex-col mb-14'>
       <div className='mb-8'>
@@ -108,48 +110,82 @@ export default function BookReport() {
       <div className='w-full flex justify-center'>
         <section className='box-border flex flex-col w-[499px] h-[302px] py-8 px-12 bg-background-input rounded-3xl mr-8'>
           <h2 className='font-sans font-medium text-base text-gray-900 mb-6'>감정 랭킹</h2>
-          <div className='flex justify-between'>
-            {mappedEmotions?.map((item, index) => (
-              <div
-                key={index}
-                className='relative flex flex-col justify-center items-center w-[116px] h-[139px] px-8 py-6 bg-gray-100 rounded-lg'
-              >
-                <p className='absolute top-[13px] left-[13px] font-sans text-xs text-gray-700'>
-                  {index + 1}
-                </p>
-                <img
-                  src={item.icon}
-                  alt='감정 이모지'
-                  className='w-[44px] h-[44px] mb-2'
-                />
-                <p className='font-sans font-medium text-sm text-gray-900 mb-2'>
-                  {item.emotionName}
-                </p>
-                <p className='font-sans text-xs text-gray-700'>{item.score}점</p>
+          {isEmptyEmotion ? (
+            <div className='flex flex-col justify-center items-center'>
+              <img
+                src='/icons/noEmotionData.svg'
+                alt='nodata 아이콘'
+                className='w-[101px] mb-6'
+              />
+              <p className='font-serif font-bold text-gray-700 text-center leading-[25px]'>
+                아직 감정 데이터가 없어요.
+                <br />
+                감정 기록을 하면 리포트를 작성해드려요.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className='grid grid-cols-3 grid-rows-1 gap-x-[27.5px]'>
+                {mappedEmotions?.map((item, index) => (
+                  <div
+                    key={index}
+                    className='relative flex flex-col justify-center items-center w-[116px] h-[139px] px-8 py-6 bg-gray-100 rounded-lg'
+                  >
+                    <p className='absolute top-[13px] left-[13px] font-sans text-xs text-gray-700'>
+                      {index + 1}
+                    </p>
+                    <img
+                      src={item.icon}
+                      alt='감정 이모지'
+                      className='w-[44px] h-[44px] mb-2'
+                    />
+                    <p className='font-sans font-medium text-sm text-gray-900 mb-2'>
+                      {item.emotionName}
+                    </p>
+                    <p className='font-sans text-xs text-gray-700'>{item.score}점</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <p className='font-sans text-base text-gray-700 text-center mt-8'>
-            가장 많이 기록한 감정은{' '}
-            <span className='font-sans font-medium text-primary-dark'>
-              {mappedEmotions?.[0]?.emotionName}
-            </span>
-            이에요.
-          </p>
+              <p className='font-sans text-base text-gray-700 text-center mt-8'>
+                가장 많이 기록한 감정은{' '}
+                <span className='font-sans font-medium text-primary-dark'>
+                  {mappedEmotions?.[0]?.emotionName}
+                </span>
+                이에요.
+              </p>
+            </>
+          )}
         </section>
         <section className='w-[499px] h-[302px] py-8 px-12 bg-background-input rounded-3xl'>
           <h2 className='font-sans font-medium text-base text-gray-900 mb-6'>월별 독서 그래프</h2>
-          <div className='flex-1'>
-            <Bar
-              data={barData}
-              options={options}
-            />
-          </div>
-          <p className='font-sans text-base text-gray-700 text-center mt-[25px]'>
-            가장 많이 기록한 달은{' '}
-            <span className='font-sans font-medium text-primary-dark'>{maxMonthLabel}</span>
-            이에요.
-          </p>
+          {isEmptyGraph ? (
+            <div className='flex flex-col justify-center items-center'>
+              <img
+                src='/icons/noEmotionData.svg'
+                alt='nodata 아이콘'
+                className='w-[101px] mb-6'
+              />
+              <p className='font-serif font-bold text-gray-700 text-center leading-[25px]'>
+                아직 독서 데이터가 없어요.
+                <br />
+                독서 기록을 하면 리포트를 작성해드려요.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className='flex-1'>
+                <Bar
+                  data={barData}
+                  options={options}
+                />
+              </div>
+              <p className='font-sans text-base text-gray-700 text-center mt-[25px]'>
+                가장 많이 기록한 달은{' '}
+                <span className='font-sans font-medium text-primary-dark'>{maxMonthLabel}</span>
+                이에요.
+              </p>
+            </>
+          )}
         </section>
       </div>
     </div>
