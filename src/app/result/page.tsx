@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useInfiniteTitleSearch } from '@/hooks/search/useInfinite';
+import { useInfiniteTitleSearch, useInfiniteEmotionSearch } from '@/hooks/search/useInfinite';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import Header from '@/components/header/header';
@@ -10,8 +10,9 @@ import { emotions } from '@/constants/emotion';
 export default function ResultSearchPage() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get('keyword') || '';
+  const type = searchParams.get('type') || 'title';
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
-    useInfiniteTitleSearch(keyword);
+    type === 'emotion' ? useInfiniteEmotionSearch(keyword) : useInfiniteTitleSearch(keyword);
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -39,14 +40,20 @@ export default function ResultSearchPage() {
   const rawBooks = data?.pages.flatMap((page) => page.books || []) || [];
 
   // 테스트용으로 첫 번째 책에 mock 감정 데이터 넣기
-  if (rawBooks.length > 0) {
-    rawBooks[0].totalEmotionCount = 10;
-    rawBooks[0].emotions = [
-      { id: 5, name: '위로', percentage: 0.5 },
-      { id: 6, name: '슬픔', percentage: 0.3 },
-      { id: 15, name: '평온함', percentage: 0.2 },
-    ];
+  if (type === 'emotion' && rawBooks.length > 0) {
+    rawBooks.forEach((book, i) => {
+      book.totalEmotionCount = 3;
+      book.emotions = [
+        { id: 2, name: '설렘', percentage: 0.5 },
+        { id: 6, name: '슬픔', percentage: 0.3 },
+        { id: 11, name: '놀람', percentage: 0.2 },
+      ];
+    });
   }
+  const filteredBooks =
+    type === 'emotion'
+      ? rawBooks.filter((book) => book.emotions?.some((e) => e.name === keyword))
+      : rawBooks;
 
   console.log('📦 총 받은 책 수:', rawBooks.length);
   data?.pages.forEach((page, i) => {
@@ -60,15 +67,15 @@ export default function ResultSearchPage() {
       </div>
       <div className='flex flex-col mt-14'>
         <p>도서명 검색결과 '{data?.pages[0]?.totalResults || 0}'건</p>
-        {rawBooks.length > 0 ? (
+        {filteredBooks.length > 0 ? ( //mock제거 후 rawBooks로 변경
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-            {rawBooks.map((book, index) => (
+            {filteredBooks.map((book, index) => (
               <div
                 key={book.isbn || `${book.title}-${index}`}
                 className='bg-white rounded-[10px] p-5 flex flex-row gap-4 w-full'
               >
                 {/* 이미지 영역 */}
-                <div className='bg-gray-300 w-[170px] h-[240px] rounded-lg'>
+                <div className='bg-white w-[170px] h-[240px] rounded-lg flex items-center justify-center overflow-hidden'>
                   {book.coverImageUrl && (
                     <Image
                       src={book.coverImageUrl}
@@ -96,6 +103,13 @@ export default function ResultSearchPage() {
 
                   {/* 감정 요약 */}
                   <div className='flex flex-col w-[279px] h-[161px] rounded-lg bg-gray-100 p-5 gap-4 items-center justify-center'>
+                    <p className='text-sm'>
+                      "이 책에{' '}
+                      <span className='text-state-success font-semibold'>
+                        {book.totalEmotionCount}
+                      </span>
+                      명이 감정을 기록했어요"
+                    </p>
                     {book.emotions && book.emotions.length > 0 ? (
                       // 감정 데이터 있을 때
                       <div className='w-[220px] h-[91px] flex flex-row justify-between items-center gap-4'>
@@ -133,7 +147,15 @@ export default function ResultSearchPage() {
                                     />
                                   )}
                                 </div>
-                                <p>{e.name}</p>
+                                <p
+                                  className={`${
+                                    isTop
+                                      ? 'text-gray-900 font-medium text-sm'
+                                      : 'text-gray-700 text-sm'
+                                  }`}
+                                >
+                                  {e.name}
+                                </p>
                               </div>
                             );
                           })}

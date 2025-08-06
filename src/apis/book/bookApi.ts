@@ -8,6 +8,7 @@ import {
   RankingData,
   RecordFinishedData,
   RecordReadingData,
+  TitleSearch,
 } from '@/types';
 
 // 책상 api
