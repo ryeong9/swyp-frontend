@@ -125,13 +125,23 @@ export type GraphData = {
 }[];
 
 // 책상 api 응답값
-export type SimpleBook = Omit<Book, 'bookshelfId'>;
 // 추천 도서 타입
-export type RecommendedBook = SimpleBook & {
+export type RecommendedBook = {
   emotionName: string;
+  isbn: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  publisher: string;
+  category: string;
+  publishedDate: string;
 };
 // 전체 데이터 타입
 export type DeskDataWithRec = {
-  readingBooks: SimpleBook[];
+  readingBooks: Book[];
   recommendedBooks: RecommendedBook[];
 };
+// 가공 데이터 타입
+export type DeskBookItem =
+  | { type: 'recommend'; book: RecommendedBook }
+  | { type: 'reading'; book: Book };

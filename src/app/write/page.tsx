@@ -6,10 +6,12 @@ import RoutingPopUp from '@/components/writePage/routingPopUp';
 import usePostRecordFinishedData from '@/hooks/write/usePostRecordFinishedData';
 import usePostRecordReadingData from '@/hooks/write/usePostRecordReadingData';
 import { Book, Emotions, RecordDataState } from '@/types';
-import { useCallback, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 export default function WritePage() {
+  const router = useRouter();
   const [formData, setFormData] = useState<RecordDataState>({
     isbn: '',
     status: '독서 상태',
@@ -19,11 +21,21 @@ export default function WritePage() {
   });
 
   const [emotionData, setEmotionData] = useState<Emotions[]>([{ emotionId: 0, score: 10 }]);
-
-  console.log(formData);
-  console.log(emotionData);
-
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const bookParam = searchParams.get('book');
+    if (bookParam) {
+      const book = JSON.parse(decodeURIComponent(bookParam));
+      setSelectedBook(book);
+      setFormData((prev) => ({ ...prev, isbn: book.isbn }));
+
+      router.replace('/write', { scroll: false });
+    }
+  }, [searchParams]);
+
   const [showSelectModal, setShowSelectModal] = useState(false);
 
   const onChange = useCallback((data: Partial<RecordDataState>) => {
@@ -41,7 +53,17 @@ export default function WritePage() {
     onChange({ [name]: newValue });
   };
 
-  console.log(selectedBook);
+  const handleReset = () => {
+    setSelectedBook(null);
+    setFormData({
+      isbn: '',
+      status: '독서 상태',
+      page: undefined,
+      content: '',
+      finalNote: '',
+    });
+    setEmotionData([{ emotionId: 0, score: 10 }]);
+  };
 
   const isSubmitEnabled = formData.isbn !== '' && formData.status !== '독서 상태';
 
@@ -280,7 +302,12 @@ export default function WritePage() {
           )}
         </section>
       </div>
-      {showSuccessModal && <RoutingPopUp setShowSuccessModal={setShowSuccessModal} />}
+      {showSuccessModal && (
+        <RoutingPopUp
+          setShowSuccessModal={setShowSuccessModal}
+          handleReset={handleReset}
+        />
+      )}
     </>
   );
 }

@@ -1,12 +1,15 @@
 import useGetDeskData from '@/hooks/main/useGetDeskDataWithRec';
 import DeskSkeleton from '../skeleton/deskSkeleton';
+import { useRouter } from 'next/navigation';
+import { DeskBookItem } from '@/types';
 
 export default function DeskSection() {
+  const router = useRouter();
   const { data: deskData, isLoading } = useGetDeskData();
 
   if (isLoading) return <DeskSkeleton />;
 
-  const mergedBooks = deskData
+  const mergedBooks: DeskBookItem[] = deskData
     ? [
         ...deskData.recommendedBooks.map((book) => ({
           type: 'recommend' as const,
@@ -18,6 +21,13 @@ export default function DeskSection() {
         })),
       ]
     : [];
+
+  const handleClickCoverImg = (item: DeskBookItem) => {
+    if (item.type === 'reading') {
+      const encodedBook = encodeURIComponent(JSON.stringify(item.book));
+      router.push(`/write?book=${encodedBook}`);
+    }
+  };
 
   return (
     <div className='flex flex-col'>
@@ -46,6 +56,7 @@ export default function DeskSection() {
               <div
                 key={item.book.isbn}
                 className='relative w-[172px] h-[246px] cursor-pointer'
+                onClick={() => handleClickCoverImg(item)}
               >
                 <img
                   src={item.book.coverImageUrl}

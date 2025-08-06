@@ -1,5 +1,3 @@
-'use client';
-
 import { emotions } from '@/constants/emotion';
 import { useRouter } from 'next/navigation';
 import { Bar } from 'react-chartjs-2';
@@ -108,7 +106,7 @@ export default function BookReport() {
       <div className='w-full flex justify-center'>
         <section className='box-border flex flex-col w-[499px] h-[302px] py-8 px-12 bg-background-input rounded-3xl mr-8'>
           <h2 className='font-sans font-medium text-base text-gray-900 mb-6'>감정 랭킹</h2>
-          <div className='flex justify-between'>
+          <div className='grid grid-cols-3 grid-rows-1 gap-x-[27.5px]'>
             {mappedEmotions?.map((item, index) => (
               <div
                 key={index}
