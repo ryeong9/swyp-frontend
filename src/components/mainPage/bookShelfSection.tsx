@@ -6,6 +6,8 @@ export default function BookShelfSection() {
 
   if (isLoading) return <BookshelfSkeleton />;
 
+  const isEmpty = bookshelfData?.length === 0;
+
   return (
     <div className='flex flex-col my-14'>
       <div className='mb-8'>
@@ -26,20 +28,35 @@ export default function BookShelfSection() {
           </button>
         </div>
       </div>
-      <div className='w-full h-[596px] grid grid-cols-5 grid-rows-2 gap-x-[22.5px] gap-y-6 bg-background-input rounded-3xl p-10'>
-        {bookshelfData?.map((item) => (
-          <div
-            key={item.isbn}
-            className='w-[172px] h-[246px] cursor-pointer'
-          >
-            <img
-              src={item.coverImageUrl}
-              alt='도서 표지'
-              className='w-full h-full rounded-lg'
-            />
-          </div>
-        ))}
-      </div>
+      {isEmpty ? (
+        <div className='flex flex-col h-[246px] justify-center items-center'>
+          <img
+            src='/icons/noEmotionData.svg'
+            alt='nodata 아이콘'
+            className='w-[101px] mb-6'
+          />
+          <p className='font-serif font-bold text-gray-700 text-center leading-[25px]'>
+            최근에 어떤 책을 재미있게 읽었나요?
+            <br />
+            검색을 통해 읽었던 책을 책장에 꽂아주세요.
+          </p>
+        </div>
+      ) : (
+        <div className='w-full h-[596px] grid grid-cols-5 grid-rows-2 gap-x-[22.5px] gap-y-6 bg-background-input rounded-3xl p-10'>
+          {bookshelfData?.map((item) => (
+            <div
+              key={item.isbn}
+              className='w-[172px] h-[246px] cursor-pointer'
+            >
+              <img
+                src={item.coverImageUrl}
+                alt='도서 표지'
+                className='w-full h-full rounded-lg'
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
