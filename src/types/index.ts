@@ -145,3 +145,24 @@ export type DeskDataWithRec = {
 export type DeskBookItem =
   | { type: 'recommend'; book: RecommendedBook }
   | { type: 'reading'; book: Book };
+
+// 내 독서 section 타입
+export type EmotionState = {
+  emotionId: number;
+  emotionName: string;
+  percentage: number;
+};
+export type RecordedData = {
+  title: string;
+  author: string;
+  isbn: string;
+  coverImageUrl: string;
+  publisher: string;
+  category: string;
+  pubDate: string;
+  status: string;
+  createdAt: string;
+  finishedAt: string | null;
+  currentPage: number | null;
+  emotionStats: EmotionState[];
+}[];

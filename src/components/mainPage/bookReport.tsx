@@ -82,7 +82,7 @@ export default function BookReport() {
     },
   };
 
-  const isEmptyGraph = graphData?.length === 0;
+  const isEmptyGraph = graphData?.every((item) => item.readingDays === 0);
 
   return (
     <div className='flex flex-col mb-14'>
