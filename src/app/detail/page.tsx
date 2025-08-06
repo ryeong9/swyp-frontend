@@ -2,7 +2,7 @@
 import ProfileDropDown from '@/components/header/profileDropDwon';
 import SearchBar from '@/components/header/searchBar';
 import Image from 'next/image';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 type ReadingStatus = 'completed' | 'reading' | 'noIndex';

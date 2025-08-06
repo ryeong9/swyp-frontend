@@ -1,3 +1,4 @@
+//bookApi.ts
 import { authInstance } from '@/lib/axios';
 import {
   Book,
@@ -7,6 +8,7 @@ import {
   RankingData,
   RecordFinishedData,
   RecordReadingData,
+  TitleSearch,
 } from '@/types';
 
 // 책상 api
@@ -67,4 +69,29 @@ export const getRankingData = async (): Promise<RankingData> => {
 export const getGraphData = async (): Promise<GraphData> => {
   const response = await authInstance.get<GraphData>('/api/stats/monthly-reading-days');
   return response.data;
+};
+
+//검색결과-제목
+export const getBooksSearch = async (keyword: string, startIndex: number): Promise<TitleSearch> => {
+  const res = await authInstance.get('/api/books/search/title', {
+    params: {
+      keyword,
+      startIndex,
+    },
+  });
+  return res.data;
+};
+
+//검색-감정
+export const getEmotionSearch = async (
+  keyword: string,
+  startIndex: number,
+): Promise<TitleSearch> => {
+  const res = await authInstance.get('/api/books/search/emotion', {
+    params: {
+      keyword,
+      startIndex,
+    },
+  });
+  return res.data;
 };

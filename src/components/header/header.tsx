@@ -4,17 +4,22 @@ import { useState } from 'react';
 import SearchBar from './searchBar';
 import ProfileDropDown from './profileDropDwon';
 import NotificationDropDown from './notificationDropDown';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
+  const router = useRouter();
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
   const [showNotificationDropDown, setShowNotificationDropDown] = useState(false);
-
+  const handleClickMain = () => {
+    router.push('/');
+  };
   return (
     <div className='w-full h-[50px] mt-6 flex'>
       <img
         src='/icons/logo.svg'
         alt='로고'
         className='w-[190px] h-[50px] mr-5'
+        onClick={handleClickMain}
       />
       <SearchBar />
       <div className='relative flex ml-[23px] pr-[23px] items-center'>
