@@ -7,22 +7,18 @@ import usePostRecordFinishedData from '@/hooks/write/usePostRecordFinishedData';
 import usePostRecordReadingData from '@/hooks/write/usePostRecordReadingData';
 import { Book, Emotions, RecordDataState } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
-export default function WritePage() {
+// useSearchParams를 사용하는 부분 분리
+function WritePageContent({
+  setSelectedBook,
+  setFormData,
+}: {
+  setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
+  setFormData: React.Dispatch<React.SetStateAction<RecordDataState>>;
+}) {
   const router = useRouter();
-  const [formData, setFormData] = useState<RecordDataState>({
-    isbn: '',
-    status: '독서 상태',
-    page: undefined,
-    content: '',
-    finalNote: '',
-  });
-
-  const [emotionData, setEmotionData] = useState<Emotions[]>([{ emotionId: 0, score: 10 }]);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -34,7 +30,22 @@ export default function WritePage() {
 
       router.replace('/write', { scroll: false });
     }
-  }, [searchParams]);
+  }, [searchParams, router, setFormData, setSelectedBook]);
+
+  return null;
+}
+
+export default function WritePage() {
+  const [formData, setFormData] = useState<RecordDataState>({
+    isbn: '',
+    status: '독서 상태',
+    page: undefined,
+    content: '',
+    finalNote: '',
+  });
+
+  const [emotionData, setEmotionData] = useState<Emotions[]>([{ emotionId: 0, score: 10 }]);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const [showSelectModal, setShowSelectModal] = useState(false);
 
@@ -100,6 +111,12 @@ export default function WritePage() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <WritePageContent
+          setSelectedBook={setSelectedBook}
+          setFormData={setFormData}
+        />
+      </Suspense>
       <div className='w-full px-[205px] py-5 flex justify-end border-b-2 border-b-gray-200'>
         <button
           type='submit'
