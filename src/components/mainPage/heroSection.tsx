@@ -8,6 +8,20 @@ export default function HeroSection() {
 
   const { user, loading } = useUser(true);
   const { data: calendarData, isLoading } = useGetCalendarData(year, month);
+  const totalBooks = calendarData
+    ? (() => {
+        // isbn 중복 제거
+        const uniqueIsbn = new Set<string>();
+
+        calendarData.forEach((day) => {
+          day.books.forEach((book) => {
+            uniqueIsbn.add(book.isbn);
+          });
+        });
+
+        return uniqueIsbn.size;
+      })()
+    : 0;
 
   const isHeroLoading = loading || isLoading;
 
@@ -17,7 +31,7 @@ export default function HeroSection() {
     <section className='relative mt-4 mb-14 px-12 py-10 w-full h-[462px] bg-gray-200 rounded-3xl'>
       <div className='absolute bottom-[40px] flex flex-col w-[400px]'>
         <h1 className='mb-4 font-serif font-bold text-[32px]'>
-          {user?.nickname}님, 이번 달에는 <br /> 총 {calendarData?.length}권의 책을 읽었어요.
+          {user?.nickname}님, 이번 달에는 <br /> 총 {totalBooks}권의 책을 읽었어요.
         </h1>
         <p className='font-sans font-normal text-xl text-gray-900 tracking-wider leading-[30px]'>
           흐릿해지는 기억 속에서도 감정은 선명히 남아요 <br />

@@ -33,7 +33,11 @@ export default function Calendar() {
         cell.classList.remove('cell-start', 'cell-emotion', 'cell-complete');
         cellFrame.classList.remove('cell-start', 'cell-emotion', 'cell-complete');
 
-        const firstBook = dayData.books[0];
+        // 첫번째 책 + 같은 책을 새롭게 다시 기록하면, startDate false로 보냄(백엔드에서)
+        const firstBook = { ...dayData.books[0] };
+        if (firstBook.status === 'READING') {
+          firstBook.startDate = true;
+        }
 
         // wrapper가 이미 있다면 재사용
         let wrapper = cellFrame.querySelector('.custom-wrapper') as HTMLDivElement;
@@ -44,6 +48,7 @@ export default function Calendar() {
           wrapper.style.flexDirection = 'column';
           wrapper.style.alignItems = 'center';
           wrapper.style.justifyContent = 'center';
+          wrapper.style.paddingTop = '9px';
           cellFrame.appendChild(wrapper);
         } else {
           wrapper.innerHTML = '';
@@ -76,7 +81,8 @@ export default function Calendar() {
         if (firstBook.emotionsId.length > 0) {
           const emotionsWrapper = document.createElement('div');
           emotionsWrapper.className = 'emotions';
-          firstBook.emotionsId.forEach((id) => {
+
+          firstBook.emotionsId.slice(0, 5).forEach((id) => {
             const emotion = emotions.find((e) => e.id === id);
             if (!emotion) return;
             const emo = document.createElement('img');
@@ -86,6 +92,16 @@ export default function Calendar() {
             emotionsWrapper.appendChild(emo);
           });
           wrapper.appendChild(emotionsWrapper);
+        } else {
+          // 감정이 없으면 텍스트 추가
+          const noEmotionText = document.createElement('p');
+          noEmotionText.innerText = '감정은 비워뒀어요.';
+          noEmotionText.style.marginTop = '8px';
+          noEmotionText.style.fontSize = '12px';
+          noEmotionText.style.fontFamily = '"Gowun Batang", serif';
+          noEmotionText.style.color = '#6B7280';
+          noEmotionText.style.textAlign = 'center';
+          wrapper.appendChild(noEmotionText);
         }
       });
     });
