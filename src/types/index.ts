@@ -80,7 +80,7 @@ export type TitleSearch = {
   page: number;
   totalResults: number;
   books: Array<{
-    isbn?: string;
+    isbn: string;
     title: string;
     author: string;
     coverImageUrl: string;
@@ -166,3 +166,28 @@ export type RecordedData = {
   currentPage: number | null;
   emotionStats: EmotionState[];
 }[];
+
+//상세페이지
+export type Emotion = {
+  id: number;
+  name: string;
+  scoreSum: number;
+  percentage: number;
+};
+
+export type BookDetail = {
+  isbn: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  publishedDate: string;
+  description: string;
+  publisher: string;
+  category: string;
+  totalEmotionCount: number;
+  emotions: Emotion[];
+};
+
+export type BookStatus = {
+  status: 'NONE' | 'WISH' | 'READING' | 'FINISHED';
+};

@@ -1,15 +1,17 @@
 //bookApi.ts
-import { authInstance } from '@/lib/axios';
+import { authInstance, defaultInstance } from '@/lib/axios';
 import {
   Book,
   CalendarData,
   DeskDataWithRec,
   GraphData,
+  BookDetail,
   RankingData,
   RecordedData,
   RecordFinishedData,
   RecordReadingData,
   TitleSearch,
+  BookStatus,
 } from '@/types';
 
 // 책상 api
@@ -101,4 +103,15 @@ export const getEmotionSearch = async (
 export const getRecordedData = async (): Promise<RecordedData> => {
   const response = await authInstance.get<RecordedData>('/api/reports');
   return response.data;
+};
+
+//상세페이지
+export const getDetail = async (isbn: string): Promise<BookDetail> => {
+  const res = await authInstance.get(`/api/books/${isbn}`);
+  return res.data;
+};
+//책 상태 값
+export const getBookStatus = async (isbn: string): Promise<BookStatus> => {
+  const res = await authInstance.get(`/api/books/${isbn}/me/status`);
+  return res.data;
 };
