@@ -1,13 +1,11 @@
-// components/detail/EmotionSwiper.tsx
 'use client';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import Image from 'next/image';
 import { emotions } from '@/constants/emotion';
+import './emotionSlide.css';
 
-// import './emotionSlide.css';
-import '@/components/reportPage/myBookHistory.css';
 interface EmotionData {
   id: number;
   scoreSum: number;
@@ -40,7 +38,7 @@ export default function EmotionSwiper({ emotionList, emotionLength }: EmotionSwi
         slidesPerView={1}
         pagination={emotionLength >= 1 ? { clickable: true } : false}
         navigation={emotionLength >= 1}
-        className='w-full'
+        className='w-full h-[240px]'
       >
         {emotionPages.map((page, pageIndex) => (
           <SwiperSlide key={pageIndex}>
