@@ -21,12 +21,13 @@ export default function DetailPage({ isbn }: DetailPageProps) {
     return <div className='text-center mt-10'>도서 정보를 불러오지 못했습니다.</div>;
 
   const hasEmotion = book?.emotions && book.emotions.length > 0;
-  // const handleClickWrite = () =>
-  //   router.push(`/write?isbn=${book.isbn}`);
-  // };
+  const handleClickWrite = () => {
+    const encodedBook = encodeURIComponent(JSON.stringify(book));
+    router.push(`/write?book=${encodedBook}`);
+  };
   return (
     <div className='flex justify-center items-center'>
-      <div className='w-[1030px] max-w-full flex flex-col gap-14'>
+      <div className='w-[1030px] max-w-full flex flex-col gap-14 pb-14'>
         <div className='flex flex-row gap-5'>
           <Header />
         </div>
@@ -60,7 +61,10 @@ export default function DetailPage({ isbn }: DetailPageProps) {
             </p>
             <div className='flex flex-row justify-between'>
               <ReadingStatusTag status={bookStatus?.status ?? 'NONE'} />
-              <button className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'>
+              <button
+                onClick={handleClickWrite}
+                className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'
+              >
                 기록하기
               </button>
             </div>
