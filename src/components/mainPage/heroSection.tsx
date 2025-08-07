@@ -1,12 +1,14 @@
 import useUser from '@/hooks/login/useUser';
 import useGetCalendarData from '@/hooks/report/useGetCalendarData';
 import HeroSkeleton from '../skeleton/heroSkeleton';
+import useAuthStore from '@/stores/useAuthStore';
 
 export default function HeroSection() {
+  const isLogin = useAuthStore((state) => state.isLogin);
   const year = new Date().getFullYear();
   const month = new Date().getMonth() + 1;
 
-  const { user, loading } = useUser(true);
+  const { user, loading } = useUser(isLogin);
   const { data: calendarData, isLoading } = useGetCalendarData(year, month);
   const totalBooks = calendarData
     ? (() => {
