@@ -1,14 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import FilterDropDown from './filterDropDown';
 import EmojiDropDown from './emojiDropDown';
 
 export default function SearchBar() {
   const router = useRouter();
-  const [category, setCategory] = useState('감정');
-  const [keyword, setKeyword] = useState('');
+  const searchParams = useSearchParams();
+
+  // URL 파라미터에서 초기값 추출
+  const initialKeyword = searchParams.get('keyword') || '';
+  const initialType = searchParams.get('type') || 'emotion';
+  const initialCategory = initialType === 'title' ? '도서명' : '감정';
+
+  const [category, setCategory] = useState(initialCategory);
+  const [keyword, setKeyword] = useState(initialKeyword);
   const [showFilterDropDown, setShowFilterDropDown] = useState(false);
   const [showEmojiDropDown, setShowEmojiDropDown] = useState(false);
 
@@ -65,7 +72,7 @@ export default function SearchBar() {
       )}
       <img
         src='/icons/bar.svg'
-        className='mx-3.5 block'
+        className='ml-5 mr-[29px] block'
       />
       <input
         className='w-[540px] outline-none leading-none text-sm placeholder-gray-500'
@@ -79,6 +86,12 @@ export default function SearchBar() {
         }}
         onChange={handleKeywordChange}
         value={keyword}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSubmitSearchData();
+          }
+        }}
       />
       {showEmojiDropDown && (
         <EmojiDropDown

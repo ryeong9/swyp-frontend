@@ -101,7 +101,7 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
                           </span>
                           명이 감정을 기록했어요"
                         </p>
-                        <div className='w-[220px] h-[91px] flex flex-row justify-between items-center gap-4'>
+                        <div className='w-[220px] h-[91px] grid grid-cols-3 grid-rows-1 gap-x-4'>
                           {book.emotions
                             .slice()
                             .sort((a, b) => b.percentage - a.percentage)

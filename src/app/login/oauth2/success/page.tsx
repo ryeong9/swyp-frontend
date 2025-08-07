@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/login/useUser';
+import useAuthStore from '@/stores/useAuthStore';
 
 export default function OAuth2Page() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function OAuth2Page() {
 
       if (accessToken) {
         localStorage.setItem('accessToken', accessToken);
+        useAuthStore.getState().setIsLogin(true);
         setTokenReady(true);
       } else {
         console.error('No access token found in URL');

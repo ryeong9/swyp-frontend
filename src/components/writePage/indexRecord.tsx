@@ -132,7 +132,6 @@ export default function IndexRecord({
                     </div>
                     <div className='grid grid-cols-5 grid-rows-4 gap-x-[9px] gap-y-2'>
                       {emotions.map((item) => {
-                        const isUsed = emotionData.some((emo) => item.id === emo.emotionId);
                         return (
                           <button
                             type='button'

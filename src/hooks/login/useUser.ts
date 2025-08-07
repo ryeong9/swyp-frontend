@@ -10,7 +10,7 @@ export function useUser(enabled: boolean) {
   } = useQuery({
     queryKey: ['user'],
     queryFn: fetchUser,
-    enabled,
+    enabled: enabled,
   });
 
   if (isError) {

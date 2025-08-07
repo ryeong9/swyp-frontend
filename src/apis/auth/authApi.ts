@@ -51,13 +51,9 @@ export const postLogin = async (email: string, password: string) => {
   const res = await defaultInstance.post('/api/auth/login', { email, password });
   return res.data;
 };
-//검색결과
-export const getBooksSearch = async (keyword: string, startIndex: number): Promise<TitleSearch> => {
-  const res = await defaultInstance.get('/api/books/search/title', {
-    params: {
-      keyword,
-      startIndex,
-    },
-  });
-  return res.data;
+
+// 로그아웃
+export const postLogOut = async (): Promise<void> => {
+  await authInstance.post('/api/auth/logout');
+  localStorage.removeItem('accessToken');
 };
