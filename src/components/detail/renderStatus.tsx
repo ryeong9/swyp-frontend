@@ -13,7 +13,7 @@ interface Props {
 const ReadingStatusTag = ({ status }: Props) => {
   if (status === 'FINISHED') {
     return (
-      <button className='flex flex-row items-center w-[88px] h-[50px] bg-primary-lightblue rounded-lg px-5 py-2.5 gap-2.5 text-state-success'>
+      <button className='flex flex-row items-center w-[87.76px] h-[50px] bg-primary-lightblue rounded-lg px-5 py-2.5 gap-2.5 text-state-success'>
         <Image
           src='/icons/completeRead.svg'
           alt='완료'
@@ -27,7 +27,7 @@ const ReadingStatusTag = ({ status }: Props) => {
 
   if (status === 'READING') {
     return (
-      <button className='flex flex-row items-center w-[88px] h-[50px] bg-primary-lightblue rounded-lg px-5 py-2.5 gap-2.5 text-state-success'>
+      <button className='flex flex-row items-center w-[101.76px] h-[50px] bg-primary-lightblue rounded-lg px-5 py-2.5 gap-2.5 text-state-success'>
         <Image
           src='/icons/completeRead.svg'
           alt='읽는 중'
