@@ -100,11 +100,11 @@ export const getEmotionSearch = async (
 
 //상세페이지
 export const getDetail = async (isbn: string): Promise<BookDetail> => {
-  const res = await defaultInstance.get(`/api/books/${isbn}`);
+  const res = await authInstance.get(`/api/books/${isbn}`);
   return res.data;
 };
 //책 상태 값
 export const getBookStatus = async (isbn: string): Promise<BookStatus> => {
-  const res = await defaultInstance.get(`/api/books/${isbn}/me/status`);
+  const res = await authInstance.get(`/api/books/${isbn}/me/status`);
   return res.data;
 };

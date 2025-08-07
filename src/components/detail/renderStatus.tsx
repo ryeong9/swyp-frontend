@@ -40,7 +40,7 @@ const ReadingStatusTag = ({ status }: Props) => {
   }
 
   return (
-    <button className='flex flex-row items-center w-[88px] h-[50px] bg-primary-lightblue rounded-lg px-5 py-2.5 gap-2.5 text-gray-500'>
+    <button className='flex flex-row items-center w-[121.76px] h-[50px] bg-primary-lightblue rounded-lg px-5 py-2.5 gap-2.5 text-gray-500'>
       <Image
         src='/icons/noIndex.svg'
         alt='인덱스 없음'
