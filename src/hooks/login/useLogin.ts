@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { postLogin } from '@/apis/auth/authApi';
 import { Login, LoginResponse } from '@/types';
+import useAuthStore from '@/stores/useAuthStore';
 
 type ModalType = 'none' | 'loginError' | 'loginAlready' | 'loginDuplicate';
 
@@ -10,10 +11,8 @@ export const useLogin = (onModalChange: (type: ModalType) => void) => {
     onSuccess: (data) => {
       if (data.accessToken) {
         localStorage.setItem('accessToken', data.accessToken);
+        useAuthStore.getState().setIsLogin(true);
       }
-
-      // 유저 정보도 필요하다면 저장
-      // localStorage.setItem('userInfo', JSON.stringify(data.userResponse));
     },
     onError: (error: any) => {
       const errorMessage = error?.response?.data?.message || '';

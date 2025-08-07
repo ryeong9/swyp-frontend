@@ -1,6 +1,7 @@
 // src/lib/axios.ts
 import axios from 'axios';
 import { BASE_URL } from '@/constants/env';
+import useAuthStore from '@/stores/useAuthStore';
 
 // 기본 instance
 export const defaultInstance = axios.create({
@@ -46,14 +47,16 @@ authInstance.interceptors.response.use(
         const res = await authInstance.post(`${BASE_URL}/api/auth/refresh`);
         const newAccessToken = res.data.accessToken;
         localStorage.setItem('accessToken', newAccessToken);
+        useAuthStore.getState().setIsLogin(true);
 
         // 원래 요청 재시도
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-        return authInstance(error.config);
+        return await authInstance(error.config);
       } catch (refreshError) {
-        // 재로그인 유도
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
+        // 로그아웃 처리
+        authInstance.post('/logout');
+        localStorage.removeItem('accessToken');
+        useAuthStore.getState().setIsLogin(false);
       }
     }
     return Promise.reject(error);
