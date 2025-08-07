@@ -57,6 +57,7 @@ authInstance.interceptors.response.use(
         authInstance.post('/logout');
         localStorage.removeItem('accessToken');
         useAuthStore.getState().setIsLogin(false);
+        window.location.replace('/login');
       }
     }
     return Promise.reject(error);
