@@ -5,8 +5,9 @@ import { useInfiniteTitleSearch, useInfiniteEmotionSearch } from '@/hooks/search
 import { useEffect, useRef } from 'react';
 import Header from '@/components/header/header';
 import { emotions } from '@/constants/emotion';
-
+import { useRouter } from 'next/navigation';
 export default function ResultSearchPage({ keyword, type }: { keyword: string; type: string }) {
+  const router = useRouter();
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
     type === 'emotion' ? useInfiniteEmotionSearch(keyword) : useInfiniteTitleSearch(keyword);
 
@@ -58,6 +59,7 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
               <div
                 key={book.isbn || `${book.title}-${index}`}
                 className='bg-white rounded-[10px] p-5 flex flex-row gap-4 w-full'
+                onClick={() => router.push(`/detail?isbn=${book.isbn}`)}
               >
                 {/* 이미지 영역 */}
                 <div className='bg-white w-[170px] h-[240px] rounded-lg flex items-center justify-center overflow-hidden'>
