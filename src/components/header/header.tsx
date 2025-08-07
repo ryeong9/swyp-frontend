@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import SearchBar from './searchBar';
 import ProfileDropDown from './profileDropDwon';
 import NotificationDropDown from './notificationDropDown';
@@ -21,7 +21,9 @@ export default function Header() {
         className='w-[190px] h-[50px] mr-5'
         onClick={handleClickMain}
       />
-      <SearchBar />
+      <Suspense fallback={null}>
+        <SearchBar />
+      </Suspense>
       <div className='relative flex ml-[23px] pr-[23px] items-center'>
         <button
           type='button'
