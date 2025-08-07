@@ -4,14 +4,15 @@ import { useRouter } from 'next/navigation';
 
 interface RoutingPopUpProps {
   setShowSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
+  handleReset: () => void;
 }
 
-export default function RoutingPopUp({ setShowSuccessModal }: RoutingPopUpProps) {
+export default function RoutingPopUp({ setShowSuccessModal, handleReset }: RoutingPopUpProps) {
   const router = useRouter();
 
   const handleClickGotoNewRecord = () => {
+    handleReset();
     setShowSuccessModal(false);
-    router.push('/write');
   };
 
   const handleClickGotoMain = () => {

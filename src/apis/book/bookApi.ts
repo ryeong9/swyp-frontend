@@ -7,6 +7,7 @@ import {
   GraphData,
   BookDetail,
   RankingData,
+  RecordedData,
   RecordFinishedData,
   RecordReadingData,
   TitleSearch,
@@ -96,6 +97,12 @@ export const getEmotionSearch = async (
     },
   });
   return res.data;
+};
+
+// 내 독서 기록 api
+export const getRecordedData = async (): Promise<RecordedData> => {
+  const response = await authInstance.get<RecordedData>('/api/reports');
+  return response.data;
 };
 
 //상세페이지
