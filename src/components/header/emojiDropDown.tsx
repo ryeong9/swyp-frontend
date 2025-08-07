@@ -19,7 +19,7 @@ export default function EmojiDropDown({
   };
 
   return (
-    <div className='absolute box-border top-14 right-14 w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 pl-6 pr-[17.5px] py-4 flex flex-col justify-between'>
+    <div className='absolute box-border top-14 right-17 w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 p-6 flex flex-col justify-between'>
       <div className='w-full flex justify-between items-start'>
         <div className='flex flex-col'>
           <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
@@ -35,14 +35,14 @@ export default function EmojiDropDown({
             사고기반
           </p>
         </div>
-        <div className='grid grid-cols-5 grid-rows-4 gap-x-[9px] gap-y-2'>
+        <div className='grid grid-cols-5 grid-rows-4 gap-6'>
           {emotions.map((item) => {
             return (
               <button
                 type='button'
                 key={item.id}
                 onClick={() => handleClickEmotion(item.name)}
-                className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
+                className='w-[60px] h-[85px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
               >
                 <img
                   src={item.icon}
