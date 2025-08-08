@@ -1,17 +1,18 @@
-// src/app/result/page.tsx
 import ResultSearchPage from '@/components/search/resultSearchPage';
-import { Suspense } from 'react';
 
-export default function Page({ searchParams }: any) {
-  const keyword = typeof searchParams?.keyword === 'string' ? searchParams.keyword : '';
-  const type = typeof searchParams?.type === 'string' ? searchParams.type : 'title';
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams; // ✅ 반드시 await
+  const keyword = typeof params.keyword === 'string' ? params.keyword : '';
+  const type = typeof params.type === 'string' ? params.type : 'title';
 
   return (
-    <Suspense fallback={<div>로딩 중...</div>}>
-      <ResultSearchPage
-        keyword={keyword}
-        type={type}
-      />
-    </Suspense>
+    <ResultSearchPage
+      keyword={keyword}
+      type={type}
+    />
   );
 }
