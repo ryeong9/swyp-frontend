@@ -12,6 +12,7 @@ import {
   RecordReadingData,
   TitleSearch,
   BookStatus,
+  AddDeskData,
 } from '@/types';
 
 // 책상 api
@@ -114,4 +115,12 @@ export const getDetail = async (isbn: string): Promise<BookDetail> => {
 export const getBookStatus = async (isbn: string): Promise<BookStatus> => {
   const res = await authInstance.get(`/api/books/${isbn}/me/status`);
   return res.data;
+};
+
+// 책상에 등록 api
+export const postAddDesk = async (isbn: string): Promise<AddDeskData> => {
+  const response = await authInstance.post('/api/addBookshelf', {
+    isbn,
+  });
+  return response.data;
 };

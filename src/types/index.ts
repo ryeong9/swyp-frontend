@@ -191,3 +191,34 @@ export type BookDetail = {
 export type BookStatus = {
   status: 'NONE' | 'WISH' | 'READING' | 'FINISHED';
 };
+
+export type AddDeskData = {
+  bookshelfId: number;
+  status: string;
+  createdAt: string;
+  finishedAt: string | null;
+  finalNote: string;
+  book: {
+    isbn: string;
+    title: string;
+    author: string;
+    coverImageUrl: string;
+    publishedDate: string;
+    description: string;
+    publisher: string;
+    category: string;
+    totalEmotionCount: number;
+  };
+};
+
+export const mapAddDeskToBook = (d: AddDeskData): Book => ({
+  bookshelfId: d.bookshelfId,
+  status: d.status,
+  isbn: d.book.isbn,
+  title: d.book.title,
+  author: d.book.author,
+  coverImageUrl: d.book.coverImageUrl,
+  publisher: d.book.publisher,
+  category: d.book.category,
+  publishedDate: d.book.publishedDate,
+});

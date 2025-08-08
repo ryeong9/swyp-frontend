@@ -2,31 +2,54 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useDetail, useBookStatus } from '@/hooks/detail/useDetail';
+import { useDetail } from '@/hooks/detail/useDetail';
 import Header from '@/components/header/header';
-import ReadingStatusTag from './renderStatus';
+// import ReadingStatusTag from './renderStatus';
 
 import EmotionSwiper from './emotionSlide';
+import { useState } from 'react';
+import usePostAddDesk from '@/hooks/detail/usePostAddDesk';
+import { AddDeskData, Book, mapAddDeskToBook } from '@/types';
 
 interface DetailPageProps {
   isbn: string;
 }
 export default function DetailPage({ isbn }: DetailPageProps) {
   const { data: book, isLoading, isError } = useDetail(isbn);
-  const { data: bookStatus } = useBookStatus(isbn);
+  // const { data: bookStatus } = useBookStatus(isbn);
   const router = useRouter();
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [bookData, setBookData] = useState<Book | null>(null);
+
+  const { mutate } = usePostAddDesk();
 
   if (isLoading) return <div className='text-center mt-10'>로딩 중...</div>;
   if (isError || !book)
     return <div className='text-center mt-10'>도서 정보를 불러오지 못했습니다.</div>;
 
   const hasEmotion = book?.emotions && book.emotions.length > 0;
-  const handleClickWrite = () => {
-    const encodedBook = encodeURIComponent(JSON.stringify(book));
+
+  const handleClickAddDesk = () => {
+    mutate(isbn, {
+      onSuccess: (data: AddDeskData) => {
+        setBookData(mapAddDeskToBook(data));
+        setShowPopup(true);
+      },
+      onError: (err) => {
+        alert('책장 등록 실패');
+        console.error(err);
+      },
+    });
+  };
+
+  const handleClickGotoWrite = () => {
+    const encodedBook = encodeURIComponent(JSON.stringify(bookData));
     router.push(`/write?book=${encodedBook}`);
   };
+
   return (
-    <div className='flex justify-center items-center'>
+    <div className='relative flex justify-center items-center'>
       <div className='w-[1030px] max-w-full flex flex-col gap-14 pb-14'>
         <div className='flex flex-row gap-5'>
           <Header />
@@ -60,12 +83,11 @@ export default function DetailPage({ isbn }: DetailPageProps) {
               {book.description || '설명이 없습니다.'}
             </p>
             <div className='flex flex-row justify-between'>
-              <ReadingStatusTag status={bookStatus?.status ?? 'NONE'} />
               <button
-                onClick={handleClickWrite}
+                onClick={handleClickAddDesk}
                 className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'
               >
-                기록하기
+                책상에 올리기
               </button>
             </div>
           </div>
@@ -86,11 +108,9 @@ export default function DetailPage({ isbn }: DetailPageProps) {
             />
           ) : (
             <div className='bg-white w-full h-[184px] rounded-3xl p-10 flex flex-col justify-center items-center gap-2'>
-              <Image
-                src='/icons/emotion/noEmotionData.svg'
+              <img
+                src='/icons/noEmotionData.svg'
                 alt='emotionIcon'
-                width={34.75}
-                height={40.35}
               />
               <p className='text-gray-700 font-serif font-bold text-base'>
                 이 책의 감정 기록이 아직 없어요.
@@ -99,6 +119,30 @@ export default function DetailPage({ isbn }: DetailPageProps) {
           )}
         </div>
       </div>
+      {showPopup && bookData && (
+        <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-20'>
+          <div className='w-[412px] h-[291px] flex flex-col justify-center items-center bg-background-input rounded-2xl'>
+            <h2 className='font-sans font-semibold text-xl mb-4'>책상 위에 자리 잡았어요!</h2>
+            <p className='font-sans font-medium text-sm text-gray-700 mb-6'>
+              이 순간의 감정을 책과 함께 남겨보세요.
+            </p>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-state-success text-background-input text-base rounded-lg mb-2'
+              onClick={handleClickGotoWrite}
+            >
+              기록하기
+            </button>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-gray-300 text-gray-700 text-base rounded-lg'
+              onClick={() => setShowPopup(false)}
+            >
+              돌아가기
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
