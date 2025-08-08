@@ -92,13 +92,13 @@ export default function MyBookHistory() {
                           >
                             {item.status === 'READING' ? '읽는 중' : '완료'}
                           </p>
-                          {item.status === 'READING' ? (
-                            <p className='w-[66px] h-[33px] flex justify-center items-center font-normal rounded-sm bg-gray-200 text-gray-700 ml-4'>
-                              {item.currentPage}P
-                            </p>
-                          ) : (
-                            ''
-                          )}
+                          {item.status === 'READING' &&
+                            Number.isFinite(Number(item.currentPage)) &&
+                            Number(item.currentPage) > 0 && (
+                              <p className='w-[66px] h-[33px] flex justify-center items-center font-normal rounded-sm bg-gray-200 text-gray-700 ml-4'>
+                                {Number(item.currentPage)}P
+                              </p>
+                            )}
                         </div>
                         <p className='font-sans text-xs text-gray-500'>
                           {item.createdAt.replace(/-/g, '.')}
