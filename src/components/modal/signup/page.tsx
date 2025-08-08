@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import Button from '@/components/button/page';
 interface ModalProps {
   onClose: () => void;
 }

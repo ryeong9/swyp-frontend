@@ -9,7 +9,6 @@ export const useInfiniteTitleSearch = (keyword: string) => {
     getNextPageParam: (lastPage, allPages) => {
       const totalResults = lastPage?.totalResults || 0;
       const loadedItems = allPages.flatMap((page) => page.books || []).length;
-      console.log(`totalResults: ${totalResults}, loadedItems: ${loadedItems}`);
       if (lastPage.books?.length === 0) return undefined; // 빈 페이지면 중단
       return loadedItems < totalResults ? lastPage.page + 1 : undefined;
     },
@@ -25,7 +24,6 @@ export const useInfiniteEmotionSearch = (keyword: string) => {
     getNextPageParam: (lastPage, allPages) => {
       const totalResults = lastPage?.totalResults || 0;
       const loadedItems = allPages.flatMap((page) => page.books || []).length;
-      console.log(`totalResults: ${totalResults}, loadedItems: ${loadedItems}`);
       if (lastPage.books?.length === 0) return undefined; // 빈 페이지면 중단
       return loadedItems < totalResults ? lastPage.page + 1 : undefined;
     },

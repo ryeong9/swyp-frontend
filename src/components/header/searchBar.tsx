@@ -25,7 +25,6 @@ export default function SearchBar() {
 
   const handleSubmitSearchData = () => {
     if (!keyword) {
-      console.log('검색어를 입력해주세요.');
       return;
     }
 
@@ -36,9 +35,6 @@ export default function SearchBar() {
     }).toString();
     router.push(`/result?${query}`);
   };
-
-  console.log(category);
-  console.log(keyword);
 
   return (
     <div className='relative w-[715px] h-[50px] rounded-[60px] bg-background-input py-[16px] px-[24px] flex items-center'>

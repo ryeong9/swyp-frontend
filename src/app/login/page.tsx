@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -64,7 +63,6 @@ export default function LoginPage() {
     const { email, password } = data;
     try {
       const result = await loginMutation.mutateAsync({ email, password });
-      console.log('로그인 성공: ', result);
       router.push('/');
     } catch (error) {
       //에러상황 useLogin에서 구현

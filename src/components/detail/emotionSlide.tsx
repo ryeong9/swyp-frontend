@@ -28,9 +28,6 @@ export default function EmotionSwiper({ emotionList, emotionLength }: EmotionSwi
     (_, index) => sortedEmotions.slice(index * 6, index * 6 + 6),
   );
 
-  console.log('emotionLength:', emotionLength);
-  console.log('emotionList:', emotionList);
-
   return (
     <div className='w-full relative'>
       <Swiper

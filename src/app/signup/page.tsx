@@ -15,7 +15,6 @@ import {
   useSendVerificationCode,
   useSignup,
 } from '@/hooks/signup/useAuth';
-import { SignupErrorModal } from '@/components/modal/signup/page';
 
 const schema = z
   .object({
@@ -128,7 +127,6 @@ export default function SignUpPage() {
 
     try {
       const result = await sendVerificationMutation.mutateAsync(email);
-      console.log('Send Verification Result:', result);
       startTimer();
     } catch (error) {
       console.error('Send Verification Error:', error);
@@ -149,7 +147,6 @@ export default function SignUpPage() {
         setVerificationStatus(null);
         setIsCheckVerification(true);
         stopTimer();
-        console.log('인증이 완료되었습니다.');
       } else {
         setVerificationStatus('인증코드를 다시 확인해주세요');
       }
@@ -163,11 +160,9 @@ export default function SignUpPage() {
   const onSubmit = async (data: any) => {
     const { email, password, nickname } = data;
     try {
-      const result = await signupMutation.mutateAsync({ email, password, nickname });
-      console.log('회원가입 성공: ', result);
+      await signupMutation.mutateAsync({ email, password, nickname });
       router.push('/login');
     } catch (error) {
-      console.log('회원가입 실패: ', error);
       setShowErrorModal(true);
     }
   };

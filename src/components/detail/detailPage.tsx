@@ -4,8 +4,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useDetail } from '@/hooks/detail/useDetail';
 import Header from '@/components/header/header';
-// import ReadingStatusTag from './renderStatus';
-
 import EmotionSwiper from './emotionSlide';
 import { useState } from 'react';
 import usePostAddDesk from '@/hooks/detail/usePostAddDesk';
@@ -16,7 +14,6 @@ interface DetailPageProps {
 }
 export default function DetailPage({ isbn }: DetailPageProps) {
   const { data: book, isLoading, isError } = useDetail(isbn);
-  // const { data: bookStatus } = useBookStatus(isbn);
   const router = useRouter();
 
   const [showPopup, setShowPopup] = useState(false);

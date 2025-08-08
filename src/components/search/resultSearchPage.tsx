@@ -41,11 +41,6 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
       ? rawBooks.filter((book) => book.emotions?.some((e) => e.name === keyword))
       : rawBooks;
 
-  console.log('📦 총 받은 책 수:', rawBooks.length);
-  data?.pages.forEach((page, i) => {
-    console.log(`page ${i + 1} - book count:`, page.books?.length);
-  });
-
   return (
     <div className='pt-6 pb-6 max-w-[1030px] mx-auto'>
       <div className='flex flex-row gap-5'>
@@ -69,7 +64,7 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
                       alt={book.title || '책 커버'}
                       width={170}
                       height={240}
-                      className='rounded-lg object-cover'
+                      className='rounded-lg object-cover w-[170px] h-[240px]'
                       onError={(e) => {
                         console.error('이미지 로드 실패:', e, book.coverImageUrl);
                         (e.target as HTMLImageElement).src = '/placeholder.png';
