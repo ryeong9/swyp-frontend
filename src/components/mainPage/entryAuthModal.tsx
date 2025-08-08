@@ -38,7 +38,7 @@ export default function EntryAuthModal() {
             moments deserve to be revisited—again and again. And ‘till the end.
           </p>
           <div
-            className='absolute w-[100px] h-[160px] right-[44px] top-0 bg-[#DEC7B5]/80 z-10'
+            className='absolute w-[100px] h-[160px] right-[44px] top-0 bg-secondary/80 z-10'
             style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%)' }}
           ></div>
         </section>
