@@ -16,7 +16,7 @@ export default function BookShelfSection() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금까지 읽었던 책들이 책장에 꽂혀 있어요
           </p>
-          <button
+          {/* <button
             type='button'
             className='flex cursor-pointer'
           >
@@ -25,7 +25,7 @@ export default function BookShelfSection() {
               src='/icons/arrowRight.svg'
               alt='오른쪽 화살표'
             />
-          </button>
+          </button> */}
         </div>
       </div>
       {isEmpty ? (

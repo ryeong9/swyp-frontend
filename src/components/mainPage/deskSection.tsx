@@ -39,7 +39,7 @@ export default function DeskSection() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금 읽고 있는 책과 추천 책을 책상 위에 올려놔 보았어요
           </p>
-          <button
+          {/* <button
             type='button'
             className='flex cursor-pointer'
           >
@@ -48,7 +48,7 @@ export default function DeskSection() {
               src='/icons/arrowRight.svg'
               alt='오른쪽 화살표'
             />
-          </button>
+          </button> */}
         </div>
       </div>
       <div>

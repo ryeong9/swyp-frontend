@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
-import AutoLoginCheckbox from '@/components/checkbox/page';
+// import AutoLoginCheckbox from '@/components/checkbox/page';
 import { BASE_URL } from '@/constants/env';
 import { useLogin } from '@/hooks/login/useLogin';
 import { LoginErrorModal, LoginAlreadyModal } from '@/components/modal/login/page';
@@ -130,7 +130,7 @@ export default function LoginPage() {
         </div>
 
         <div className='flex flex-col justify-center items-center gap-4'>
-          <AutoLoginCheckbox />
+          {/* <AutoLoginCheckbox /> */}
           <a
             href='./signup'
             className='text-gray-700 underline'

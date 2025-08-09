@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react';
 import SearchBar from './searchBar';
 import ProfileDropDown from './profileDropDwon';
-import NotificationDropDown from './notificationDropDown';
+// import NotificationDropDown from './notificationDropDown';
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
@@ -25,7 +25,7 @@ export default function Header() {
         <SearchBar />
       </Suspense>
       <div className='relative flex ml-[23px] pr-[23px] items-center'>
-        <button
+        {/* <button
           type='button'
           className='w-[20px] h-[20px] mr-[18px] cursor-pointer'
           onClick={() => setShowNotificationDropDown((prev) => !prev)}
@@ -35,7 +35,7 @@ export default function Header() {
             alt='알림함 아이콘'
           />
         </button>
-        {showNotificationDropDown && <NotificationDropDown />}
+        {showNotificationDropDown && <NotificationDropDown />} */}
         <button
           type='button'
           className='w-[20px] h-[20px] cursor-pointer'
