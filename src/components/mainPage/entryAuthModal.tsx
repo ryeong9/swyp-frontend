@@ -43,7 +43,10 @@ export default function EntryAuthModal() {
           ></div>
         </section>
         <section className='w-1/2 flex flex-col justify-center items-center py-12 px-[55px] bg-gray-200 rounded-r-2xl'>
-          <img className='w-[300px] h-[238px] bg-gray-300' />
+          <img
+            src='/icons/entryModal.svg'
+            alt='비회원 모달 일러스트'
+          />
           <button
             type='button'
             onClick={handleClickGotoLogin}
