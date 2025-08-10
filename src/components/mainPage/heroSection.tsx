@@ -30,7 +30,7 @@ export default function HeroSection() {
   if (isHeroLoading) return <HeroSkeleton />;
 
   return (
-    <section className='relative mt-4 mb-14 px-12 py-10 w-full h-[462px] bg-gray-200 rounded-3xl'>
+    <section className='relative mt-4 mb-14 px-12 py-10 w-full h-[462px] bg-[url(/icons/heroHeader.svg)] bg-cover rounded-3xl'>
       <div className='absolute bottom-[40px] flex flex-col w-[400px]'>
         <h1 className='mb-4 font-serif font-bold text-[32px]'>
           {user?.nickname}님, 이번 달에는 <br /> 총 {totalBooks}권의 책을 읽었어요.
