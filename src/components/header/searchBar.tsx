@@ -11,7 +11,7 @@ export default function SearchBar() {
 
   // URL 파라미터에서 초기값 추출
   const initialKeyword = searchParams.get('keyword') || '';
-  const initialType = searchParams.get('type') || 'emotion';
+  const initialType = searchParams.get('type') || 'title';
   const initialCategory = initialType === 'title' ? '도서명' : '감정';
 
   const [category, setCategory] = useState(initialCategory);

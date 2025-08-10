@@ -13,7 +13,7 @@ export default function FilterDropDown({
   setKeyword,
   setShowEmojiDropDown,
 }: CategorySelectProps) {
-  const categoryList = ['감정', '도서명'];
+  const categoryList = ['도서명', '감정'];
 
   const handleSelectCategory = (item: string) => {
     setShowFilterDropDown(false);
