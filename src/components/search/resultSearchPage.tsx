@@ -35,11 +35,6 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
   if (isError) return <div>오류 발생: {error?.message}</div>;
 
   const rawBooks = data?.pages.flatMap((page) => page.books || []) || [];
-  //감정 키워드 정확히 포함된 책만 걸러줌
-  const filteredBooks =
-    type === 'emotion'
-      ? rawBooks.filter((book) => book.emotions?.some((e) => e.name === keyword))
-      : rawBooks;
 
   return (
     <div className='pt-6 pb-6 max-w-[1030px] mx-auto'>
@@ -48,9 +43,9 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
       </div>
       <div className='flex flex-col mt-14'>
         <p className='mb-8'>도서명 검색결과 '{data?.pages[0]?.totalResults || 0}'건</p>
-        {filteredBooks.length > 0 ? (
+        {rawBooks.length > 0 ? (
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-            {filteredBooks.map((book, index) => (
+            {rawBooks.map((book, index) => (
               <div
                 key={book.isbn || `${book.title}-${index}`}
                 className='bg-white rounded-[10px] p-5 flex flex-row gap-4 w-full'
