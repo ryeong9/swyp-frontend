@@ -108,7 +108,7 @@ export default function Calendar() {
   }, [calendarData]);
 
   return (
-    <div className='bg-background-input p-10 my-14 rounded-3xl text-gray-900'>
+    <div className='bg-background-input p-10 mb-14 mt-[125px] rounded-3xl text-gray-900'>
       <FullCalendar
         plugins={[dayGridPlugin]}
         firstDay={1}
