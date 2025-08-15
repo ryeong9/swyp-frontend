@@ -14,8 +14,8 @@ export default function MainPage() {
 
   return (
     <div className='relative'>
+      <Header />
       <div className='w-[1030px] flex flex-col mx-auto'>
-        <Header />
         <HeroSection />
         <DeskSection />
         <BookShelfSection />

@@ -9,12 +9,12 @@ import { useRouter } from 'next/navigation';
 export default function Header() {
   const router = useRouter();
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
-  const [showNotificationDropDown, setShowNotificationDropDown] = useState(false);
+  // const [showNotificationDropDown, setShowNotificationDropDown] = useState(false);
   const handleClickMain = () => {
     router.push('/');
   };
   return (
-    <div className='w-full h-[50px] mt-6 flex'>
+    <div className='fixed w-full pt-6 pb-4 flex justify-center items-center z-20 bg-background'>
       <img
         src='/icons/logo.svg'
         alt='로고'
