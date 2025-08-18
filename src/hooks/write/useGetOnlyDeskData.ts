@@ -2,13 +2,12 @@ import { getOnlyDeskData } from '@/apis/book/bookApi';
 import { useQuery } from '@tanstack/react-query';
 
 const useGetOnlyDeskData = () => {
-  const { data } = useQuery({
+  return useQuery({
     queryKey: ['OnlyDeskData'],
     queryFn: getOnlyDeskData,
     // staleTime: 1000 * 60 * 5, // 5분 동안은 새로고침 안 함
     // gcTime: 1000 * 60 * 30, // 30분 동안 캐시 유지
   });
-  return { data };
 };
 
 export default useGetOnlyDeskData;
