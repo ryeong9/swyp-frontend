@@ -73,7 +73,7 @@ export default function BookModal({
         <div className='flex justify-center'>
           <button
             onClick={handleClickAddBtn}
-            className='w-[300px] h-[50px] font-sans font-medium text-base text-background-input rounded-lg bg-primary mt-5 cursor-pointer'
+            className={`w-[300px] h-[50px] font-sans font-medium text-base rounded-lg mt-5 cursor-pointer ${!tempSelectedBook ? 'bg-gray-300 text-gray-500' : 'bg-primary text-background-input '}`}
           >
             추가하기
           </button>
