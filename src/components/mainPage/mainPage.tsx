@@ -6,11 +6,39 @@ import DeskSection from './deskSection';
 import Header from '../header/header';
 import HeroSection from './heroSection';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function MainPage() {
   const router = useRouter();
   const [showSpeechBubble, setShowSpeechBubble] = useState(true);
+
+  const hideName = 'hideSpeechBubble';
+  const hideDay = 24 * 60 * 60 * 1000;
+
+  function isHidden(): boolean {
+    try {
+      const until = Number(localStorage.getItem(hideName) || '0');
+      return until > Date.now();
+    } catch {
+      return false;
+    }
+  }
+
+  function hideForOneDay() {
+    try {
+      const oneDayLater = Date.now() + hideDay;
+      localStorage.setItem(hideName, String(oneDayLater));
+    } catch {}
+  }
+
+  useEffect(() => {
+    setShowSpeechBubble(!isHidden());
+  }, []);
+
+  const handleClickCloseBubble = () => {
+    hideForOneDay();
+    setShowSpeechBubble(false);
+  };
 
   return (
     <div className='relative'>
@@ -123,7 +151,7 @@ export default function MainPage() {
               <button
                 type='button'
                 className='w-[10px] absolute top-4 right-4'
-                onClick={() => setShowSpeechBubble(false)}
+                onClick={handleClickCloseBubble}
               >
                 <img
                   src='/icons/closeIcon.svg'
