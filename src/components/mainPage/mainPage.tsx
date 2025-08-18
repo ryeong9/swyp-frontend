@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 export default function MainPage() {
   const router = useRouter();
-  const [showSpeechBubble, setShowSpeechBubble] = useState(true);
+  const [showSpeechBubble, setShowSpeechBubble] = useState(false);
 
   const hideName = 'hideSpeechBubble';
   const hideDay = 24 * 60 * 60 * 1000;
