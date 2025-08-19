@@ -164,9 +164,9 @@ export default function IndexRecord({
                   onChange={(e) => handleChangeScore(index, Number(e.target.value))}
                   className='slider-custom'
                   style={{
-                    background: `linear-gradient(to right,#CDE5CD ${
-                      ((item.score - 1) / 9) * 100
-                    }%, #F0F0F0 ${((item.score - 1) / 9) * 100}%)`,
+                    background: `linear-gradient(to right, ${
+                      formData.status === '읽는 중' ? '#CDE5CD' : '#D2DEF4'
+                    } ${((item.score - 1) / 9) * 100}%, #F0F0F0 ${((item.score - 1) / 9) * 100}%)`,
                   }}
                 />
                 <div className='w-full flex justify-between mt-[2px] pl-2 pr-[18px] translate-x-[6px]'>
