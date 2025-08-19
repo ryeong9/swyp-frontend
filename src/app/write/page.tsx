@@ -110,14 +110,14 @@ export default function WritePage() {
   };
 
   return (
-    <>
+    <div className='relative'>
       <Suspense fallback={null}>
         <WritePageContent
           setSelectedBook={setSelectedBook}
           setFormData={setFormData}
         />
       </Suspense>
-      <div className='w-full px-[205px] py-5 flex justify-end border-b-2 border-b-gray-200'>
+      <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-end border-b-2 bg-background border-b-gray-200 z-10'>
         <button
           type='submit'
           className={`w-[190px] h-[50px] rounded-lg font-sans font-medium ${
@@ -131,7 +131,7 @@ export default function WritePage() {
           등록하기
         </button>
       </div>
-      <div className='w-[1030px] mx-auto mb-14'>
+      <div className='w-[1030px] mx-auto mb-14 pt-[90px]'>
         {/* 기록할 책 선택하기 */}
         <section className='relative w-full'>
           {!selectedBook ? (
@@ -325,6 +325,6 @@ export default function WritePage() {
           handleReset={handleReset}
         />
       )}
-    </>
+    </div>
   );
 }
