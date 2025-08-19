@@ -222,3 +222,19 @@ export const mapAddDeskToBook = (d: AddDeskData): Book => ({
   category: d.book.category,
   publishedDate: d.book.publishedDate,
 });
+
+// 하나의 도서에 대한 내 모든 기록 조회
+export type ReadRecordData = {
+  recordId: number;
+  status: 'READING' | 'FINISHED';
+  createdAt: string;
+  emotions: {
+    emotionId: number;
+    emotionName: string;
+    score: number;
+  }[];
+  page?: number;
+  content?: string;
+  finalNote?: string;
+};
+export type ReadRecordList = ReadRecordData[];
