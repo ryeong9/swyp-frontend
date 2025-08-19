@@ -42,8 +42,8 @@ body {
 }
 
 @layer utilities {
-  /* radio 버튼 색상 custom - reading */
-  input[type='radio'].reading {
+  /* radio 버튼 색상 custom - 공동 베이스 */
+  input[type='radio'].radio {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -54,33 +54,40 @@ body {
     outline: none;
     cursor: pointer;
   }
-  input[type='radio'].reading:checked {
+  input[type='radio'].radio + span {
+    color: #c4c4c4;
+  }
+
+  /* 책 미선택 */
+  input[type='radio'].radio:disabled {
+    border: 2px solid #d9d9d9;
+  }
+
+  /* 책 선택 + 상태 체크 안 함 */
+  input[type='radio'].radio:not(:disabled):not(:checked) {
+    border: 2px solid #6b6b6b;
+  }
+  input[type='radio'].radio:not(:disabled):not(:checked) + span {
+    color: #6b6b6b;
+  }
+
+  /* 읽는 중 체크 */
+  input[type='radio'].reading:checked:not(:disabled) {
     background-color: #9bc99f;
     border: 4px solid white;
     box-shadow: 0 0 0 2px #9bc99f;
   }
-  input[type='radio'].reading:checked + span {
+  input[type='radio'].reading:checked:not(:disabled) + span {
     color: #9bc99f;
   }
 
-  /* radio 버튼 색상 custom - finished */
-  input[type='radio'].finished {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border: 1px solid #c4c4c4;
-    border-radius: 50%;
-    outline: none;
-    cursor: pointer;
-  }
-  input[type='radio'].finished:checked {
+  /* 다읽음 체크 */
+  input[type='radio'].finished:checked:not(:disabled) {
     background-color: #94a8d2;
     border: 4px solid white;
     box-shadow: 0 0 0 2px #94a8d2;
   }
-  input[type='radio'].finished:checked + span {
+  input[type='radio'].finished:checked:not(:disabled) + span {
     color: #94a8d2;
   }
 

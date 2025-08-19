@@ -36,6 +36,9 @@ function WritePageContent({
 }
 
 export default function WritePage() {
+  const router = useRouter();
+  const [showGotoBackModal, setShowGotoBackModal] = useState(false);
+
   const [formData, setFormData] = useState<RecordDataState>({
     isbn: '',
     status: '독서 상태',
@@ -48,6 +51,7 @@ export default function WritePage() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const [showSelectModal, setShowSelectModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const onChange = useCallback((data: Partial<RecordDataState>) => {
     setFormData((prev) => ({ ...prev, ...data }));
@@ -117,7 +121,16 @@ export default function WritePage() {
           setFormData={setFormData}
         />
       </Suspense>
-      <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-end border-b-2 bg-background border-b-gray-200 z-10'>
+      <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-10'>
+        <button
+          type='button'
+          onClick={() => setShowGotoBackModal(true)}
+        >
+          <img
+            src='/icons/arrowLeft.svg'
+            alt='뒤로가기 아이콘'
+          />
+        </button>
         <button
           type='submit'
           className={`w-[190px] h-[50px] rounded-lg font-sans font-medium ${
@@ -130,6 +143,35 @@ export default function WritePage() {
         >
           등록하기
         </button>
+        {showGotoBackModal && (
+          <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
+            <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
+              <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
+                아직 작성이 완료 되지 않았어요
+              </h2>
+              <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
+                벗어나면 작성 중인 내용은 삭제돼요
+              </p>
+              <button
+                type='button'
+                className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+                onClick={() => {
+                  setShowGotoBackModal(false);
+                  router.back();
+                }}
+              >
+                확인
+              </button>
+              <button
+                type='button'
+                className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+                onClick={() => setShowGotoBackModal(false)}
+              >
+                계속 기록하기
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       <div className='w-[1030px] mx-auto mb-14 pt-[90px]'>
         {/* 기록할 책 선택하기 */}
@@ -156,17 +198,7 @@ export default function WritePage() {
           ) : (
             <div className='relative h-[528px] flex flex-col justify-center items-center bg-background-input rounded-3xl mt-14 group'>
               <button
-                onClick={() => {
-                  setSelectedBook(null);
-                  setFormData({
-                    isbn: '',
-                    status: '독서 상태',
-                    page: undefined,
-                    content: '',
-                    finalNote: '',
-                  });
-                  setEmotionData([{ emotionId: 0, score: 10 }]);
-                }}
+                onClick={() => setShowDeleteModal(true)}
                 className='absolute top-4 right-4 opacity-0 group-hover:opacity-100'
               >
                 <img
@@ -193,6 +225,43 @@ export default function WritePage() {
               </span>
             </div>
           )}
+          {showDeleteModal && (
+            <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
+              <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
+                <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
+                  책을 삭제하면 기록이 사라져요
+                </h2>
+                <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
+                  기록을 삭제하고 다른 책을 선택하시겠어요?
+                </p>
+                <button
+                  type='button'
+                  className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+                  onClick={() => {
+                    setSelectedBook(null);
+                    setFormData({
+                      isbn: '',
+                      status: '독서 상태',
+                      page: undefined,
+                      content: '',
+                      finalNote: '',
+                    });
+                    setEmotionData([{ emotionId: 0, score: 10 }]);
+                    setShowDeleteModal(false);
+                  }}
+                >
+                  삭제
+                </button>
+                <button
+                  type='button'
+                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  취소
+                </button>
+              </div>
+            </div>
+          )}
         </section>
 
         {showSelectModal && (
@@ -211,19 +280,6 @@ export default function WritePage() {
             독서 상태를 선택해주세요.
           </p>
           <div className='flex items-center mt-8'>
-            <div
-              className={`w-[190px] h-[50px] flex justify-center items-center font-sans font-semibold leading-[30px] text-base rounded-lg mr-8 ${
-                !selectedBook
-                  ? 'bg-gray-100 text-gray-300'
-                  : formData.status === '읽는 중'
-                    ? 'bg-[#E6F2E6] text-primary'
-                    : formData.status === '다 읽음'
-                      ? 'bg-primary-lightblue text-[#94A8D2]'
-                      : 'bg-gray-100 text-gray-300'
-              }`}
-            >
-              {formData.status}
-            </div>
             <label
               htmlFor='reading'
               className='flex font-sans font-medium text-gray-300 cursor-pointer'
@@ -234,7 +290,7 @@ export default function WritePage() {
                 name='status'
                 value='읽는 중'
                 checked={formData.status === '읽는 중'}
-                className='mr-2 reading'
+                className='mr-2 radio reading'
                 disabled={!selectedBook}
                 onChange={handleChange}
               />
@@ -250,7 +306,7 @@ export default function WritePage() {
                 name='status'
                 value='다 읽음'
                 checked={formData.status === '다 읽음'}
-                className='mr-2 finished'
+                className='mr-2 radio finished'
                 disabled={!selectedBook}
                 onChange={handleChange}
               />

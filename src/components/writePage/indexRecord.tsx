@@ -164,7 +164,7 @@ export default function IndexRecord({
                   onChange={(e) => handleChangeScore(index, Number(e.target.value))}
                   className='slider-custom'
                   style={{
-                    background: `linear-gradient(to right,#9BC99F ${
+                    background: `linear-gradient(to right,#CDE5CD ${
                       ((item.score - 1) / 9) * 100
                     }%, #F0F0F0 ${((item.score - 1) / 9) * 100}%)`,
                   }}
@@ -181,7 +181,7 @@ export default function IndexRecord({
                 </div>
               </div>
               <div className='w-[84px] h-[51px] bg-[#EEF2FA] rounded-lg flex justify-center items-center'>
-                <p className='font-sans font-medium text-base text-gray-900'>
+                <p className='font-sans font-medium text-base text-gray-700'>
                   {item.score}
                   <span className='font-sans text-base font-normal text-gray-700'>점</span>
                 </p>
