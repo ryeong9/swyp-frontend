@@ -45,7 +45,7 @@ export default function MainPage() {
       <Header />
       <div className='w-[1030px] flex flex-col mx-auto'>
         <HeroSection />
-        <DeskSection />
+        {/* <DeskSection /> */}
         <BookShelfSection />
         <BookReport />
       </div>
