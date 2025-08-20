@@ -32,7 +32,7 @@ export default function ReadPage() {
       <Suspense fallback={null}>
         <ReadPageContent setBook={setBook} />
       </Suspense>
-      <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-10'>
+      <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-20'>
         <button
           type='button'
           onClick={() => router.back()}
@@ -95,21 +95,50 @@ export default function ReadPage() {
                 <p className='font-sans text-xs text-gray-500'>{item.createdAt.slice(0, 10)}</p>
               </div>
               <div className='flex'>
-                <button
-                  type='button'
-                  className='mr-4'
-                >
-                  <img
-                    src='/icons/updateIcon.svg'
-                    alt='수정 아이콘'
-                  />
-                </button>
-                <button type='button'>
-                  <img
-                    src='/icons/deleteIcon.svg'
-                    alt='삭제 아이콘'
-                  />
-                </button>
+                <div className='relative group mr-4'>
+                  <button
+                    type='button'
+                    aria-label='수정'
+                    className='p-2'
+                  >
+                    <img
+                      src='/icons/updateIcon.svg'
+                      alt=''
+                    />
+                  </button>
+                  <div
+                    role='tooltip'
+                    className='absolute -top-7 -left-1 bg-gray-900 text-background-input text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 whitespace-nowrap z-10'
+                  >
+                    수정
+                    <span
+                      className='absolute top-full left-1/2 -translate-x-1/2 
+                   border-4 border-transparent border-t-gray-900'
+                    />
+                  </div>
+                </div>
+                <div className='relative group'>
+                  <button
+                    type='button'
+                    aria-label='삭제'
+                    className='p-2'
+                  >
+                    <img
+                      src='/icons/deleteIcon.svg'
+                      alt=''
+                    />
+                  </button>
+                  <div
+                    role='tooltip'
+                    className='absolute -top-7 -left-1 bg-gray-900 text-background-input text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 whitespace-nowrap z-10'
+                  >
+                    삭제
+                    <span
+                      className='absolute top-full left-1/2 -translate-x-1/2 
+                   border-4 border-transparent border-t-gray-900'
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div className='mt-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
