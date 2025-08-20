@@ -5,8 +5,8 @@ const useGetRecordInfo = (status: string, recordId?: number, bookshelfId?: numbe
   return useQuery({
     queryKey: ['recordInfo', status, recordId, bookshelfId],
     queryFn: () => {
-      if (status === 'READING' && recordId) return getReadingRecordForBook(recordId);
-      if (status === 'FINISHED' && bookshelfId) return getFinishedRecordForBook(bookshelfId);
+      if (status === '읽는 중' && recordId) return getReadingRecordForBook(recordId);
+      if (status === '다 읽음' && bookshelfId) return getFinishedRecordForBook(bookshelfId);
     },
     enabled: !!status,
   });

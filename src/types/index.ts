@@ -38,7 +38,7 @@ export type RecordDataState = {
   isbn: string;
   status: string;
   page?: number;
-  content: string;
+  content?: string;
   finalNote?: string;
 };
 // 감정 상태관리 타입

@@ -14,6 +14,7 @@ import {
   BookStatus,
   AddDeskData,
   ReadRecordList,
+  ReadRecordData,
 } from '@/types';
 
 // 책상 api
@@ -133,12 +134,12 @@ export const getAllRecordForBook = async (bookshelfId: number): Promise<ReadReco
 };
 
 // 모든 기록 안에서 하나의 기록 조회 (읽는중)
-export const getReadingRecordForBook = async (recordId: number) => {
+export const getReadingRecordForBook = async (recordId: number): Promise<ReadRecordData> => {
   const response = await authInstance.get(`/api/records/pages/${recordId}`);
   return response.data;
 };
 // 모든 기록 안에서 하나의 기록 조회 (완독)
-export const getFinishedRecordForBook = async (bookshelfId: number) => {
+export const getFinishedRecordForBook = async (bookshelfId: number): Promise<ReadRecordData> => {
   const response = await authInstance.get(`/api/records/completion/${bookshelfId}`);
   return response.data;
 };

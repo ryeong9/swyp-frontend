@@ -74,7 +74,7 @@ export default function IndexRecord({
 
   return (
     <div className='w-full bg-background-input'>
-      <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2 mt-[56px]'>
+      <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2 pt-[56px]'>
         인덱스
       </h2>
       <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider mb-6'>
@@ -220,7 +220,7 @@ export default function IndexRecord({
           value={formData.content}
         />
         <p className='absolute bottom-6 right-8 text-sm text-gray-500'>
-          {formData.content.length}/1000
+          {formData.content?.length}/1000
         </p>
       </div>
     </div>
