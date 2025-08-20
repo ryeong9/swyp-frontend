@@ -111,11 +111,7 @@ export type CalendarData = {
 }[];
 
 // ranking top3
-export type RankingData = {
-  emotionId: number;
-  emotionName: string;
-  score: number;
-}[];
+export type RankingData = EmotionData[];
 
 // 월별 그래프 api
 export type GraphData = {
@@ -228,13 +224,22 @@ export type ReadRecordData = {
   recordId: number;
   status: 'READING' | 'FINISHED';
   createdAt: string;
-  emotions: {
-    emotionId: number;
-    emotionName: string;
-    score: number;
-  }[];
+  emotions: EmotionData[];
   page?: number;
   content?: string;
   finalNote?: string;
 };
 export type ReadRecordList = ReadRecordData[];
+
+// Id 관리
+export type IdState = {
+  recordId: number;
+  bookshelfId: number;
+};
+
+// 감정관련
+export type EmotionData = {
+  emotionId: number;
+  emotionName: string;
+  score: number;
+};

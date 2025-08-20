@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
 function ReadPageContent({ setBook }: { setBook: (b: Book) => void }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -16,7 +15,7 @@ function ReadPageContent({ setBook }: { setBook: (b: Book) => void }) {
       const book = JSON.parse(decodeURIComponent(bookParam)) as Book;
       setBook(book);
     }
-  }, [searchParams, router, setBook]);
+  }, [searchParams, setBook]);
 
   return null;
 }
@@ -26,6 +25,17 @@ export default function ReadPage() {
   const [book, setBook] = useState<Book | null>(null);
 
   const { data: allRecords } = useGetAllRecords(book?.bookshelfId);
+
+  const handleClickUpdateBtn = (
+    recordId: number,
+    bookshelfId: number,
+    status: string,
+    isbn: string,
+  ) => {
+    router.push(
+      `/update?recordId=${recordId}&bookshelfId=${bookshelfId}&status=${status}&isbn=${isbn}`,
+    );
+  };
 
   return (
     <div className='relative'>
@@ -98,12 +108,19 @@ export default function ReadPage() {
                 <div className='relative group mr-4'>
                   <button
                     type='button'
-                    aria-label='수정'
                     className='p-2'
+                    onClick={() =>
+                      handleClickUpdateBtn(
+                        item.recordId,
+                        book!.bookshelfId,
+                        item.status,
+                        book!.isbn,
+                      )
+                    }
                   >
                     <img
                       src='/icons/updateIcon.svg'
-                      alt=''
+                      alt='수정 아이콘'
                     />
                   </button>
                   <div
@@ -120,12 +137,11 @@ export default function ReadPage() {
                 <div className='relative group'>
                   <button
                     type='button'
-                    aria-label='삭제'
                     className='p-2'
                   >
                     <img
                       src='/icons/deleteIcon.svg'
-                      alt=''
+                      alt='삭제 아이콘'
                     />
                   </button>
                   <div
