@@ -1,5 +1,5 @@
 //bookApi.ts
-import { authInstance, defaultInstance } from '@/lib/axios';
+import { authInstance } from '@/lib/axios';
 import {
   Book,
   CalendarData,
@@ -13,6 +13,7 @@ import {
   TitleSearch,
   BookStatus,
   AddDeskData,
+  ReadRecordList,
 } from '@/types';
 
 // 책상 api
@@ -122,5 +123,11 @@ export const postAddDesk = async (isbn: string): Promise<AddDeskData> => {
   const response = await authInstance.post('/api/addBookshelf', {
     isbn,
   });
+  return response.data;
+};
+
+// 하나의 도서에 대한 모든 기록 조회
+export const getAllRecordForBook = async (bookshelfId: number): Promise<ReadRecordList> => {
+  const response = await authInstance.get(`/api/bookshelf/${bookshelfId}/records`);
   return response.data;
 };

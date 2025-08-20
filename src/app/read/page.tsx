@@ -1,76 +1,10 @@
 'use client';
 
 import { emotions } from '@/constants/emotion';
+import useGetAllRecords from '@/hooks/read/useGetAllRecords';
 import { Book } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
-
-// data
-const data = [
-  {
-    recordId: 157,
-    status: 'FINISHED',
-    createdAt: '2025-08-19 11:01:37',
-    content:
-      '한 세대에 한 명씩만 나오는 작가, 클레어 키건의 대표작!* 2022 부커상 최종후보* 2022 오웰상 소설 부문 수상 * 킬리언 머피 주연·제작 영화화 확정2023년 4월 국내에 처음 소개된 『맡겨진 소녀』로 독자들의 열렬한 환호를 받은 클레어 키건의 대표작 『이처럼 사소한 것들』이 다산책방에서 번역 출간되었다. 작가가 전작 『맡겨진 소녀』 이후 11년 만에 세상에 내놓은 소설로, 자국에서는 이미 오래전부터 거장의 반열에 오른 키건에게 미국을 넘어 세계적인 명성을 안겨준 작품이다. 한 세대에 한 명씩만 나오는 작가, 클레어 키건의 대표작!* 2022 부커상 최종후보* 2022 오웰상 소설 부문 수상 * 킬리언 머피 주연·제작 영화화 확정2023년 4월 국내에 처음 소개된 『맡겨진 소녀』로 독자들의 열렬한 환호를 받은 클레어 키건의 대표작 『이처럼 사소한 것들』이 다산책방에서 번역 출간되었다. ',
-    finalNote:
-      '재밌었다 한 세대에 한 명씩만 나오는 작가, 클레어 키건의 대표작!* 2022 부커상 최종후보* 2022 오웰상 소설 부문 수상 * 킬리언 머피 주연·제작 영화화 확정2023년 4월 국내에 처음 소개된 『맡겨진 소녀』로 독자들의 열렬한 환호를 받은 클레어 키건의 대표작 『이처럼 사소한 것들』이 다산책방에서 번역 출간되었다. 작가가 전작 『맡겨진 소녀』 이후 11년 만에 세상에 내놓은 소설로, 자국에서는 이미 오래전부터 거장의 반열에 오른 키건에게 미국을 넘어 세계적인 명성을 안겨준 작품이다. 한 세대에 한 명씩만 나오는 작가, 클레어 키건의 대표작!* 2022 부커상 최종후보* 2022 오웰상 소설 부문 수상 * 킬리언 머피 주연·제작 영화화 확정2023년 4월 국내에 처음 소개된 『맡겨진 소녀』로 독자들의 열렬한 환호를 받은 클레어 키건의 대표작 『이처럼 사소한 것들』이 다산책방에서 번역 출간되었다. 작가가 전작 『맡겨진 소녀』 이후 11년 만에 세상에 내놓은 소설로, 자국에서는 이미 오래전부터 거장의 반열에 오른 키건에게 미국을 넘어 세계적인 명성을 안겨준 작품이다. 한 세대에 한 명씩만 나오는 작가, 클레어 키건의 대표작!* 2022 부커상 최종후보* 2022 오웰상 소설 부문 수상 * 킬리언 머피 주연·제작 영화화 확정2023년 4월 국내에 처음 소개된 『맡겨진 소녀』로 독자들의 열렬한 환호를 받은 클레어 키건의 대표작 『이처럼 사소한 것들』이 다산책방에서 번역 출간되었다. 작가가 전작 『맡겨진 소녀』 이후 11년 만에 세상에 내놓은 소설로, 자국에서는 이미 오래전부터 거장의 반열에 오른 키건에게 미국을 넘어 세계적인 명성을 안겨준 작품이다. 한 세대에 한 명씩만 나오는 작가, 클레어 키건의 대표작!* 2022 부커상 최종후보* 2022 오웰상 소설 부문 수상 * 킬리언 머피 주연·제작 영화화 확정2023년 4월 국내에 처음 소개된 『맡겨진 소녀』로 독자들의 열렬한 환호를 받은 클레어 키건의 대표작 『이처럼 사소한 것들』이 다산책방에서 번역 출간되었다. 작가가 ',
-    emotions: [
-      {
-        emotionId: 3,
-        emotionName: '유쾌한',
-        score: 7,
-      },
-      {
-        emotionId: 5,
-        emotionName: '위로',
-        score: 10,
-      },
-      {
-        emotionId: 6,
-        emotionName: '슬픔',
-        score: 2,
-      },
-      {
-        emotionId: 16,
-        emotionName: '깨달음',
-        score: 5,
-      },
-      {
-        emotionId: 19,
-        emotionName: '영감',
-        score: 1,
-      },
-    ],
-  },
-  {
-    recordId: 156,
-    status: 'READING',
-    createdAt: '2025-08-19 11:00:22',
-    page: 77,
-    emotions: [
-      {
-        emotionId: 1,
-        emotionName: '감동',
-        score: 9,
-      },
-    ],
-  },
-  {
-    recordId: 155,
-    status: 'READING',
-    createdAt: '2025-08-19 10:59:57',
-    page: 35,
-    content: '너무 재밌다',
-    emotions: [
-      {
-        emotionId: 2,
-        emotionName: '설렘',
-        score: 9,
-      },
-    ],
-  },
-];
 
 function ReadPageContent({ setBook }: { setBook: (b: Book) => void }) {
   const router = useRouter();
@@ -90,6 +24,8 @@ function ReadPageContent({ setBook }: { setBook: (b: Book) => void }) {
 export default function ReadPage() {
   const router = useRouter();
   const [book, setBook] = useState<Book | null>(null);
+
+  const { data: allRecords } = useGetAllRecords(book?.bookshelfId);
 
   return (
     <div className='relative'>
@@ -142,7 +78,7 @@ export default function ReadPage() {
         <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mt-14 mb-6'>
           기록
         </h2>
-        {data.map((item) => (
+        {allRecords?.map((item) => (
           <div
             key={item.recordId}
             className='w-full bg-background-input rounded-2xl px-8 py-6 mb-8'
@@ -176,7 +112,7 @@ export default function ReadPage() {
                 </button>
               </div>
             </div>
-            <div className='my-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
+            <div className='mt-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
               {item.emotions.map((emo, index) => {
                 const emotion = emotions.find((item) => item.id === emo.emotionId);
                 return (
@@ -197,13 +133,17 @@ export default function ReadPage() {
                 );
               })}
             </div>
-            {item.content ? <p>{item.content}</p> : ''}
+            {item.content ? (
+              <p className='mt-4 font-sans text-gray-900 text-base'>{item.content}</p>
+            ) : (
+              ''
+            )}
             {item.finalNote ? (
-              <div className=''>
-                <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] my-6'>
-                  노트
-                </h2>{' '}
-                <p className='py-4 px-6 bg-gray-100 rounded-sm'>{item.finalNote}</p>
+              <div className='font-sans text-gray-900'>
+                <h2 className='font-semibold text-2xl my-6'>노트</h2>
+                <p className='py-4 px-6 text-base leading-[25px] bg-gray-100 rounded-sm'>
+                  {item.finalNote}
+                </p>
               </div>
             ) : (
               ''
