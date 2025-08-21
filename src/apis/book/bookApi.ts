@@ -3,7 +3,6 @@ import { authInstance } from '@/lib/axios';
 import {
   Book,
   CalendarData,
-  DeskDataWithRec,
   GraphData,
   BookDetail,
   RankingData,
@@ -19,19 +18,13 @@ import {
   UpdateFormFinished,
 } from '@/types';
 
-// 책상 api
-export const getDeskData = async (): Promise<DeskDataWithRec> => {
-  const response = await authInstance.get<DeskDataWithRec>('/api/desk/reading');
-  return response.data;
-};
-
 // 책장 api
 export const getBookshelfData = async (): Promise<Book[]> => {
   const response = await authInstance.get<Book[]>('/api/bookshelf/finished');
   return response.data;
 };
 
-// 책 추가하기 모달 api
+// 책상 api
 export const getOnlyDeskData = async (): Promise<Book[]> => {
   const response = await authInstance.get<Book[]>('/api/desk/reading-only');
   return response.data;

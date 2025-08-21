@@ -120,28 +120,6 @@ export type GraphData = {
   readingDays: number;
 }[];
 
-// 책상 api 응답값
-// 추천 도서 타입
-export type RecommendedBook = {
-  emotionName: string;
-  isbn: string;
-  title: string;
-  author: string;
-  coverImageUrl: string;
-  publisher: string;
-  category: string;
-  publishedDate: string;
-};
-// 전체 데이터 타입
-export type DeskDataWithRec = {
-  readingBooks: Book[];
-  recommendedBooks: RecommendedBook[];
-};
-// 가공 데이터 타입
-export type DeskBookItem =
-  | { type: 'recommend'; book: RecommendedBook }
-  | { type: 'reading'; book: Book };
-
 // 내 독서 section 타입
 export type EmotionState = {
   emotionId: number;
