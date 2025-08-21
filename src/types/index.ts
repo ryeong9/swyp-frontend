@@ -38,7 +38,7 @@ export type RecordDataState = {
   isbn: string;
   status: string;
   page?: number;
-  content: string;
+  content?: string;
   finalNote?: string;
 };
 // 감정 상태관리 타입
@@ -111,11 +111,7 @@ export type CalendarData = {
 }[];
 
 // ranking top3
-export type RankingData = {
-  emotionId: number;
-  emotionName: string;
-  score: number;
-}[];
+export type RankingData = EmotionData[];
 
 // 월별 그래프 api
 export type GraphData = {
@@ -123,28 +119,6 @@ export type GraphData = {
   month: number;
   readingDays: number;
 }[];
-
-// 책상 api 응답값
-// 추천 도서 타입
-export type RecommendedBook = {
-  emotionName: string;
-  isbn: string;
-  title: string;
-  author: string;
-  coverImageUrl: string;
-  publisher: string;
-  category: string;
-  publishedDate: string;
-};
-// 전체 데이터 타입
-export type DeskDataWithRec = {
-  readingBooks: Book[];
-  recommendedBooks: RecommendedBook[];
-};
-// 가공 데이터 타입
-export type DeskBookItem =
-  | { type: 'recommend'; book: RecommendedBook }
-  | { type: 'reading'; book: Book };
 
 // 내 독서 section 타입
 export type EmotionState = {
@@ -222,3 +196,41 @@ export const mapAddDeskToBook = (d: AddDeskData): Book => ({
   category: d.book.category,
   publishedDate: d.book.publishedDate,
 });
+
+// 하나의 도서에 대한 내 모든 기록 조회
+export type ReadRecordData = {
+  recordId: number;
+  status: 'READING' | 'FINISHED';
+  createdAt: string;
+  emotions: EmotionData[];
+  page?: number;
+  content?: string;
+  finalNote?: string;
+};
+export type ReadRecordList = ReadRecordData[];
+
+// Id 관리
+export type IdState = {
+  recordId: number;
+  bookshelfId: number;
+};
+
+// 감정관련
+export type EmotionData = {
+  emotionId: number;
+  emotionName: string;
+  score: number;
+};
+
+// 읽는 중 책 기록 수정
+export type UpdateFormReading = {
+  page: number | null;
+  content: string | null;
+  emotions: Emotions[];
+};
+// 다 읽음 책 기록 수정
+export type UpdateFormFinished = {
+  content: string | null;
+  finalNote: string | null;
+  emotions: Emotions[];
+};

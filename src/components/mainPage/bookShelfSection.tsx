@@ -1,12 +1,19 @@
 import useGetBookshelfData from '@/hooks/main/useGetBookshelfData';
 import BookshelfSkeleton from '../skeleton/bookshelfSkeleton';
+import { useRouter } from 'next/navigation';
+import { Book } from '@/types';
 
 export default function BookShelfSection() {
+  const router = useRouter();
+
   const { data: bookshelfData, isLoading } = useGetBookshelfData();
-
   if (isLoading) return <BookshelfSkeleton />;
-
   const isEmpty = bookshelfData?.length === 0;
+
+  const handleClickGotoRead = (item: Book) => {
+    const encodedBook = encodeURIComponent(JSON.stringify(item));
+    router.push(`/read?book=${encodedBook}`);
+  };
 
   return (
     <div className='flex flex-col my-14'>
@@ -16,16 +23,6 @@ export default function BookShelfSection() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금까지 읽었던 책들이 책장에 꽂혀 있어요
           </p>
-          {/* <button
-            type='button'
-            className='flex cursor-pointer'
-          >
-            <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
-            <img
-              src='/icons/arrowRight.svg'
-              alt='오른쪽 화살표'
-            />
-          </button> */}
         </div>
       </div>
       {isEmpty ? (
@@ -47,6 +44,7 @@ export default function BookShelfSection() {
             <div
               key={item.isbn}
               className='w-[172px] h-[246px] cursor-pointer'
+              onClick={() => handleClickGotoRead(item)}
             >
               <img
                 src={item.coverImageUrl}

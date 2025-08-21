@@ -1,9 +1,8 @@
 //bookApi.ts
-import { authInstance, defaultInstance } from '@/lib/axios';
+import { authInstance } from '@/lib/axios';
 import {
   Book,
   CalendarData,
-  DeskDataWithRec,
   GraphData,
   BookDetail,
   RankingData,
@@ -13,13 +12,11 @@ import {
   TitleSearch,
   BookStatus,
   AddDeskData,
+  ReadRecordList,
+  ReadRecordData,
+  UpdateFormReading,
+  UpdateFormFinished,
 } from '@/types';
-
-// 책상 api
-export const getDeskData = async (): Promise<DeskDataWithRec> => {
-  const response = await authInstance.get<DeskDataWithRec>('/api/desk/reading');
-  return response.data;
-};
 
 // 책장 api
 export const getBookshelfData = async (): Promise<Book[]> => {
@@ -27,7 +24,7 @@ export const getBookshelfData = async (): Promise<Book[]> => {
   return response.data;
 };
 
-// 책 추가하기 모달 api
+// 책상 api
 export const getOnlyDeskData = async (): Promise<Book[]> => {
   const response = await authInstance.get<Book[]>('/api/desk/reading-only');
   return response.data;
@@ -122,5 +119,50 @@ export const postAddDesk = async (isbn: string): Promise<AddDeskData> => {
   const response = await authInstance.post('/api/addBookshelf', {
     isbn,
   });
+  return response.data;
+};
+
+// 하나의 도서에 대한 모든 기록 조회
+export const getAllRecordForBook = async (bookshelfId: number): Promise<ReadRecordList> => {
+  const response = await authInstance.get(`/api/bookshelf/${bookshelfId}/records`);
+  return response.data;
+};
+
+// 모든 기록 안에서 하나의 기록 조회 (읽는중)
+export const getReadingRecordForBook = async (recordId: number): Promise<ReadRecordData> => {
+  const response = await authInstance.get(`/api/records/pages/${recordId}`);
+  return response.data;
+};
+// 모든 기록 안에서 하나의 기록 조회 (완독)
+export const getFinishedRecordForBook = async (bookshelfId: number): Promise<ReadRecordData> => {
+  const response = await authInstance.get(`/api/records/completion/${bookshelfId}`);
+  return response.data;
+};
+
+// 하나의 기록 수정 (읽는 중)
+export const putReadingForm = async (updateForm: UpdateFormReading, recordId: number) => {
+  const response = await authInstance.put<UpdateFormReading>(
+    `/api/records/pages/${recordId}`,
+    updateForm,
+  );
+  return response.data;
+};
+// 하나의 기록 수정 (완독)
+export const putFinishedForm = async (updateForm: UpdateFormFinished, bookshelfId: number) => {
+  const response = await authInstance.put<UpdateFormFinished>(
+    `/api/records/completion/${bookshelfId}`,
+    updateForm,
+  );
+  return response.data;
+};
+
+// 하나의 기록 삭제 (읽는 중)
+export const deleteReadingRecord = async (recordId: number) => {
+  const response = await authInstance.delete(`/api/records/pages/${recordId}`);
+  return response.data;
+};
+// 하나의 기록 삭제 (다 읽음)
+export const deleteFinishedRecord = async (bookshelfId: number) => {
+  const response = await authInstance.delete(`/api/records/completion/${bookshelfId}`);
   return response.data;
 };

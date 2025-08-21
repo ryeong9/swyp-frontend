@@ -74,7 +74,7 @@ export default function IndexRecord({
 
   return (
     <div className='w-full bg-background-input'>
-      <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2 mt-[56px]'>
+      <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2 pt-[56px]'>
         인덱스
       </h2>
       <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider mb-6'>
@@ -164,9 +164,9 @@ export default function IndexRecord({
                   onChange={(e) => handleChangeScore(index, Number(e.target.value))}
                   className='slider-custom'
                   style={{
-                    background: `linear-gradient(to right,#9BC99F ${
-                      ((item.score - 1) / 9) * 100
-                    }%, #F0F0F0 ${((item.score - 1) / 9) * 100}%)`,
+                    background: `linear-gradient(to right, ${
+                      formData.status === '읽는 중' ? '#CDE5CD' : '#D2DEF4'
+                    } ${((item.score - 1) / 9) * 100}%, #F0F0F0 ${((item.score - 1) / 9) * 100}%)`,
                   }}
                 />
                 <div className='w-full flex justify-between mt-[2px] pl-2 pr-[18px] translate-x-[6px]'>
@@ -181,7 +181,7 @@ export default function IndexRecord({
                 </div>
               </div>
               <div className='w-[84px] h-[51px] bg-[#EEF2FA] rounded-lg flex justify-center items-center'>
-                <p className='font-sans font-medium text-base text-gray-900'>
+                <p className='font-sans font-medium text-base text-gray-700'>
                   {item.score}
                   <span className='font-sans text-base font-normal text-gray-700'>점</span>
                 </p>
@@ -220,7 +220,7 @@ export default function IndexRecord({
           value={formData.content}
         />
         <p className='absolute bottom-6 right-8 text-sm text-gray-500'>
-          {formData.content.length}/1000
+          {formData.content?.length}/1000
         </p>
       </div>
     </div>

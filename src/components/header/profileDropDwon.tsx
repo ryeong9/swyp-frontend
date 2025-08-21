@@ -19,7 +19,7 @@ export default function ProfileDropDown() {
   };
 
   return (
-    <div className='absolute top-14 -right-[19px] mt-[10px] drop-shadow-sm z-10'>
+    <div className='absolute top-11 -right-[19px] mt-[10px] drop-shadow-sm z-30'>
       <img
         src='/icons/polygon.svg'
         alt='삼각형'

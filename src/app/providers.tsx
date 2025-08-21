@@ -9,6 +9,8 @@ import { usePathname } from 'next/navigation';
 
 export default function Providers({ children }: { children: ReactNode }) {
   const isLogin = useAuthStore((state) => state.isLogin);
+  const isLoading = useAuthStore((state) => state.isLoading);
+
   const pathname = usePathname();
   const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/signup');
 
@@ -19,7 +21,7 @@ export default function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {!isLogin && !isAuthPage && <EntryAuthModal />}
+      {!isLoading && !isLogin && !isAuthPage && <EntryAuthModal />}
     </QueryClientProvider>
   );
 }

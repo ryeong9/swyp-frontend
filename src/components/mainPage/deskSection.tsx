@@ -1,35 +1,23 @@
-import useGetDeskData from '@/hooks/main/useGetDeskDataWithRec';
+import './mainSwiper.css';
 import DeskSkeleton from '../skeleton/deskSkeleton';
 import { useRouter } from 'next/navigation';
-import { DeskBookItem } from '@/types';
+import useGetOnlyDeskData from '@/hooks/write/useGetOnlyDeskData';
+import { Book } from '@/types';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
 
 export default function DeskSection() {
   const router = useRouter();
-  const { data: deskData, isLoading } = useGetDeskData();
+  const { data: deskData, isLoading } = useGetOnlyDeskData();
 
   if (isLoading) return <DeskSkeleton />;
 
-  const mergedBooks: DeskBookItem[] = deskData
-    ? [
-        ...deskData.recommendedBooks.map((book) => ({
-          type: 'recommend' as const,
-          book,
-        })),
-        ...deskData.readingBooks.map((book) => ({
-          type: 'reading' as const,
-          book,
-        })),
-      ]
-    : [];
+  const isEmpty = deskData?.length === 0;
 
-  const handleClickCoverImg = (item: DeskBookItem) => {
-    if (item.type === 'reading') {
-      const encodedBook = encodeURIComponent(JSON.stringify(item.book));
-      router.push(`/write?book=${encodedBook}`);
-    }
+  const handleClickGotoRead = (item: Book) => {
+    const encodedBook = encodeURIComponent(JSON.stringify(item));
+    router.push(`/read?book=${encodedBook}`);
   };
-
-  const isEmpty = mergedBooks.length === 0;
 
   return (
     <div className='flex flex-col'>
@@ -39,19 +27,9 @@ export default function DeskSection() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금 읽고 있는 책과 추천 책을 책상 위에 올려놔 보았어요
           </p>
-          {/* <button
-            type='button'
-            className='flex cursor-pointer'
-          >
-            <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
-            <img
-              src='/icons/arrowRight.svg'
-              alt='오른쪽 화살표'
-            />
-          </button> */}
         </div>
       </div>
-      <div>
+      <div className=''>
         {isEmpty ? (
           <div className='flex flex-col h-[246px] justify-center items-center'>
             <img
@@ -66,32 +44,48 @@ export default function DeskSection() {
             </p>
           </div>
         ) : (
-          <div className='grid grid-cols-5 grid-rows-1 gap-x-[22.5px] px-10'>
-            {mergedBooks.map((item) => {
-              return (
-                <div
-                  key={item.book.isbn}
-                  className='relative w-[172px] h-[246px] cursor-pointer'
-                  onClick={() => handleClickCoverImg(item)}
-                >
-                  <img
-                    src={item.book.coverImageUrl}
-                    alt='도서 이미지'
-                    className='w-full h-full rounded-lg'
-                  />
-                  {item.type === 'recommend' ? (
+          <div className='relative px-5 w-full h-[280px]'>
+            <Swiper
+              modules={[Navigation, Pagination]}
+              slidesPerView={5}
+              spaceBetween={24}
+              pagination={(deskData?.length ?? 0) > 1 ? { clickable: true } : false}
+              navigation={{
+                nextEl: '.custom-next',
+                prevEl: '.custom-prev',
+              }}
+              className='max-w-[956px] h-[280px]'
+            >
+              {deskData?.map((item) => {
+                return (
+                  <SwiperSlide key={item.isbn}>
                     <div
-                      className='absolute flex justify-center w-[50px] h-[80px] top-[-10px] right-[10px] bg-[#D2DEF4]/80 z-10 rounded-t-[2px]'
-                      style={{
-                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%)',
-                      }}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </div>
-              );
-            })}
+                      className='relative w-[172px] h-[246px] cursor-pointer'
+                      onClick={() => handleClickGotoRead(item)}
+                    >
+                      <img
+                        src={item.coverImageUrl}
+                        alt='도서 이미지'
+                        className='w-full h-full rounded-lg'
+                      />
+                    </div>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+            <div className='custom-prev absolute left-2 top-[40%] cursor-pointer'>
+              <img
+                src='/icons/arrowLeft.svg'
+                alt='왼쪽 화살표'
+              />
+            </div>
+            <div className='custom-next absolute right-2 top-[40%] cursor-pointer'>
+              <img
+                src='/icons/arrowLeft.svg'
+                alt='오른쪽 화살표'
+                className='rotate-180'
+              />
+            </div>
           </div>
         )}
       </div>
