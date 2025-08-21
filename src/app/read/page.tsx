@@ -196,15 +196,12 @@ export default function ReadPage() {
                   <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
                     기록을 삭제하시겠어요?
                   </h2>
-                  {/* <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
-                    벗어나면 수정 중인 내용은 삭제돼요
-                  </p> */}
                   <button
                     type='button'
                     className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
                     onClick={handleClickDeleteBtn}
                   >
-                    확인
+                    삭제
                   </button>
                   <button
                     type='button'

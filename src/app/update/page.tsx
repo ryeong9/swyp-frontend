@@ -154,7 +154,7 @@ export default function UpdatePage() {
                 아직 수정이 완료 되지 않았어요
               </h2>
               <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
-                벗어나면 수정 중인 내용은 삭제돼요
+                페이지를 벗어나면 수정한 내용은 삭제돼요
               </p>
               <button
                 type='button'
@@ -171,7 +171,7 @@ export default function UpdatePage() {
                 className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
                 onClick={() => setShowGotoBackModal(false)}
               >
-                계속 기록하기
+                계속 수정하기
               </button>
             </div>
           </div>
