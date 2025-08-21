@@ -29,7 +29,7 @@ export default function DeskSection() {
           </p>
         </div>
       </div>
-      <div className='relative px-5 w-full h-[280px]'>
+      <div className=''>
         {isEmpty ? (
           <div className='flex flex-col h-[246px] justify-center items-center'>
             <img
@@ -44,7 +44,7 @@ export default function DeskSection() {
             </p>
           </div>
         ) : (
-          <>
+          <div className='relative px-5 w-full h-[280px]'>
             <Swiper
               modules={[Navigation, Pagination]}
               slidesPerView={5}
@@ -86,7 +86,7 @@ export default function DeskSection() {
                 className='rotate-180'
               />
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
