@@ -332,7 +332,7 @@ export default function WritePage() {
                 className='appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none w-[190px] h-[50px] rounded-lg bg-gray-100 pl-[79px] text-gray-900  pr-6 outline-none border-2 border-gray-300 hover:border-primary'
                 placeholder='페이지 입력'
                 onChange={handleChange}
-                value={formData.page ?? ''}
+                value={formData.page !== undefined ? String(formData.page) : ''}
               />
               <IndexRecord
                 emotionData={emotionData}

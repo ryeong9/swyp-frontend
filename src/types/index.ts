@@ -243,3 +243,16 @@ export type EmotionData = {
   emotionName: string;
   score: number;
 };
+
+// 읽는 중 책 기록 수정
+export type UpdateFormReading = {
+  page: number | null;
+  content: string | null;
+  emotions: Emotions[];
+};
+// 다 읽음 책 기록 수정
+export type UpdateFormFinished = {
+  content: string | null;
+  finalNote: string | null;
+  emotions: Emotions[];
+};

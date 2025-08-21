@@ -2,6 +2,8 @@
 
 import IndexRecord from '@/components/writePage/indexRecord';
 import useGetRecordInfo from '@/hooks/update/useGetRecordInfo';
+import usePutUpdateFinishedForm from '@/hooks/update/usePutUpdateFinishedForm';
+import usePutUpdateReadingForm from '@/hooks/update/usePutUpdateReadingForm';
 import { EmotionData, Emotions, IdState, RecordDataState } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
@@ -86,6 +88,40 @@ export default function UpdatePage() {
   console.log(formData);
   console.log(emotionData);
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const { mutate: updateReadingForm } = usePutUpdateReadingForm(() => setShowSuccessModal(true));
+  const { mutate: updateFinishedForm } = usePutUpdateFinishedForm(() => setShowSuccessModal(true));
+
+  const handleClickUpdateBtn = () => {
+    if (formData.status === '읽는 중') {
+      updateReadingForm({
+        updateForm: {
+          page: formData.page ?? null,
+          content: formData.content || null,
+          emotions: emotionData.map((item) => ({
+            emotionId: item.emotionId,
+            score: item.score,
+          })),
+        },
+        recordId: id.recordId,
+      });
+    }
+    if (formData.status === '다 읽음') {
+      updateFinishedForm({
+        updateForm: {
+          content: formData.content || null,
+          finalNote: formData.finalNote || null,
+          emotions: emotionData.map((item) => ({
+            emotionId: item.emotionId,
+            score: item.score,
+          })),
+        },
+        bookshelfId: id.bookshelfId,
+      });
+    }
+  };
+
   return (
     <div className='relative'>
       <Suspense fallback={null}>
@@ -107,7 +143,7 @@ export default function UpdatePage() {
         <button
           type='submit'
           className='w-[190px] h-[50px] rounded-lg font-sans font-medium bg-primary text-background-input cursor-pointer'
-          //   onClick={handleClickSubmitBtn}
+          onClick={handleClickUpdateBtn}
         >
           수정하기
         </button>
@@ -162,7 +198,7 @@ export default function UpdatePage() {
                 className='appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none w-[190px] h-[50px] rounded-lg bg-gray-100 pl-[79px] text-gray-900  pr-6 outline-none border-2 border-gray-300 hover:border-primary'
                 placeholder='페이지 입력'
                 onChange={handleChange}
-                value={formData.page ?? ''}
+                value={formData.page !== undefined ? String(formData.page) : ''}
               />
               <IndexRecord
                 emotionData={emotionData}
@@ -205,6 +241,30 @@ export default function UpdatePage() {
           )}
         </div>
       </div>
+      {showSuccessModal && (
+        <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
+          <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
+            <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>수정 완료!</h2>
+            <p className='font-sans font-medium text-sm text-gray-700 leading-[20px] mb-6'>
+              이전 페이지로 이동하시겠어요?
+            </p>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              onClick={() => router.back()}
+            >
+              확인
+            </button>
+            {/* <button
+              type='button'
+              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+              onClick={handleClickGotoMain}
+            >
+              닫기
+            </button> */}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

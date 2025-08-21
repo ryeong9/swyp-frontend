@@ -15,6 +15,8 @@ import {
   AddDeskData,
   ReadRecordList,
   ReadRecordData,
+  UpdateFormReading,
+  UpdateFormFinished,
 } from '@/types';
 
 // 책상 api
@@ -141,5 +143,22 @@ export const getReadingRecordForBook = async (recordId: number): Promise<ReadRec
 // 모든 기록 안에서 하나의 기록 조회 (완독)
 export const getFinishedRecordForBook = async (bookshelfId: number): Promise<ReadRecordData> => {
   const response = await authInstance.get(`/api/records/completion/${bookshelfId}`);
+  return response.data;
+};
+
+// 하나의 기록 수정 (읽는 중)
+export const putReadingForm = async (updateForm: UpdateFormReading, recordId: number) => {
+  const response = await authInstance.put<UpdateFormReading>(
+    `/api/records/pages/${recordId}`,
+    updateForm,
+  );
+  return response.data;
+};
+// 하나의 기록 수정 (완독)
+export const putFinishedForm = async (updateForm: UpdateFormFinished, bookshelfId: number) => {
+  const response = await authInstance.put<UpdateFormFinished>(
+    `/api/records/completion/${bookshelfId}`,
+    updateForm,
+  );
   return response.data;
 };
