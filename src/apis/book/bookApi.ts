@@ -162,3 +162,14 @@ export const putFinishedForm = async (updateForm: UpdateFormFinished, bookshelfI
   );
   return response.data;
 };
+
+// 하나의 기록 삭제 (읽는 중)
+export const deleteReadingRecord = async (recordId: number) => {
+  const response = await authInstance.delete(`/api/records/pages/${recordId}`);
+  return response.data;
+};
+// 하나의 기록 삭제 (다 읽음)
+export const deleteFinishedRecord = async (bookshelfId: number) => {
+  const response = await authInstance.delete(`/api/records/completion/${bookshelfId}`);
+  return response.data;
+};

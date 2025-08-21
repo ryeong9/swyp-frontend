@@ -1,6 +1,7 @@
 'use client';
 
 import { emotions } from '@/constants/emotion';
+import useDeleteRecords from '@/hooks/read/useDeleteRecords';
 import useGetAllRecords from '@/hooks/read/useGetAllRecords';
 import { Book } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -35,6 +36,31 @@ export default function ReadPage() {
     router.push(
       `/update?recordId=${recordId}&bookshelfId=${bookshelfId}&status=${status}&isbn=${isbn}`,
     );
+  };
+
+  const [deleteTarget, setDeleteTarget] = useState<{
+    status: string;
+    recordId: number;
+    bookshelfId: number;
+  } | null>(null);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleClickDeleteConfirm = (status: string, recordId: number, bookshelfId: number) => {
+    setDeleteTarget({ status, recordId, bookshelfId });
+    setShowDeleteModal(true);
+  };
+
+  const { mutate: deleteRecord } = useDeleteRecords();
+
+  const handleClickDeleteBtn = () => {
+    if (deleteTarget?.status === 'READING') {
+      deleteRecord({ status: 'READING', recordId: deleteTarget.recordId });
+    }
+    if (deleteTarget?.status === 'FINISHED') {
+      deleteRecord({ status: 'FINISHED', bookshelfId: deleteTarget.bookshelfId });
+    }
+    setShowDeleteModal(false);
   };
 
   return (
@@ -138,6 +164,9 @@ export default function ReadPage() {
                   <button
                     type='button'
                     className='p-2'
+                    onClick={() =>
+                      handleClickDeleteConfirm(item.status, item.recordId, book!.bookshelfId)
+                    }
                   >
                     <img
                       src='/icons/deleteIcon.svg'
@@ -157,6 +186,33 @@ export default function ReadPage() {
                 </div>
               </div>
             </div>
+            {showDeleteModal && (
+              <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
+                <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
+                  <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
+                    기록을 삭제하시겠어요?
+                  </h2>
+                  {/* <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
+                    벗어나면 수정 중인 내용은 삭제돼요
+                  </p> */}
+                  <button
+                    type='button'
+                    className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+                    onClick={handleClickDeleteBtn}
+                  >
+                    확인
+                  </button>
+                  <button
+                    type='button'
+                    className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+                    onClick={() => setShowDeleteModal(false)}
+                  >
+                    취소
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className='mt-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
               {item.emotions.map((emo, index) => {
                 const emotion = emotions.find((item) => item.id === emo.emotionId);
