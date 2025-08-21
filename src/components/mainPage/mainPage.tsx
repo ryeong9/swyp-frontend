@@ -176,6 +176,7 @@ export default function MainPage() {
         <button
           type='button'
           onClick={() => router.push('/write')}
+          className='z-50'
         >
           <img
             src='icons/plusIcon.svg'
