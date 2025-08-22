@@ -63,6 +63,10 @@ export default function ReadPage() {
     setShowDeleteModal(false);
   };
 
+  const handleClickAddIndex = (isbn: string) => {
+    router.push(`/addIndex?isbn=${isbn}`);
+  };
+
   return (
     <div className='relative'>
       <Suspense fallback={null}>
@@ -256,6 +260,7 @@ export default function ReadPage() {
           <button
             type='button'
             className='w-[172px] h-[46px] flex items-center justify-center bg-gray-700 mb-4 rounded-lg cursor-pointer'
+            onClick={() => handleClickAddIndex(book.isbn)}
           >
             <img
               src='/icons/plusIcon.svg'

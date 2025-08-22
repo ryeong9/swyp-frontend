@@ -1,45 +1,32 @@
 'use client';
 
 import IndexRecord from '@/components/writePage/indexRecord';
-import useGetRecordInfo from '@/hooks/update/useGetRecordInfo';
-import usePutUpdateFinishedForm from '@/hooks/update/usePutUpdateFinishedForm';
-import usePutUpdateReadingForm from '@/hooks/update/usePutUpdateReadingForm';
-import { EmotionData, Emotions, IdState, RecordDataState } from '@/types';
+import usePostRecordFinishedData from '@/hooks/write/usePostRecordFinishedData';
+import usePostRecordReadingData from '@/hooks/write/usePostRecordReadingData';
+import { Emotions, RecordDataState } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
-function UpdatePageContent({
+function AddIndexPageContent({
   setFormData,
-  setId,
 }: {
   setFormData: React.Dispatch<React.SetStateAction<RecordDataState>>;
-  setId: React.Dispatch<React.SetStateAction<IdState>>;
 }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const recordId = searchParams.get('recordId');
-    const bookshelfId = searchParams.get('bookshelfId');
-    const status = searchParams.get('status');
     const isbn = searchParams.get('isbn');
-    if (recordId && bookshelfId && status && isbn) {
-      const statusText = status === 'READING' ? '읽는 중' : '다 읽음';
-      setId({ recordId: Number(recordId), bookshelfId: Number(bookshelfId) });
-      setFormData((prev) => ({ ...prev, isbn: isbn, status: statusText }));
+    if (isbn) {
+      setFormData((prev) => ({ ...prev, isbn: isbn }));
     }
-  }, [searchParams, setFormData, setId]);
+  }, [searchParams, setFormData]);
 
   return null;
 }
 
-export default function UpdatePage() {
+export default function AddIndexPage() {
   const router = useRouter();
-  const [id, setId] = useState<IdState>({
-    recordId: 0,
-    bookshelfId: 0,
-  });
-
   const [formData, setFormData] = useState<RecordDataState>({
     isbn: '',
     status: '',
@@ -47,26 +34,7 @@ export default function UpdatePage() {
     content: '',
     finalNote: '',
   });
-  const [emotionData, setEmotionData] = useState<Emotions[]>([]);
-
-  const { data: recordInfo } = useGetRecordInfo(formData.status, id.recordId, id.bookshelfId);
-
-  useEffect(() => {
-    if (recordInfo) {
-      setFormData((prev) => ({
-        ...prev,
-        page: recordInfo.page,
-        content: recordInfo.content ?? '',
-        finalNote: recordInfo.finalNote ?? '',
-      }));
-      setEmotionData(
-        recordInfo.emotions.map((e: EmotionData) => ({
-          emotionId: e.emotionId,
-          score: e.score,
-        })),
-      );
-    }
-  }, [recordInfo]);
+  const [emotionData, setEmotionData] = useState<Emotions[]>([{ emotionId: 0, score: 10 }]);
 
   const [showGotoBackModal, setShowGotoBackModal] = useState(false);
 
@@ -87,45 +55,41 @@ export default function UpdatePage() {
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { mutate: updateReadingForm } = usePutUpdateReadingForm(() => setShowSuccessModal(true));
-  const { mutate: updateFinishedForm } = usePutUpdateFinishedForm(() => setShowSuccessModal(true));
+  const { mutate: onSubmitReading } = usePostRecordReadingData(() => setShowSuccessModal(true));
+  const { mutate: onSubmitFinished } = usePostRecordFinishedData(() => setShowSuccessModal(true));
 
-  const handleClickUpdateBtn = () => {
+  const handleClickAddBtn = () => {
     if (formData.status === '읽는 중') {
-      updateReadingForm({
-        updateForm: {
-          page: formData.page ?? null,
-          content: formData.content || null,
-          emotions: emotionData.map((item) => ({
-            emotionId: item.emotionId,
-            score: item.score,
-          })),
-        },
-        recordId: id.recordId,
+      onSubmitReading({
+        isbn: formData.isbn,
+        page: formData.page ?? null,
+        content: formData.content || null,
+        emotions: emotionData.map((item) => ({
+          emotionId: item.emotionId,
+          score: item.score,
+        })),
       });
     }
     if (formData.status === '다 읽음') {
-      updateFinishedForm({
-        updateForm: {
-          content: formData.content || null,
-          finalNote: formData.finalNote || null,
-          emotions: emotionData.map((item) => ({
-            emotionId: item.emotionId,
-            score: item.score,
-          })),
-        },
-        bookshelfId: id.bookshelfId,
+      onSubmitFinished({
+        isbn: formData.isbn,
+        content: formData.content || null,
+        finalNote: formData.finalNote || null,
+        emotions: emotionData.map((item) => ({
+          emotionId: item.emotionId,
+          score: item.score,
+        })),
       });
     }
   };
 
+  console.log(formData);
+  console.log(emotionData);
+
   return (
     <div className='relative flex flex-col items-center'>
       <Suspense fallback={null}>
-        <UpdatePageContent
-          setFormData={setFormData}
-          setId={setId}
-        />
+        <AddIndexPageContent setFormData={setFormData} />
       </Suspense>
       <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-10'>
         <div className='max-w-[1030px] w-full mx-auto flex justify-between px-8'>
@@ -140,19 +104,20 @@ export default function UpdatePage() {
           </button>
           <button
             type='submit'
-            className='w-[190px] h-[50px] rounded-lg font-sans font-medium bg-primary text-background-input cursor-pointer'
-            onClick={handleClickUpdateBtn}
+            className='w-[190px] h-[50px] rounded-lg font-sans font-medium bg-primary text-background-input cursor-pointer disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
+            disabled={formData.status === ''}
+            onClick={handleClickAddBtn}
           >
-            수정하기
+            추가하기
           </button>
           {showGotoBackModal && (
             <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
               <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
                 <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
-                  아직 수정이 완료 되지 않았어요
+                  아직 작성이 완료 되지 않았어요
                 </h2>
                 <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
-                  페이지를 벗어나면 수정한 내용은 삭제돼요
+                  벗어나면 작성 중인 내용은 삭제돼요
                 </p>
                 <button
                   type='button'
@@ -169,7 +134,7 @@ export default function UpdatePage() {
                   className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
                   onClick={() => setShowGotoBackModal(false)}
                 >
-                  계속 수정하기
+                  계속 기록하기
                 </button>
               </div>
             </div>
@@ -177,7 +142,45 @@ export default function UpdatePage() {
         </div>
       </div>
       <div className='w-[1030px] mx-auto mb-14 pt-[90px]'>
-        <div className='w-full bg-background-input rounded-3xl mt-[68px] pb-14 px-[105px]'>
+        <div className='w-full bg-background-input rounded-3xl mt-[68px] py-14 px-[105px]'>
+          <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2'>
+            독서 상태
+          </h2>
+          <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider'>
+            독서 상태를 선택해주세요.
+          </p>
+          <div className='flex items-center mt-8'>
+            <label
+              htmlFor='reading'
+              className='flex font-sans font-medium text-gray-300 cursor-pointer'
+            >
+              <input
+                id='reading'
+                type='radio'
+                name='status'
+                value='읽는 중'
+                checked={formData.status === '읽는 중'}
+                className='mr-2 radio reading'
+                onChange={handleChange}
+              />
+              <span>읽는 중</span>
+            </label>
+            <label
+              htmlFor='finished'
+              className='flex ml-5 font-sans font-medium text-gray-300 cursor-pointer'
+            >
+              <input
+                id='finished'
+                type='radio'
+                name='status'
+                value='다 읽음'
+                checked={formData.status === '다 읽음'}
+                className='mr-2 radio finished'
+                onChange={handleChange}
+              />
+              <span>다 읽음</span>
+            </label>
+          </div>
           {formData.status === '읽는 중' ? (
             <div className='w-full bg-background-input'>
               <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2 pt-[56px]'>
@@ -243,24 +246,53 @@ export default function UpdatePage() {
       {showSuccessModal && (
         <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
           <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
-            <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>수정 완료!</h2>
-            <p className='font-sans font-medium text-sm text-gray-700 leading-[20px] mb-6'>
-              이전 페이지로 이동하시겠어요?
-            </p>
-            <button
-              type='button'
-              className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'
-              onClick={() => router.back()}
-            >
-              확인
-            </button>
-            {/* <button
-              type='button'
-              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
-              onClick={handleClickGotoMain}
-            >
-              닫기
-            </button> */}
+            <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
+              인덱스 추가 완료!
+            </h2>
+            {formData.status === '읽는 중' ? (
+              <>
+                <p className='font-sans font-medium text-sm text-gray-700 leading-[20px] mb-6'>
+                  계속 기록하시겠어요?
+                </p>
+                <button
+                  type='button'
+                  className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'
+                  onClick={() => {
+                    setShowSuccessModal(false);
+                    setFormData((prev) => ({
+                      ...prev,
+                      status: '',
+                      page: undefined,
+                      content: '',
+                      finalNote: '',
+                    }));
+                    setEmotionData([{ emotionId: 0, score: 10 }]);
+                  }}
+                >
+                  계속 기록하기
+                </button>
+                <button
+                  type='button'
+                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+                  onClick={() => router.back()}
+                >
+                  이전 페이지로 이동
+                </button>
+              </>
+            ) : (
+              <>
+                <p className='font-sans font-medium text-sm text-gray-700 leading-[20px] mb-6'>
+                  메인으로 이동하시겠어요?
+                </p>
+                <button
+                  type='button'
+                  className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input'
+                  onClick={() => router.push('/')}
+                >
+                  메인으로 이동
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
