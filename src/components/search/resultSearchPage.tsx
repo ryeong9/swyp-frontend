@@ -37,7 +37,7 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
   const rawBooks = data?.pages.flatMap((page) => page.books || []) || [];
 
   return (
-    <>
+    <div className='flex flex-col items-center'>
       <Header />
       <div className='pt-6 pb-6 max-w-[1030px] mx-auto'>
         <div className='flex flex-col mt-[100px]'>
@@ -181,6 +181,6 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
           <div ref={loadMoreRef} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

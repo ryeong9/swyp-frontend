@@ -46,7 +46,7 @@ export default function DetailPage({ isbn }: DetailPageProps) {
   };
 
   return (
-    <>
+    <div className='flex flex-col items-center'>
       <Header />
       <div className='relative flex justify-center items-center'>
         <div className='w-[1030px] max-w-full flex flex-col gap-14 pb-14 mt-[125px]'>
@@ -140,6 +140,6 @@ export default function DetailPage({ isbn }: DetailPageProps) {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
