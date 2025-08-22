@@ -83,9 +83,6 @@ export default function AddIndexPage() {
     }
   };
 
-  console.log(formData);
-  console.log(emotionData);
-
   return (
     <div className='relative flex flex-col items-center'>
       <Suspense fallback={null}>
