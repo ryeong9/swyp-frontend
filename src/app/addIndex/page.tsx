@@ -1,57 +1,42 @@
 'use client';
 
-import BookModal from '@/components/writePage/bookModal';
 import IndexRecord from '@/components/writePage/indexRecord';
-import RoutingPopUp from '@/components/writePage/routingPopUp';
 import usePostRecordFinishedData from '@/hooks/write/usePostRecordFinishedData';
 import usePostRecordReadingData from '@/hooks/write/usePostRecordReadingData';
-import { Book, Emotions, RecordDataState } from '@/types';
+import { Emotions, RecordDataState } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
-// useSearchParams를 사용하는 부분 분리
-function WritePageContent({
-  setSelectedBook,
+function AddIndexPageContent({
   setFormData,
 }: {
-  setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
   setFormData: React.Dispatch<React.SetStateAction<RecordDataState>>;
 }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const bookParam = searchParams.get('book');
-    if (bookParam) {
-      const book = JSON.parse(decodeURIComponent(bookParam));
-      setSelectedBook(book);
-      setFormData((prev) => ({ ...prev, isbn: book.isbn }));
-
-      router.replace('/write', { scroll: false });
+    const isbn = searchParams.get('isbn');
+    if (isbn) {
+      setFormData((prev) => ({ ...prev, isbn: isbn }));
     }
-  }, [searchParams, router, setFormData, setSelectedBook]);
+  }, [searchParams, setFormData]);
 
   return null;
 }
 
-export default function WritePage() {
+export default function AddIndexPage() {
   const router = useRouter();
-  const [showGotoBackModal, setShowGotoBackModal] = useState(false);
-
   const [formData, setFormData] = useState<RecordDataState>({
     isbn: '',
-    status: '독서 상태',
+    status: '',
     page: undefined,
     content: '',
     finalNote: '',
   });
-
   const [emotionData, setEmotionData] = useState<Emotions[]>([{ emotionId: 0, score: 10 }]);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
-  const [showSelectModal, setShowSelectModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showGotoBackModal, setShowGotoBackModal] = useState(false);
 
   const onChange = useCallback((data: Partial<RecordDataState>) => {
     setFormData((prev) => ({ ...prev, ...data }));
@@ -68,27 +53,12 @@ export default function WritePage() {
     onChange({ [name]: newValue });
   };
 
-  const handleReset = () => {
-    setSelectedBook(null);
-    setFormData({
-      isbn: '',
-      status: '독서 상태',
-      page: undefined,
-      content: '',
-      finalNote: '',
-    });
-    setEmotionData([{ emotionId: 0, score: 10 }]);
-  };
-
-  const isSubmitEnabled = formData.isbn !== '' && formData.status !== '독서 상태';
-
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const { mutate: onSubmitReading } = usePostRecordReadingData(() => setShowSuccessModal(true));
   const { mutate: onSubmitFinished } = usePostRecordFinishedData(() => setShowSuccessModal(true));
 
-  const handleClickSubmitBtn = () => {
-    if (!isSubmitEnabled) return;
+  const handleClickAddBtn = () => {
     if (formData.status === '읽는 중') {
       onSubmitReading({
         isbn: formData.isbn,
@@ -116,12 +86,9 @@ export default function WritePage() {
   return (
     <div className='relative flex flex-col items-center'>
       <Suspense fallback={null}>
-        <WritePageContent
-          setSelectedBook={setSelectedBook}
-          setFormData={setFormData}
-        />
+        <AddIndexPageContent setFormData={setFormData} />
       </Suspense>
-      <div className='fixed w-full h-[90px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-10'>
+      <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-10'>
         <div className='max-w-[1030px] w-full mx-auto flex justify-between px-8'>
           <button
             type='button'
@@ -134,15 +101,11 @@ export default function WritePage() {
           </button>
           <button
             type='submit'
-            className={`w-[190px] h-[50px] rounded-lg font-sans font-medium ${
-              isSubmitEnabled
-                ? 'bg-primary text-background-input cursor-pointer'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-            disabled={!isSubmitEnabled}
-            onClick={handleClickSubmitBtn}
+            className='w-[190px] h-[50px] rounded-lg font-sans font-medium bg-primary text-background-input cursor-pointer disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
+            disabled={formData.status === ''}
+            onClick={handleClickAddBtn}
           >
-            등록하기
+            추가하기
           </button>
           {showGotoBackModal && (
             <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
@@ -176,105 +139,7 @@ export default function WritePage() {
         </div>
       </div>
       <div className='w-[1030px] mx-auto mb-14 pt-[90px]'>
-        {/* 기록할 책 선택하기 */}
-        <section className='relative w-full'>
-          {!selectedBook ? (
-            <div className='h-[177px] flex flex-col justify-center items-center mt-14 bg-gray-200 rounded-3xl'>
-              <button
-                type='button'
-                onClick={() => setShowSelectModal((prev) => !prev)}
-                className='w-[145px] h-[46px] flex items-center justify-center bg-gray-700 mb-4 rounded-lg cursor-pointer'
-              >
-                <img
-                  src='/icons/plusIcon.svg'
-                  alt='플러스 아이콘'
-                />
-                <p className='font-sans font-medium leading-[30px] text-base text-background-input ml-2'>
-                  책 추가하기
-                </p>
-              </button>
-              <p className='font-sans text-base text-gray-500'>
-                나의 책상에서 기록할 책을 추가해주세요
-              </p>
-            </div>
-          ) : (
-            <div className='relative h-[528px] flex flex-col justify-center items-center bg-background-input rounded-3xl mt-14 group'>
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                className='absolute top-4 right-4 opacity-0 group-hover:opacity-100'
-              >
-                <img
-                  src='/icons/closeIcon2.svg'
-                  alt='닫기 아이콘'
-                />
-              </button>
-              <h2 className='font-sans font-semibold text-2xl text-gray-900 mb-2 truncate max-w-[600px]'>
-                {selectedBook.title}
-              </h2>
-              <p className='font-sans font-medium text-base text-gray-700 mb-4'>
-                {selectedBook.author}
-              </p>
-              <div className='w-[224px] h-[327px] rounded-lg overflow-hidden mb-4'>
-                <img
-                  src={selectedBook.coverImageUrl}
-                  alt='도서 표지'
-                  className='w-full h-full object-cover'
-                />
-              </div>
-              <span className='font-sans font-normal text-sm text-gray-500'>
-                {selectedBook.category} &middot; {selectedBook.publisher} &middot;{' '}
-                {selectedBook.publishedDate.split('-')[0]}
-              </span>
-            </div>
-          )}
-          {showDeleteModal && (
-            <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
-              <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
-                <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
-                  책을 삭제하면 기록이 사라져요
-                </h2>
-                <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
-                  기록을 삭제하고 다른 책을 선택하시겠어요?
-                </p>
-                <button
-                  type='button'
-                  className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
-                  onClick={() => {
-                    setSelectedBook(null);
-                    setFormData({
-                      isbn: '',
-                      status: '독서 상태',
-                      page: undefined,
-                      content: '',
-                      finalNote: '',
-                    });
-                    setEmotionData([{ emotionId: 0, score: 10 }]);
-                    setShowDeleteModal(false);
-                  }}
-                >
-                  삭제
-                </button>
-                <button
-                  type='button'
-                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
-                  onClick={() => setShowDeleteModal(false)}
-                >
-                  취소
-                </button>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {showSelectModal && (
-          <BookModal
-            setSelectedBook={setSelectedBook}
-            setShowSelectModal={setShowSelectModal}
-            onChange={onChange}
-          />
-        )}
-        {/* 독서 상태 선택하기 */}
-        <section className='w-full bg-background-input rounded-3xl mt-14 py-14 px-[105px]'>
+        <div className='w-full bg-background-input rounded-3xl mt-[68px] py-14 px-[105px]'>
           <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2'>
             독서 상태
           </h2>
@@ -293,7 +158,6 @@ export default function WritePage() {
                 value='읽는 중'
                 checked={formData.status === '읽는 중'}
                 className='mr-2 radio reading'
-                disabled={!selectedBook}
                 onChange={handleChange}
               />
               <span>읽는 중</span>
@@ -309,7 +173,6 @@ export default function WritePage() {
                 value='다 읽음'
                 checked={formData.status === '다 읽음'}
                 className='mr-2 radio finished'
-                disabled={!selectedBook}
                 onChange={handleChange}
               />
               <span>다 읽음</span>
@@ -317,7 +180,7 @@ export default function WritePage() {
           </div>
           {formData.status === '읽는 중' ? (
             <div className='w-full bg-background-input'>
-              <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2 mt-[56px]'>
+              <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2 pt-[56px]'>
                 페이지
               </h2>
               <p className='font-sans text-base text-gray-500 leading-[25px] tracking-wider mb-6'>
@@ -375,13 +238,60 @@ export default function WritePage() {
           ) : (
             <></>
           )}
-        </section>
+        </div>
       </div>
       {showSuccessModal && (
-        <RoutingPopUp
-          setShowSuccessModal={setShowSuccessModal}
-          handleReset={handleReset}
-        />
+        <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
+          <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
+            <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
+              인덱스 추가 완료!
+            </h2>
+            {formData.status === '읽는 중' ? (
+              <>
+                <p className='font-sans font-medium text-sm text-gray-700 leading-[20px] mb-6'>
+                  계속 기록하시겠어요?
+                </p>
+                <button
+                  type='button'
+                  className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'
+                  onClick={() => {
+                    setShowSuccessModal(false);
+                    setFormData((prev) => ({
+                      ...prev,
+                      status: '',
+                      page: undefined,
+                      content: '',
+                      finalNote: '',
+                    }));
+                    setEmotionData([{ emotionId: 0, score: 10 }]);
+                  }}
+                >
+                  계속 기록하기
+                </button>
+                <button
+                  type='button'
+                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+                  onClick={() => router.back()}
+                >
+                  이전 페이지로 이동
+                </button>
+              </>
+            ) : (
+              <>
+                <p className='font-sans font-medium text-sm text-gray-700 leading-[20px] mb-6'>
+                  메인으로 이동하시겠어요?
+                </p>
+                <button
+                  type='button'
+                  className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input'
+                  onClick={() => router.push('/')}
+                >
+                  메인으로 이동
+                </button>
+              </>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

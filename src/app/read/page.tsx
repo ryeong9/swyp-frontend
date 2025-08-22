@@ -63,6 +63,10 @@ export default function ReadPage() {
     setShowDeleteModal(false);
   };
 
+  const handleClickAddIndex = (isbn: string) => {
+    router.push(`/addIndex?isbn=${isbn}`);
+  };
+
   return (
     <div className='relative'>
       <Suspense fallback={null}>
@@ -121,13 +125,17 @@ export default function ReadPage() {
           >
             <div className='flex justify-between'>
               <div className='flex items-center'>
-                {item.page ? (
-                  <p className='w-[63px] h-[30px] bg-gray-200 rounded-sm font-sans font-medium text-xs text-gray-700 flex justify-center items-center mr-4'>
-                    {item.page} P
-                  </p>
-                ) : (
-                  ''
-                )}
+                {item.status === 'READING' ? (
+                  item.page ? (
+                    <p className='h-[30px] bg-gray-200 rounded-sm font-sans font-medium text-xs text-gray-700 flex justify-center items-center mr-4 px-4 py-2'>
+                      {item.page} P
+                    </p>
+                  ) : (
+                    <p className='h-[30px] bg-gray-200 rounded-sm font-sans font-medium text-xs text-gray-700 flex justify-center items-center mr-4 px-4 py-2'>
+                      페이지 없음
+                    </p>
+                  )
+                ) : null}
                 <p className='font-sans text-xs text-gray-500'>{item.createdAt.slice(0, 10)}</p>
               </div>
               <div className='flex'>
@@ -192,15 +200,12 @@ export default function ReadPage() {
                   <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
                     기록을 삭제하시겠어요?
                   </h2>
-                  {/* <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
-                    벗어나면 수정 중인 내용은 삭제돼요
-                  </p> */}
                   <button
                     type='button'
                     className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
                     onClick={handleClickDeleteBtn}
                   >
-                    확인
+                    삭제
                   </button>
                   <button
                     type='button'
@@ -255,6 +260,7 @@ export default function ReadPage() {
           <button
             type='button'
             className='w-[172px] h-[46px] flex items-center justify-center bg-gray-700 mb-4 rounded-lg cursor-pointer'
+            onClick={() => handleClickAddIndex(book.isbn)}
           >
             <img
               src='/icons/plusIcon.svg'

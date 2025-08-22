@@ -41,7 +41,7 @@ export default function MainPage() {
   };
 
   return (
-    <div className='relative'>
+    <div className='relative flex flex-col items-center'>
       <Header />
       <div className='w-[1030px] flex flex-col mx-auto'>
         <HeroSection />
