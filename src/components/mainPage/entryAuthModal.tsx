@@ -44,8 +44,14 @@ export default function EntryAuthModal() {
         </section>
         <section className='w-1/2 flex flex-col justify-center items-center py-12 px-[55px] bg-gray-200 rounded-r-2xl'>
           <img
+            src='/icons/logoEntry.svg'
+            alt='로고'
+            className='mb-[31px]'
+          />
+          <img
             src='/icons/entryModal.svg'
             alt='비회원 모달 일러스트'
+            className='w-[256px] h-[140px]'
           />
           <button
             type='button'
