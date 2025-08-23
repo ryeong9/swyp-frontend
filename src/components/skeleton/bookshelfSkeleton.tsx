@@ -7,20 +7,10 @@ export default function BookshelfSkeleton() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금까지 읽었던 책들이 책장에 꽂혀 있어요
           </p>
-          <button
-            type='button'
-            className='flex cursor-pointer'
-          >
-            <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
-            <img
-              src='/icons/arrowRight.svg'
-              alt='오른쪽 화살표'
-            />
-          </button>
         </div>
       </div>
-      <div className='w-full h-[596px] grid grid-cols-5 grid-rows-2 gap-x-[22.5px] gap-y-6 bg-background-input rounded-3xl p-10'>
-        {Array.from({ length: 10 }, (_, i) => (
+      <div className='w-full h-[298px] grid grid-cols-5 grid-rows-1 gap-x-[22.5px] bg-background-input rounded-3xl p-10'>
+        {Array.from({ length: 5 }, (_, i) => (
           <div
             key={i}
             className='w-[172px] h-[246px] rounded-lg bg-gray-200'
