@@ -1,10 +1,7 @@
 'use client';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
 import Image from 'next/image';
 import { emotions } from '@/constants/emotion';
-import './emotionSlide.css';
 import { useState } from 'react';
 
 interface EmotionData {
@@ -52,7 +49,7 @@ export default function EmotionSwiper({ emotionList, emotionLength }: EmotionSwi
         {emotionPages.map((page, pageIndex) => (
           <div
             key={pageIndex}
-            className='grid grid-cols-6 gap-4 min-w-full'
+            className='grid grid-cols-6 gap-x-[33.2px] min-w-full'
           >
             {page.map((emotionData, index) => {
               const emotion = emotions.find((em) => em.id === emotionData.id);
