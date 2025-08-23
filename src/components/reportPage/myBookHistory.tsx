@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import './myBookHistory.css';
 import { useRouter } from 'next/navigation';
 import useGetRecordedData from '@/hooks/report/useGetRecordedData';
 import { emotions } from '@/constants/emotion';
@@ -185,19 +184,19 @@ export default function MyBookHistory() {
               className='rotate-180 w-[13px]'
             />
           </button>
+          <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex justify-center space-x-2'>
+            {groups.map((_, idx) => (
+              <div
+                key={idx}
+                className={`w-[10px] h-[10px] rounded-full ${
+                  idx === currentIndex ? 'bg-[#5a5a5a]' : 'bg-gray-300'
+                }`}
+                onClick={() => setCurrentIndex(idx)}
+              />
+            ))}
+          </div>
         </>
       )}
-      <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex justify-center space-x-2'>
-        {groups.map((_, idx) => (
-          <div
-            key={idx}
-            className={`w-[10px] h-[10px] rounded-full ${
-              idx === currentIndex ? 'bg-[#5a5a5a]' : 'bg-gray-300'
-            }`}
-            onClick={() => setCurrentIndex(idx)}
-          />
-        ))}
-      </div>
     </div>
   );
 }
