@@ -45,9 +45,9 @@ export default function MainPage() {
       <Header />
       <div className='w-[1030px] flex flex-col mx-auto'>
         <HeroSection />
+        <BookReport />
         <DeskSection />
         <BookShelfSection />
-        <BookReport />
       </div>
       <div className='w-full h-[435px] bg-[#383838] mt-[114px] py-14 px-[100px]'>
         <div className='flex justify-between mb-10'>
