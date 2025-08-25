@@ -39,8 +39,8 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
   return (
     <div className='flex flex-col items-center'>
       <Header />
-      <div className='pt-6 pb-6 max-w-[1030px] mx-auto'>
-        <div className='flex flex-col mt-[100px]'>
+      <div className='pt-6 pb-6 w-[1030px] mx-auto'>
+        <div className='flex flex-col justify-center mt-[100px]'>
           <p className='mb-8'>도서명 검색결과 '{data?.pages[0]?.totalResults || 0}'건</p>
           {rawBooks.length > 0 ? (
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
@@ -164,7 +164,7 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
               ))}
             </div>
           ) : (
-            <div className='flex flex-col w-full min-h-screen mt-14 items-center justify-center font-serif font-bold text-gray-700 text-base leading-[25px] gap-6'>
+            <div className='flex flex-col w-full pt-[273px] items-center justify-center font-serif font-bold text-gray-700 text-base leading-[25px] gap-6'>
               <img
                 src='/icons/noEmotionData.svg'
                 alt='noResult'
