@@ -86,7 +86,7 @@ export default function DeskSection() {
                 <button
                   onClick={prev}
                   disabled={currentIndex === 0}
-                  className='absolute left-3 top-[40%] disabled:opacity-30'
+                  className='absolute left-4 top-[40%] disabled:opacity-30'
                 >
                   <img
                     src='/icons/arrowLeft.svg'
@@ -96,7 +96,7 @@ export default function DeskSection() {
                 <button
                   onClick={next}
                   disabled={currentIndex >= deskData.length - itemsPerView}
-                  className='absolute right-3 top-[40%] disabled:opacity-30'
+                  className='absolute right-4 top-[40%] disabled:opacity-30'
                 >
                   <img
                     src='/icons/arrowLeft.svg'
