@@ -2,11 +2,6 @@
 @import 'tailwindcss';
 @config "../../tailwind.config.js";
 
-/* 스위퍼 관련 */
-@import 'swiper/css';
-@import 'swiper/css/navigation';
-@import 'swiper/css/pagination';
-
 /* Pretendard 폰트 */
 @font-face {
   font-family: 'Pretendard';
