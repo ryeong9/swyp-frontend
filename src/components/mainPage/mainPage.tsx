@@ -49,47 +49,45 @@ export default function MainPage() {
         <DeskSection />
         <BookShelfSection />
       </div>
-      <div className='w-full h-[435px] bg-[#383838] mt-[114px] py-14 px-[100px]'>
+      <div className='w-full h-[371px] pt-14 px-[100px] border-t border-t-gray-300'>
         <div className='flex justify-between mb-10'>
-          <div className=''>
+          <div>
             <img
               src='/icons/logoFooter.svg'
               alt='로고 초록색'
               className='mb-4'
             />
-            <p className='mb-[100px] font-serif font-bold leading-[25px] text-base text-background'>
+            <p className='mb-[60px] font-serif font-bold leading-[25px] text-base text-gray-900'>
               찰나의 감정을 오래 꺼내볼 수 있도록 기록해요.
               <br />
               인덱스가 그 순간들을 모아드릴게요.
             </p>
             <div className='flex'>
-              <section className='mr-[52px] flex flex-col'>
-                <h2 className='font-sans font-semibold text-sm text-background-input leading-[15px] tracking-wider mb-4'>
-                  Team INDEX (2025)
-                </h2>
+              <section className='mr-[52px] flex flex-col font-sans text-gray-700 leading-[15px] tracking-wider'>
+                <h2 className='font-semibold text-sm mb-4'>Team INDEX (2025)</h2>
                 <div className='flex'>
-                  <p className='font-sans font-normal text-sm text-background-input leading-[15px] tracking-wider'>
+                  <p className='font-normal text-sm'>
                     <span className='font-medium mr-2'>PM</span>
                     정환욱
                   </p>
-                  <p className='font-sans text-sm text-background-input leading-[15px] tracking-wider'>
+                  <p className='text-sm'>
                     <span className='font-medium ml-4 mr-2'>UI/UX</span>
                     정다희<span className='ml-2'>채준병</span>
                   </p>
                 </div>
                 <div className='flex mt-2'>
-                  <p className='font-sans text-sm text-background-input leading-[15px] tracking-wider'>
+                  <p className='text-sm'>
                     <span className='font-medium mr-2'>FE</span>
                     김민희<span className='ml-2'>최성령</span>
                   </p>
-                  <p className='font-sans text-sm text-background-input leading-[15px] tracking-wider'>
+                  <p className='text-sm'>
                     <span className='font-medium ml-4 mr-2'>BE</span>
                     나현오<span className='ml-2'>박영찬</span>
                     <span className='ml-2'>이동주</span>
                   </p>
                 </div>
               </section>
-              <section className='flex flex-col justify-between'>
+              <section className='flex flex-col justify-between font-sans text-sm text-gray-700 leading-[15px] tracking-wider'>
                 <div className='flex items-center'>
                   <img
                     src='/icons/mailIcon.svg'
@@ -97,7 +95,7 @@ export default function MainPage() {
                   />
                   <a
                     href='mailto:udown0109@gmail.com'
-                    className='ml-2 font-sans text-sm text-background-input leading-[15px] tracking-wider'
+                    className='ml-2'
                   >
                     udown0109@gmail.com
                   </a>
@@ -109,7 +107,7 @@ export default function MainPage() {
                   />
                   <a
                     href='https://github.com/SWYP-index'
-                    className='ml-2 font-sans text-sm text-background-input leading-[15px] tracking-wider'
+                    className='ml-2'
                   >
                     https://github.com/SWYP-index
                   </a>
@@ -140,7 +138,7 @@ export default function MainPage() {
             />
           </div>
         </div>
-        <p className='text-center font-sans text-xs text-[#94A8D2] leading-[15px] tracking-wider'>
+        <p className='text-center font-sans text-xs text-gray-700 leading-[15px] tracking-wider pb-8'>
           © 2025 INDEX. All rights reserved.
         </p>
       </div>
