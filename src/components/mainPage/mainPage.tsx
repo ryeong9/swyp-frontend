@@ -145,7 +145,7 @@ export default function MainPage() {
       <div className='fixed bottom-[60px] right-[205px] flex flex-col items-end drop-shadow-sm'>
         {showSpeechBubble && (
           <div className='flex flex-col items-end relative -top-4 -right-3'>
-            <div className='relative w-[321px] h-[150px] bg-background-input rounded-2xl p-8'>
+            <div className='relative w-[288px] h-[140px] bg-background-input rounded-2xl p-8'>
               <button
                 type='button'
                 className='w-[10px] absolute top-4 right-4'
@@ -156,10 +156,10 @@ export default function MainPage() {
                   alt='닫기 아이콘'
                 />
               </button>
-              <h2 className='font-serif font-bold text-xl text-gray-900'>
+              <h2 className='font-serif font-bold text-lg text-gray-900'>
                 당신의 감정을 들려주세요.
               </h2>
-              <p className='font-serif font-normal text-base leading-[25px] mt-[10px]'>
+              <p className='font-serif font-normal text-sm mt-[10px]'>
                 기록은 습관이 될수록 더 깊어져요. <br />
                 하루 인덱스 하나, 한 줄이면 충분해요.
               </p>
