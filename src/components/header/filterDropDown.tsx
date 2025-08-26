@@ -13,7 +13,7 @@ export default function FilterDropDown({
   setKeyword,
   setShowEmojiDropDown,
 }: CategorySelectProps) {
-  const categoryList = ['도서명', '감정'];
+  const categoryList = ['도서명/저자', '감정'];
 
   const handleSelectCategory = (item: string) => {
     setShowFilterDropDown(false);
@@ -23,11 +23,11 @@ export default function FilterDropDown({
   };
 
   return (
-    <div className='absolute flex flex-col items-center top-14 left-0 w-[116px] h-[86px] bg-background-input drop-shadow-sm rounded-lg px-2 py-2 z-10'>
+    <div className='absolute flex flex-col items-center top-14 left-0 w-[146px] h-[104px] bg-background-input drop-shadow-sm rounded-lg p-4 z-10'>
       {categoryList.map((item, index) => (
         <li
           key={index}
-          className={`w-[98px] list-none font-sans font-semibold text-sm px-4 py-2 cursor-pointer  hover:bg-gray-200 rounded-[4px] ${category === item ? 'text-gray-900' : 'text-gray-500'}`}
+          className={`w-[114px] list-none font-sans font-semibold text-sm px-4 py-2 cursor-pointer  hover:bg-gray-200 rounded-[4px] ${category === item ? 'text-gray-900' : 'text-gray-500'}`}
           onClick={() => handleSelectCategory(item)}
         >
           {item}

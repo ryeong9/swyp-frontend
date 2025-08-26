@@ -19,7 +19,7 @@ export default function EmojiDropDown({
   };
 
   return (
-    <div className='absolute box-border top-14 right-17 w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 pl-6 pr-[17.5px] py-4 flex flex-col justify-between'>
+    <div className='absolute box-border top-14 right-10 w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 pl-6 pr-[17.5px] py-4 flex flex-col justify-between'>
       <div className='w-full flex justify-between items-start'>
         <div className='flex flex-col'>
           <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
