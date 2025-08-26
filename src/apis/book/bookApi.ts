@@ -1,3 +1,4 @@
+import { RecommendBooks } from './../../types/index';
 //bookApi.ts
 import { authInstance } from '@/lib/axios';
 import {
@@ -164,5 +165,11 @@ export const deleteReadingRecord = async (recordId: number) => {
 // 하나의 기록 삭제 (다 읽음)
 export const deleteFinishedRecord = async (bookshelfId: number) => {
   const response = await authInstance.delete(`/api/records/completion/${bookshelfId}`);
+  return response.data;
+};
+
+// 추천 도서 불러오기
+export const getRecommendBooks = async (): Promise<RecommendBooks> => {
+  const response = await authInstance.get<RecommendBooks>('/api/recommendations');
   return response.data;
 };

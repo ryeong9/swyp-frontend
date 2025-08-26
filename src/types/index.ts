@@ -234,3 +234,14 @@ export type UpdateFormFinished = {
   finalNote: string | null;
   emotions: Emotions[];
 };
+
+export type RecommendBooks = {
+  emotionName: string;
+  isbn: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  publisher: string;
+  category: string;
+  publishedDate: string;
+}[];
