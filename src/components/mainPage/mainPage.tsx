@@ -7,6 +7,7 @@ import Header from '../header/header';
 import HeroSection from './heroSection';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import RecommendSection from './recommendSection';
 
 export default function MainPage() {
   const router = useRouter();
@@ -48,6 +49,7 @@ export default function MainPage() {
         <BookReport />
         <DeskSection />
         <BookShelfSection />
+        <RecommendSection />
       </div>
       <div className='w-full h-[371px] pt-14 px-[100px] border-t border-t-gray-300'>
         <div className='flex justify-between mb-10'>
