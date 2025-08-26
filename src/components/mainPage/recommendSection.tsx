@@ -6,7 +6,7 @@ export default function RecommendSection() {
 
   const bgColorMap: Record<string, string> = {
     positive: 'bg-[#E6F2E6]',
-    negative: 'bg-[#94A8D2]',
+    negative: 'bg-[#B3CAFB]',
     neutrality: 'bg-[#EEF2FA]',
     thought: 'bg-[#9BC99F]',
   };
@@ -37,29 +37,32 @@ export default function RecommendSection() {
           return (
             <div
               key={item.isbn}
-              className={`w-[320px] h-[410px] flex flex-col items-center p-8 rounded-2xl
-                ${emotion ? bgColorMap[emotion.type] : ''}`}
+              className={`relative w-[320px] h-[410px] flex flex-col items-center p-8 rounded-2xl overflow-hidden`}
             >
-              <div className='w-full flex justify-between mb-8'>
-                <div className='flex flex-col font-sans font-normal'>
-                  <p className='text-base text-gray-900'>
-                    {item.emotionName}
-                    {postposition}
-                    <br /> 바탕으로 추천해드려요.
-                  </p>
-                  <p className='text-sm text-gray-700'>{item.title}</p>
+              <div className={`absolute inset-0 ${emotion ? bgColorMap[emotion.type] : ''}`} />
+              {emotion?.type === 'negative' && <div className='absolute inset-0 bg-black/20' />}
+              <div className='relative z-10 w-full flex flex-col items-center'>
+                <div className='w-full flex justify-between mb-8'>
+                  <div className='flex flex-col font-sans font-normal'>
+                    <p className='text-base text-gray-900'>
+                      {item.emotionName}
+                      {postposition}
+                      <br /> 바탕으로 추천해드려요.
+                    </p>
+                    <p className='text-sm text-gray-700'>{item.title}</p>
+                  </div>
+                  <img
+                    src={emotion?.icon}
+                    alt='감정 아이콘'
+                    className='w-[60px] h-[60px]'
+                  />
                 </div>
                 <img
-                  src={emotion?.icon}
-                  alt='감정 아이콘'
-                  className='w-[60px] h-[60px]'
+                  src={item.coverImageUrl}
+                  alt='도서 표지'
+                  className='w-[172px] h-[246px]'
                 />
               </div>
-              <img
-                src={item.coverImageUrl}
-                alt='도서 표지'
-                className='w-[172px] h-[246px]'
-              />
             </div>
           );
         })}
