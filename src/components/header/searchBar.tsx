@@ -20,7 +20,7 @@ export default function SearchBar() {
   const [showEmojiDropDown, setShowEmojiDropDown] = useState(false);
 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (category === '도서명') setKeyword(e.target.value);
+    if (category === '도서명/저자') setKeyword(e.target.value);
   };
 
   const handleSubmitSearchData = () => {
@@ -30,7 +30,7 @@ export default function SearchBar() {
 
     const query = new URLSearchParams({
       keyword: keyword,
-      type: category === '도서명' ? 'title' : 'emotion',
+      type: category === '도서명/저자' ? 'title' : 'emotion',
       startIndex: '1',
     }).toString();
     router.push(`/result?${query}`);
