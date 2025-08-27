@@ -37,7 +37,7 @@ export default function DeskSection() {
         <h1 className='font-sans font-semibold text-2xl leading-[30px] mb-2 text-gray-900'>책상</h1>
         <div className='flex items-center justify-between'>
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
-            지금 읽고 있는 책과 추천 책을 책상 위에 올려놔 보았어요
+            지금 읽고 있는 책과 추천 책을 책상 위에 올려놓았어요.
           </p>
         </div>
       </div>
