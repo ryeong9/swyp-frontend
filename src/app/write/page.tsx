@@ -122,15 +122,17 @@ export default function WritePage() {
         />
       </Suspense>
       <div className='fixed w-full h-[90px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-10'>
-        <div className='max-w-[1030px] w-full mx-auto flex justify-between px-8'>
+        <div className='max-w-[1030px] w-full mx-auto flex justify-between items-center'>
           <button
             type='button'
             onClick={() => setShowGotoBackModal(true)}
+            className='w-[75px] h-[22px] flex cursor-pointer'
           >
             <img
               src='/icons/arrowLeft.svg'
               alt='뒤로가기 아이콘'
             />
+            <p className='font-sans text-base text-gray-500 ml-2'>뒤로가기</p>
           </button>
           <button
             type='submit'

@@ -10,7 +10,8 @@ export default function BackButton() {
   };
 
   return (
-    <div
+    <button
+      type='button'
       onClick={handleClickBack}
       className='w-[75px] h-[22px] flex mt-[130px] cursor-pointer'
     >
@@ -19,6 +20,6 @@ export default function BackButton() {
         alt='왼쪽 화살표'
       />
       <p className='font-sans text-base text-gray-500 ml-2'>뒤로가기</p>
-    </div>
+    </button>
   );
 }
