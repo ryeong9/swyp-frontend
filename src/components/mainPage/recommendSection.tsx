@@ -1,7 +1,9 @@
 import { emotions } from '@/constants/emotion';
 import useGetRecommendBooks from '@/hooks/main/useGetRecommendBooks';
+import { useRouter } from 'next/navigation';
 
 export default function RecommendSection() {
+  const router = useRouter();
   const { data: recommendBooks, isLoading } = useGetRecommendBooks();
 
   const bgColorMap: Record<string, string> = {
@@ -18,8 +20,12 @@ export default function RecommendSection() {
     return hasFinalConsonant ? '을' : '를';
   };
 
+  const handleClickBook = (isbn: string) => {
+    router.push(`/detail?isbn=${isbn}`);
+  };
+
   return (
-    <div>
+    <>
       <div className='mb-8'>
         <h1 className='font-sans font-semibold text-2xl leading-[30px] mb-2 text-gray-900'>
           나의 감정과 어울리는 책
@@ -38,6 +44,7 @@ export default function RecommendSection() {
             <div
               key={item.isbn}
               className={`relative w-[320px] h-[410px] flex flex-col items-center p-8 rounded-2xl overflow-hidden`}
+              onClick={() => handleClickBook(item.isbn)}
             >
               <div className={`absolute inset-0 ${emotion ? bgColorMap[emotion.type] : ''}`} />
               {emotion?.type === 'negative' && <div className='absolute inset-0 bg-black/20' />}
@@ -67,6 +74,6 @@ export default function RecommendSection() {
           );
         })}
       </div>
-    </div>
+    </>
   );
 }
