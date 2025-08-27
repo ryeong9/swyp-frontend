@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import Header from '@/components/header/header';
 import { emotions } from '@/constants/emotion';
 import { useRouter } from 'next/navigation';
+import BackButton from '../backButton/backButton';
 export default function ResultSearchPage({ keyword, type }: { keyword: string; type: string }) {
   const router = useRouter();
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
@@ -39,8 +40,11 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
   return (
     <div className='flex flex-col items-center'>
       <Header />
-      <div className='pt-6 pb-6 w-[1030px] mx-auto'>
-        <div className='flex flex-col justify-center mt-[100px]'>
+      <div className='w-[1030px] flex justify-start'>
+        <BackButton />
+      </div>
+      <div className='pt-8 pb-6 w-[1030px] mx-auto'>
+        <div className='flex flex-col justify-center'>
           <p className='mb-8'>도서명 검색결과 '{data?.pages[0]?.totalResults || 0}'건</p>
           {rawBooks.length > 0 ? (
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
