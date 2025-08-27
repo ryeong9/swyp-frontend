@@ -39,6 +39,9 @@ export default function DetailPage({ isbn }: DetailPageProps) {
       },
     });
   };
+  const handleClickBookHeart = () => {
+    alert('이미 책상에 올려진 책이에요.'); //Todo: 이미 책상에 올려져있는경우 : 토스트 만들기
+  };
 
   const handleClickGotoWrite = () => {
     const encodedBook = encodeURIComponent(JSON.stringify(bookData));
@@ -84,6 +87,12 @@ export default function DetailPage({ isbn }: DetailPageProps) {
                   className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'
                 >
                   책상에 올리기
+                </button>
+                <button
+                  onClick={handleClickBookHeart}
+                  className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'
+                >
+                  찜하기
                 </button>
               </div>
             </div>
