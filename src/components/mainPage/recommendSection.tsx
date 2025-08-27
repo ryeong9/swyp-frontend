@@ -1,10 +1,13 @@
 import { emotions } from '@/constants/emotion';
 import useGetRecommendBooks from '@/hooks/main/useGetRecommendBooks';
 import { useRouter } from 'next/navigation';
+import RecommendationSkeleton from '../skeleton/recommendationSkeleton';
 
 export default function RecommendSection() {
   const router = useRouter();
   const { data: recommendBooks, isLoading } = useGetRecommendBooks();
+
+  if (isLoading) return <RecommendationSkeleton />;
 
   const bgColorMap: Record<string, string> = {
     positive: 'bg-[#E6F2E6]',
