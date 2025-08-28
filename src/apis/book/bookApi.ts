@@ -172,5 +172,5 @@ export const deleteFinishedRecord = async (bookshelfId: number) => {
 //찜목록에 도서 추가
 export const postAddBookHeart = async (isbn: string) => {
   const response = await authInstance.post<BookHeartData>('/api/wishlist', { isbn });
-  return response.data;
+  return response;
 };

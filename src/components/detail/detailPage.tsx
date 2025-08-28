@@ -6,9 +6,10 @@ import { useDetail } from '@/hooks/detail/useDetail';
 import Header from '@/components/header/header';
 import EmotionSwiper from './emotionSlide';
 import { useState } from 'react';
+import { FaBookmark } from 'react-icons/fa';
 import usePostAddDesk from '@/hooks/detail/usePostAddDesk';
 import { AddDeskData, Book, mapAddDeskToBook } from '@/types';
-
+import { BookHeartButton } from './bookHeart';
 interface DetailPageProps {
   isbn: string;
 }
@@ -18,6 +19,7 @@ export default function DetailPage({ isbn }: DetailPageProps) {
 
   const [showPopup, setShowPopup] = useState(false);
   const [bookData, setBookData] = useState<Book | null>(null);
+  const [isBookHeart, setIsBookHeart] = useState(false);
 
   const { mutate } = usePostAddDesk();
 
@@ -38,9 +40,6 @@ export default function DetailPage({ isbn }: DetailPageProps) {
         console.error(err);
       },
     });
-  };
-  const handleClickBookHeart = () => {
-    alert('이미 책상에 올려진 책이에요.'); //Todo: 이미 책상에 올려져있는경우 : 토스트 만들기
   };
 
   const handleClickGotoWrite = () => {
@@ -81,19 +80,17 @@ export default function DetailPage({ isbn }: DetailPageProps) {
               <p className='text-gray-700 text-sm line-clamp-4 overflow-hidden'>
                 {book.description || '설명이 없습니다.'}
               </p>
-              <div className='flex flex-row justify-between'>
+              <div className='flex flex-row justify-start gap-4'>
                 <button
                   onClick={handleClickAddDesk}
                   className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'
                 >
                   책상에 올리기
                 </button>
-                <button
-                  onClick={handleClickBookHeart}
-                  className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'
-                >
-                  찜하기
-                </button>
+                <BookHeartButton
+                  isBookHeart={isBookHeart}
+                  isbn={isbn}
+                />
               </div>
             </div>
           </div>
