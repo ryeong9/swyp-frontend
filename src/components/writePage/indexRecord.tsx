@@ -61,6 +61,11 @@ export default function IndexRecord({
     );
   };
 
+  // 감정 삭제
+  const handleClickDeleteEmotion = (index: number) => {
+    setEmotionData((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // 글자 제한
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > 1000) {
@@ -86,8 +91,18 @@ export default function IndexRecord({
           return (
             <div
               key={index}
-              className='relative flex items-center px-8 py-6 bg-gray-100 rounded-2xl mb-6'
+              className='relative group flex items-center px-8 py-6 bg-gray-100 rounded-2xl mb-6'
             >
+              <button
+                type='button'
+                className='absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity'
+                onClick={() => handleClickDeleteEmotion(index)}
+              >
+                <img
+                  src='/icons/closeIcon2.svg'
+                  alt='삭제 아이콘'
+                />
+              </button>
               <button
                 type='button'
                 className='w-[83px] flex flex-col justify-center items-center pr-[18px] border-r-1 border-r-gray-300'
