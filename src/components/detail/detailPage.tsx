@@ -6,8 +6,8 @@ import { useDetail } from '@/hooks/detail/useDetail';
 import Header from '@/components/header/header';
 import EmotionSwiper from './emotionSlide';
 import { useState } from 'react';
-import { FaBookmark } from 'react-icons/fa';
 import usePostAddDesk from '@/hooks/detail/usePostAddDesk';
+import { useGetBookHeartStatus } from '@/hooks/detail/useBookHeart';
 import { AddDeskData, Book, mapAddDeskToBook } from '@/types';
 import { BookHeartButton } from './bookHeart';
 interface DetailPageProps {
@@ -19,7 +19,6 @@ export default function DetailPage({ isbn }: DetailPageProps) {
 
   const [showPopup, setShowPopup] = useState(false);
   const [bookData, setBookData] = useState<Book | null>(null);
-  const [isBookHeart, setIsBookHeart] = useState(false);
 
   const { mutate } = usePostAddDesk();
 
@@ -87,10 +86,7 @@ export default function DetailPage({ isbn }: DetailPageProps) {
                 >
                   책상에 올리기
                 </button>
-                <BookHeartButton
-                  isBookHeart={isBookHeart}
-                  isbn={isbn}
-                />
+                <BookHeartButton isbn={isbn} />
               </div>
             </div>
           </div>

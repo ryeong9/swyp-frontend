@@ -18,6 +18,7 @@ import {
   UpdateFormReading,
   UpdateFormFinished,
   BookHeartData,
+  BookHeartStatus,
 } from '@/types';
 
 // 책장 api
@@ -172,5 +173,15 @@ export const deleteFinishedRecord = async (bookshelfId: number) => {
 //찜목록에 도서 추가
 export const postAddBookHeart = async (isbn: string) => {
   const response = await authInstance.post<BookHeartData>('/api/wishlist', { isbn });
-  return response;
+  return response.data;
+};
+//찜목록에서 도서 삭제
+export const deleteBookHeart = async (isbn: string) => {
+  const response = await authInstance.delete(`/api/wishlist/${isbn}`);
+  return response.data;
+};
+//특정 책 찜상태 조회
+export const getBookHeartStatus = async (isbn: string): Promise<BookHeartStatus> => {
+  const response = await authInstance.get(`/api/wishlist/status/${isbn}`);
+  return response.data;
 };

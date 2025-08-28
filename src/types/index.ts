@@ -241,3 +241,7 @@ export type BookHeartData = {
   message: string;
   timestamp: string;
 };
+
+export type BookHeartStatus = {
+  wished: boolean;
+};
