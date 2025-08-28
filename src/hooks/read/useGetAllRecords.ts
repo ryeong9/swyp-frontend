@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const useGetAllRecords = (bookshelfId?: number) => {
   return useQuery({
-    queryKey: ['allRecords'],
+    queryKey: ['allRecords', bookshelfId],
     queryFn: () => getAllRecordForBook(bookshelfId!),
     enabled: typeof bookshelfId === 'number',
   });
