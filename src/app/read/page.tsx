@@ -196,29 +196,6 @@ export default function ReadPage() {
                 </div>
               </div>
             </div>
-            {showDeleteModal && (
-              <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
-                <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
-                  <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
-                    기록을 삭제하시겠어요?
-                  </h2>
-                  <button
-                    type='button'
-                    className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
-                    onClick={handleClickDeleteBtn}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    type='button'
-                    className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
-                    onClick={() => setShowDeleteModal(false)}
-                  >
-                    취소
-                  </button>
-                </div>
-              </div>
-            )}
 
             <div className='mt-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
               {item.emotions.map((emo, index) => {
@@ -276,6 +253,29 @@ export default function ReadPage() {
           ''
         )}
       </div>
+      {showDeleteModal && (
+        <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
+          <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
+            <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
+              기록을 삭제하시겠어요?
+            </h2>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              onClick={handleClickDeleteBtn}
+            >
+              삭제
+            </button>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+              onClick={() => setShowDeleteModal(false)}
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
