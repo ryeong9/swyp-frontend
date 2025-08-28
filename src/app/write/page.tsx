@@ -121,7 +121,7 @@ export default function WritePage() {
           setFormData={setFormData}
         />
       </Suspense>
-      <div className='fixed w-full h-[90px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-10'>
+      <div className='fixed w-full h-[90px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-30'>
         <div className='max-w-[1030px] w-full mx-auto flex justify-between items-center'>
           <button
             type='button'
@@ -146,35 +146,6 @@ export default function WritePage() {
           >
             등록하기
           </button>
-          {showGotoBackModal && (
-            <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
-              <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
-                <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
-                  아직 작성이 완료 되지 않았어요
-                </h2>
-                <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
-                  벗어나면 작성 중인 내용은 삭제돼요
-                </p>
-                <button
-                  type='button'
-                  className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
-                  onClick={() => {
-                    setShowGotoBackModal(false);
-                    router.back();
-                  }}
-                >
-                  확인
-                </button>
-                <button
-                  type='button'
-                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
-                  onClick={() => setShowGotoBackModal(false)}
-                >
-                  계속 기록하기
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
       <div className='w-[1030px] mx-auto mb-14 pt-[90px]'>
@@ -384,6 +355,35 @@ export default function WritePage() {
           setShowSuccessModal={setShowSuccessModal}
           handleReset={handleReset}
         />
+      )}
+      {showGotoBackModal && (
+        <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-50'>
+          <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
+            <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
+              아직 작성이 완료 되지 않았어요
+            </h2>
+            <p className='font-sans text-base text-gray-700 leading-[25px] mb-6'>
+              벗어나면 작성 중인 내용은 삭제돼요
+            </p>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              onClick={() => {
+                setShowGotoBackModal(false);
+                router.back();
+              }}
+            >
+              확인
+            </button>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+              onClick={() => setShowGotoBackModal(false)}
+            >
+              계속 기록하기
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
