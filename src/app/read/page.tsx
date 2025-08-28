@@ -197,27 +197,46 @@ export default function ReadPage() {
               </div>
             </div>
 
-            <div className='mt-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
-              {item.emotions.map((emo, index) => {
-                const emotion = emotions.find((item) => item.id === emo.emotionId);
-                return (
-                  <div
-                    key={index}
-                    className='w-[133px] h-[76px] flex justify-center items-center bg-gray-100 rounded-lg'
-                  >
+            <>
+              {(item.status === 'READING' && !item.content && item.emotions.length === 0) ||
+              (item.status === 'FINISHED' &&
+                !item.content &&
+                !item.finalNote &&
+                item.emotions.length === 0) ? (
+                <div className='flex justify-center items-center'>
+                  <div className='flex flex-col items-center'>
                     <img
-                      src={emotion?.icon}
-                      alt='감정 이모지'
-                      className='w-[44px] mr-4'
+                      src='/icons/noEmotionData.svg'
+                      alt='데이터 없음 아이콘'
+                      className='w-[60px] mb-4'
                     />
-                    <div className='flex flex-col font-sans font-medium text-sm'>
-                      <p className='text-gray-900'>{emo.emotionName}</p>
-                      <p className='text-gray-700'>{emo.score}점</p>
-                    </div>
+                    <p className='font-serif font-bold text-gray-700'>인덱스가 없어요.</p>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              ) : (
+                <div className='mt-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
+                  {item.emotions.map((emo, index) => {
+                    const emotion = emotions.find((item) => item.id === emo.emotionId);
+                    return (
+                      <div
+                        key={index}
+                        className='w-[133px] h-[76px] flex justify-center items-center bg-gray-100 rounded-lg'
+                      >
+                        <img
+                          src={emotion?.icon}
+                          alt='감정 이모지'
+                          className='w-[44px] mr-4'
+                        />
+                        <div className='flex flex-col font-sans font-medium text-sm'>
+                          <p className='text-gray-900'>{emo.emotionName}</p>
+                          <p className='text-gray-700'>{emo.score}점</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </>
             {item.content ? (
               <p className='mt-4 font-sans text-gray-900 text-base'>{item.content}</p>
             ) : (
