@@ -28,7 +28,7 @@ export default function RecommendSection() {
   };
 
   return (
-    <div className='mb-16'>
+    <div className='mb-20'>
       <div className='mb-8'>
         <h1 className='font-sans font-semibold text-2xl leading-[30px] mb-2 text-gray-900'>
           나의 감정과 어울리는 책
@@ -51,7 +51,7 @@ export default function RecommendSection() {
           </p>
         </div>
       ) : (
-        <div className='grid grid-cols-3 grid-rows-1 gap-x-[35px] mb-40'>
+        <div className='grid grid-cols-3 grid-rows-1 gap-x-[35px]'>
           {recommendBooks?.map((item) => {
             const emotion = emotions.find((emo) => emo.name === item.emotionName);
             const postposition = getPostposition(item.emotionName);
