@@ -100,9 +100,7 @@ export default function WishBookSection() {
             className='w-[101px] mb-6'
           />
           <p className='font-serif font-bold text-gray-700 text-center leading-[25px]'>
-            어떤 책을 읽고 계신가요?
-            <br />
-            검색을 통해 읽고 있는 책을 책상 위에 올려주세요.
+            읽고 싶은 책이 있다면 찜을 해주세요.
           </p>
         </div>
       ) : (

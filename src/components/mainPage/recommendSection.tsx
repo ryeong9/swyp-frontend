@@ -28,7 +28,7 @@ export default function RecommendSection() {
   };
 
   return (
-    <>
+    <div className='mb-16'>
       <div className='mb-8'>
         <h1 className='font-sans font-semibold text-2xl leading-[30px] mb-2 text-gray-900'>
           나의 감정과 어울리는 책
@@ -39,44 +39,57 @@ export default function RecommendSection() {
           </p>
         </div>
       </div>
-      <div className='grid grid-cols-3 grid-rows-1 gap-x-[35px] mb-40'>
-        {recommendBooks?.map((item) => {
-          const emotion = emotions.find((emo) => emo.name === item.emotionName);
-          const postposition = getPostposition(item.emotionName);
-          return (
-            <div
-              key={item.isbn}
-              className={`relative w-[320px] h-[410px] flex flex-col items-center p-8 rounded-2xl overflow-hidden`}
-              onClick={() => handleClickBook(item.isbn)}
-            >
-              <div className={`absolute inset-0 ${emotion ? bgColorMap[emotion.type] : ''}`} />
-              {emotion?.type === 'negative' && <div className='absolute inset-0 bg-black/20' />}
-              <div className='relative z-10 w-full flex flex-col items-center'>
-                <div className='w-full flex justify-between mb-8'>
-                  <div className='flex flex-col font-sans font-normal'>
-                    <p className='text-base text-gray-900'>
-                      {item.emotionName}
-                      {postposition}
-                      <br /> 바탕으로 추천해드려요.
-                    </p>
-                    <p className='text-sm text-gray-700'>{item.title}</p>
+      {recommendBooks?.length === 0 ? (
+        <div className='flex flex-col h-[246px] justify-center items-center'>
+          <img
+            src='/icons/noEmotionData.svg'
+            alt='nodata 아이콘'
+            className='w-[101px] mb-6'
+          />
+          <p className='font-serif font-bold text-gray-700 text-center leading-[25px]'>
+            감정기록을 바탕으로 책을 추천해줘요.
+          </p>
+        </div>
+      ) : (
+        <div className='grid grid-cols-3 grid-rows-1 gap-x-[35px] mb-40'>
+          {recommendBooks?.map((item) => {
+            const emotion = emotions.find((emo) => emo.name === item.emotionName);
+            const postposition = getPostposition(item.emotionName);
+            return (
+              <div
+                key={item.isbn}
+                className={`relative w-[320px] h-[410px] flex flex-col items-center p-8 rounded-2xl overflow-hidden`}
+                onClick={() => handleClickBook(item.isbn)}
+              >
+                <div className={`absolute inset-0 ${emotion ? bgColorMap[emotion.type] : ''}`} />
+                {emotion?.type === 'negative' && <div className='absolute inset-0 bg-black/20' />}
+                <div className='relative z-10 w-full flex flex-col items-center'>
+                  <div className='w-full flex justify-between mb-8'>
+                    <div className='flex flex-col font-sans font-normal'>
+                      <p className='text-base text-gray-900'>
+                        {item.emotionName}
+                        {postposition}
+                        <br /> 바탕으로 추천해드려요.
+                      </p>
+                      <p className='text-sm text-gray-700'>{item.title}</p>
+                    </div>
+                    <img
+                      src={emotion?.icon}
+                      alt='감정 아이콘'
+                      className='w-[60px] h-[60px]'
+                    />
                   </div>
                   <img
-                    src={emotion?.icon}
-                    alt='감정 아이콘'
-                    className='w-[60px] h-[60px]'
+                    src={item.coverImageUrl}
+                    alt='도서 표지'
+                    className='w-[172px] h-[246px]'
                   />
                 </div>
-                <img
-                  src={item.coverImageUrl}
-                  alt='도서 표지'
-                  className='w-[172px] h-[246px]'
-                />
               </div>
-            </div>
-          );
-        })}
-      </div>
-    </>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }
