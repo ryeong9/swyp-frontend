@@ -8,6 +8,7 @@ import HeroSection from './heroSection';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import RecommendSection from './recommendSection';
+import WishBookSection from './wishBookSection';
 
 export default function MainPage() {
   const router = useRouter();
@@ -49,6 +50,7 @@ export default function MainPage() {
         <BookReport />
         <DeskSection />
         <BookShelfSection />
+        <WishBookSection />
         <RecommendSection />
       </div>
       <div className='w-full h-[371px] pt-14 px-[100px] border-t border-t-gray-300'>
