@@ -104,7 +104,7 @@ export default function WishBookSection() {
           </p>
         </div>
       ) : (
-        <div className='relative flex justify-center px-5 w-full h-[280px] overflow-hidden'>
+        <div className='relative flex justify-center px-5 w-full h-[290px] overflow-hidden'>
           <div className='w-[956px] overflow-hidden'>
             <div
               className='flex transition-transform duration-500'
@@ -116,20 +116,22 @@ export default function WishBookSection() {
               {data?.map((item) => (
                 <div
                   key={item.isbn}
-                  className='relative flex-shrink-0 w-[172px] h-[246px] cursor-pointer'
+                  className='relative flex flex-col justify-end w-[172px] h-[258px] cursor-pointer'
                   onClick={() => handleClickBook(item.isbn)}
                 >
-                  <img
-                    // src={item.coverImageUrl}
-                    alt='도서 이미지'
-                    className='w-full h-full rounded-lg bg-gray-200'
-                  />
-                  <div
-                    className='absolute flex justify-center w-[50px] h-[80px] top-[-10px] right-[10px] bg-[#D2DEF4]/80 z-10 rounded-t-[2px]'
-                    style={{
-                      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%)',
-                    }}
-                  />
+                  <div className='w-[172px] h-[246px]'>
+                    <img
+                      // src={item.coverImageUrl}
+                      alt='도서 이미지'
+                      className='w-full h-full rounded-lg bg-gray-200'
+                    />
+                    <div
+                      className='absolute flex justify-center w-[46px] h-[65px] top-0 right-4 bg-[#D2DEF4]/80 z-10 rounded-t-[2px]'
+                      style={{
+                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%)',
+                      }}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
@@ -161,7 +163,7 @@ export default function WishBookSection() {
               </>
             )}
             {data && data.length > itemsPerView && (
-              <div className='absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2'>
+              <div className='absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2'>
                 {Array.from({ length: Math.ceil(data.length / itemsPerView) }).map((_, idx) => (
                   <div
                     key={idx}
