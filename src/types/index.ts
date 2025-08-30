@@ -245,3 +245,13 @@ export type RecommendBooks = {
   category: string;
   publishedDate: string;
 }[];
+
+export type Wishlist = {
+  isbn: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  publisher: string;
+  category: string;
+  publishedDate: string;
+}[];
