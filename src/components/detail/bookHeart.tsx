@@ -2,7 +2,6 @@
 
 import { FaBookmark } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { useState, useEffect } from 'react';
 import {
   usePostBookHeart,
   useDeleteBookHeart,
@@ -32,36 +31,45 @@ export const BookHeartButton: React.FC<BookHeartButtonProps> = ({
 
     try {
       if (isBookHeart) {
-        // 현재 찜한 상태 → 찜 해제 (204 응답 예상)
         await deleteMutation.mutateAsync(isbn);
 
-        toast.success('찜 목록에서 제거되었습니다.');
+        toast.success('찜 목록에서 제거되었습니다.', {
+          position: 'top-center',
+          autoClose: 300,
+          hideProgressBar: true,
+          closeButton: false,
+          style: {
+            marginTop: '86px',
+            borderRadius: '8px',
+            border: '1px solid #9BC99F',
+            padding: '24px 32px',
+            width: 'fit-content',
+            color: '#000000',
+            boxShadow: 'none',
+          },
+        });
       } else {
-        // 현재 찜하지 않은 상태 → 찜 추가 (200 응답)
         await addMutation.mutateAsync(isbn);
 
-        toast.success('찜 목록에 추가되었습니다!');
+        toast.success('찜 목록에 추가되었습니다!', {
+          position: 'top-center',
+          autoClose: 300,
+          hideProgressBar: true,
+          closeButton: false,
+          style: {
+            marginTop: '86px',
+            borderRadius: '8px',
+            border: '1px solid #9BC99F',
+            padding: '24px 32px',
+            width: 'fit-content',
+            color: '#000000',
+            boxShadow: 'none',
+          },
+        });
       }
     } catch (error: any) {
       console.log('에러 상세:', error);
       const errorData = error.response?.data;
-
-      if (isBookHeart) {
-        // 찜 해제 실패 - 404: 찜 목록에 없는 도서
-        if (errorData?.status === 404) {
-          toast.warning('이미 찜 목록에서 제거된 책입니다.');
-        } else {
-          toast.error('찜 해제 중 오류가 발생했습니다.');
-        }
-      } else {
-        if (errorData?.status === 400) {
-          toast.error('잘못된 요청입니다.');
-        } else if (errorData?.status === 404) {
-          toast.error('존재하지 않는 도서입니다.');
-        } else {
-          toast.error('찜하기 처리 중 오류가 발생했습니다.');
-        }
-      }
     }
 
     onClick?.();

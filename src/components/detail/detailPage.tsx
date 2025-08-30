@@ -10,6 +10,7 @@ import usePostAddDesk from '@/hooks/detail/usePostAddDesk';
 import { useGetBookHeartStatus } from '@/hooks/detail/useBookHeart';
 import { AddDeskData, Book, mapAddDeskToBook } from '@/types';
 import { BookHeartButton } from './bookHeart';
+import { ToastContainer, toast } from 'react-toastify';
 interface DetailPageProps {
   isbn: string;
 }
@@ -34,8 +35,42 @@ export default function DetailPage({ isbn }: DetailPageProps) {
         setBookData(mapAddDeskToBook(data));
         setShowPopup(true);
       },
-      onError: (err) => {
-        alert('책장 등록 실패');
+      onError: (err: any) => {
+        const errorData = err.response?.data;
+
+        if (errorData?.status === 409) {
+          toast.error('이미 책상에 올려져 있는 책이에요.', {
+            position: 'top-center',
+            autoClose: 300,
+            hideProgressBar: true,
+            closeButton: false,
+            style: {
+              marginTop: '86px',
+              width: 'fit-content',
+              borderRadius: '8px',
+              border: '1px solid #F56767',
+              padding: '24px 32px',
+              color: '#000000',
+              boxShadow: 'none',
+            },
+          });
+        } else {
+          toast.error('책상 등록 중 오류가 발생했습니다', {
+            position: 'top-center',
+            autoClose: 300,
+            hideProgressBar: true,
+            closeButton: false,
+            style: {
+              marginTop: '86px',
+              width: 'fit-content',
+              borderRadius: '8px',
+              border: '1px solid #F56767',
+              padding: '24px 32px',
+              color: '#000000',
+              boxShadow: 'none',
+            },
+          });
+        }
         console.error(err);
       },
     });
