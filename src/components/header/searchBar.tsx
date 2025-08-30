@@ -90,12 +90,18 @@ export default function SearchBar() {
         }}
       />
       {showEmojiDropDown && (
-        <EmojiDropDown
-          keyword={keyword}
-          setKeyword={setKeyword}
-          showEmojiDropDown={showEmojiDropDown}
-          setShowEmojiDropDown={setShowEmojiDropDown}
-        />
+        <>
+          <div
+            className='fixed inset-0 z-10'
+            onClick={() => setShowEmojiDropDown(false)}
+          />
+          <EmojiDropDown
+            keyword={keyword}
+            setKeyword={setKeyword}
+            showEmojiDropDown={showEmojiDropDown}
+            setShowEmojiDropDown={setShowEmojiDropDown}
+          />
+        </>
       )}
       <button
         className='ml-3.5 cursor-pointer'
