@@ -1,29 +1,21 @@
-import { useState } from 'react';
+import useGetWishlist from '@/hooks/main/useGetWishlist';
+import { Wishlist } from '@/types';
 import { useRouter } from 'next/navigation';
-import useGetOnlyDeskData from '@/hooks/write/useGetOnlyDeskData';
+import { useState } from 'react';
 import DeskSkeleton from '../skeleton/deskSkeleton';
-import { Book } from '@/types';
 
-export default function DeskSection() {
+export default function WishBookSection() {
   const router = useRouter();
-  const { data: deskData, isLoading } = useGetOnlyDeskData();
+
+  const { data: wishlist, isLoading } = useGetWishlist();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerView = 5;
   const gap = 24;
 
-  if (isLoading) return <DeskSkeleton />;
-
-  const isEmpty = deskData?.length === 0;
-
-  const handleClickGotoRead = (item: Book) => {
-    const encodedBook = encodeURIComponent(JSON.stringify(item));
-    router.push(`/read?book=${encodedBook}`);
-  };
-
   const next = () => {
-    if (!deskData) return;
-    const maxIndex = Math.ceil(deskData.length / itemsPerView) - 1;
+    if (!wishlist) return;
+    const maxIndex = Math.ceil(wishlist.length / itemsPerView) - 1;
     setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   };
 
@@ -31,18 +23,27 @@ export default function DeskSection() {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
+  const handleClickBook = (isbn: string) => {
+    router.push(`/detail?isbn=${isbn}`);
+  };
+
+  if (isLoading) {
+    return <DeskSkeleton />;
+  }
+
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col mb-14'>
       <div className='mb-8'>
-        <h1 className='font-sans font-semibold text-2xl leading-[30px] mb-2 text-gray-900'>책상</h1>
+        <h1 className='font-sans font-semibold text-2xl leading-[30px] mb-2 text-gray-900'>
+          내가 찜한 책
+        </h1>
         <div className='flex items-center justify-between'>
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
-            지금 읽고 있는 책과 추천 책을 책상 위에 올려놓았어요.
+            언젠가 읽고 싶은 책들을 여기에 모아뒀어요.
           </p>
         </div>
       </div>
-
-      {isEmpty ? (
+      {wishlist?.length === 0 ? (
         <div className='flex flex-col h-[246px] justify-center items-center'>
           <img
             src='/icons/noEmotionData.svg'
@@ -50,13 +51,11 @@ export default function DeskSection() {
             className='w-[101px] mb-6'
           />
           <p className='font-serif font-bold text-gray-700 text-center leading-[25px]'>
-            어떤 책을 읽고 계신가요?
-            <br />
-            검색을 통해 읽고 있는 책을 책상 위에 올려주세요.
+            읽고 싶은 책이 있다면 찜을 해주세요.
           </p>
         </div>
       ) : (
-        <div className='relative flex justify-center px-5 w-full h-[280px] overflow-hidden'>
+        <div className='relative flex justify-center px-5 w-full h-[290px] overflow-hidden'>
           <div className='w-[956px] overflow-hidden'>
             <div
               className='flex transition-transform duration-500'
@@ -65,23 +64,31 @@ export default function DeskSection() {
                 gap: `${gap}px`,
               }}
             >
-              {deskData?.map((item) => (
+              {wishlist?.map((item) => (
                 <div
                   key={item.isbn}
-                  className='flex-shrink-0 w-[172px] h-[246px] cursor-pointer'
-                  onClick={() => handleClickGotoRead(item)}
+                  className='relative flex flex-col justify-end w-[172px] h-[258px] cursor-pointer'
+                  onClick={() => handleClickBook(item.isbn)}
                 >
-                  <img
-                    src={item.coverImageUrl}
-                    alt='도서 이미지'
-                    className='w-full h-full rounded-lg'
-                  />
+                  <div className='w-[172px] h-[246px]'>
+                    <img
+                      src={item.coverImageUrl}
+                      alt='도서 이미지'
+                      className='w-full h-full rounded-lg bg-gray-200'
+                    />
+                    <div
+                      className='absolute flex justify-center w-[46px] h-[65px] top-0 right-4 bg-[#D2DEF4]/80 z-10 rounded-t-[2px]'
+                      style={{
+                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%)',
+                      }}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
 
             {/* 화살표 및 닷 */}
-            {deskData && deskData.length > itemsPerView && (
+            {wishlist && wishlist.length > itemsPerView && (
               <>
                 <button
                   onClick={prev}
@@ -95,7 +102,7 @@ export default function DeskSection() {
                 </button>
                 <button
                   onClick={next}
-                  disabled={currentIndex >= deskData.length - itemsPerView}
+                  disabled={currentIndex >= wishlist.length - itemsPerView}
                   className='absolute right-4 top-[40%] disabled:opacity-30'
                 >
                   <img
@@ -106,9 +113,9 @@ export default function DeskSection() {
                 </button>
               </>
             )}
-            {deskData && deskData.length > itemsPerView && (
-              <div className='absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2'>
-                {Array.from({ length: Math.ceil(deskData.length / itemsPerView) }).map((_, idx) => (
+            {wishlist && wishlist.length > itemsPerView && (
+              <div className='absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2'>
+                {Array.from({ length: Math.ceil(wishlist.length / itemsPerView) }).map((_, idx) => (
                   <div
                     key={idx}
                     className={`w-[10px] h-[10px] rounded-full cursor-pointer ${

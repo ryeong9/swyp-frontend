@@ -235,6 +235,27 @@ export type UpdateFormFinished = {
   emotions: Emotions[];
 };
 
+export type RecommendBooks = {
+  emotionName: string;
+  isbn: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  publisher: string;
+  category: string;
+  publishedDate: string;
+}[];
+
+export type Wishlist = {
+  isbn: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  publisher: string;
+  category: string;
+  publishedDate: string;
+}[];
+
 export type BookHeartData = {
   status: number;
   code: string;

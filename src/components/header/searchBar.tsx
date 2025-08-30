@@ -12,7 +12,7 @@ export default function SearchBar() {
   // URL 파라미터에서 초기값 추출
   const initialKeyword = searchParams.get('keyword') || '';
   const initialType = searchParams.get('type') || 'title';
-  const initialCategory = initialType === 'title' ? '도서명' : '감정';
+  const initialCategory = initialType === 'title' ? '도서명/저자' : '감정';
 
   const [category, setCategory] = useState(initialCategory);
   const [keyword, setKeyword] = useState(initialKeyword);
@@ -20,7 +20,7 @@ export default function SearchBar() {
   const [showEmojiDropDown, setShowEmojiDropDown] = useState(false);
 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (category === '도서명') setKeyword(e.target.value);
+    if (category === '도서명/저자') setKeyword(e.target.value);
   };
 
   const handleSubmitSearchData = () => {
@@ -30,7 +30,7 @@ export default function SearchBar() {
 
     const query = new URLSearchParams({
       keyword: keyword,
-      type: category === '도서명' ? 'title' : 'emotion',
+      type: category === '도서명/저자' ? 'title' : 'emotion',
       startIndex: '1',
     }).toString();
     router.push(`/result?${query}`);
@@ -42,7 +42,7 @@ export default function SearchBar() {
         className='flex items-center cursor-pointer'
         onClick={() => setShowFilterDropDown((prev) => !prev)}
       >
-        <p className='w-[45px] mr-[18px] font-sans font-semibold text-gray-900 text-sm text-left'>
+        <p className='w-[90px] mr-[16px] font-sans font-semibold text-gray-900 text-sm text-left'>
           {category}
         </p>
         {showFilterDropDown ? (
@@ -68,7 +68,7 @@ export default function SearchBar() {
       )}
       <img
         src='/icons/bar.svg'
-        className='ml-5 mr-[29px] block'
+        className='ml-3 mr-5 block'
       />
       <input
         className='w-[540px] outline-none leading-none text-sm placeholder-gray-500'
@@ -90,12 +90,18 @@ export default function SearchBar() {
         }}
       />
       {showEmojiDropDown && (
-        <EmojiDropDown
-          keyword={keyword}
-          setKeyword={setKeyword}
-          showEmojiDropDown={showEmojiDropDown}
-          setShowEmojiDropDown={setShowEmojiDropDown}
-        />
+        <>
+          <div
+            className='fixed inset-0 z-10'
+            onClick={() => setShowEmojiDropDown(false)}
+          />
+          <EmojiDropDown
+            keyword={keyword}
+            setKeyword={setKeyword}
+            showEmojiDropDown={showEmojiDropDown}
+            setShowEmojiDropDown={setShowEmojiDropDown}
+          />
+        </>
       )}
       <button
         className='ml-3.5 cursor-pointer'

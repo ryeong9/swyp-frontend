@@ -92,7 +92,7 @@ export default function BookReport() {
         </h1>
         <div className='flex items-center justify-between'>
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
-            지금까지의 기록들을 바탕으로 리포트를 작성해보았어요
+            지금까지의 기록들을 바탕으로 리포트를 작성했어요.
           </p>
           <button
             type='button'

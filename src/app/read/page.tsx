@@ -72,15 +72,17 @@ export default function ReadPage() {
       <Suspense fallback={null}>
         <ReadPageContent setBook={setBook} />
       </Suspense>
-      <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-between border-b-2 bg-background border-b-gray-200 z-20'>
+      <div className='fixed w-full h-[90px] px-[205px] py-5 flex justify-between items-center border-b-2 bg-background border-b-gray-200 z-20'>
         <button
           type='button'
           onClick={() => router.back()}
+          className='w-[75px] h-[22px] flex cursor-pointer'
         >
           <img
             src='/icons/arrowLeft.svg'
             alt='뒤로가기 아이콘'
           />
+          <p className='font-sans text-base text-gray-500 ml-2'>뒤로가기</p>
         </button>
       </div>
       <div className='w-[820px] mx-auto mb-14 pt-[90px]'>
@@ -194,51 +196,47 @@ export default function ReadPage() {
                 </div>
               </div>
             </div>
-            {showDeleteModal && (
-              <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
-                <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
-                  <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
-                    기록을 삭제하시겠어요?
-                  </h2>
-                  <button
-                    type='button'
-                    className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
-                    onClick={handleClickDeleteBtn}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    type='button'
-                    className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
-                    onClick={() => setShowDeleteModal(false)}
-                  >
-                    취소
-                  </button>
-                </div>
-              </div>
-            )}
 
-            <div className='mt-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
-              {item.emotions.map((emo, index) => {
-                const emotion = emotions.find((item) => item.id === emo.emotionId);
-                return (
-                  <div
-                    key={index}
-                    className='w-[133px] h-[76px] flex justify-center items-center bg-gray-100 rounded-lg'
-                  >
+            <>
+              {(item.status === 'READING' && !item.content && item.emotions.length === 0) ||
+              (item.status === 'FINISHED' &&
+                !item.content &&
+                !item.finalNote &&
+                item.emotions.length === 0) ? (
+                <div className='flex justify-center items-center'>
+                  <div className='flex flex-col items-center'>
                     <img
-                      src={emotion?.icon}
-                      alt='감정 이모지'
-                      className='w-[44px] mr-4'
+                      src='/icons/noEmotionData.svg'
+                      alt='데이터 없음 아이콘'
+                      className='w-[60px] mb-4'
                     />
-                    <div className='flex flex-col font-sans font-medium text-sm'>
-                      <p className='text-gray-900'>{emo.emotionName}</p>
-                      <p className='text-gray-700'>{emo.score}점</p>
-                    </div>
+                    <p className='font-serif font-bold text-gray-700'>인덱스가 없어요.</p>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              ) : (
+                <div className='mt-4 grid grid-cols-5 grid-rows-1 gap-x-[23px]'>
+                  {item.emotions.map((emo, index) => {
+                    const emotion = emotions.find((item) => item.id === emo.emotionId);
+                    return (
+                      <div
+                        key={index}
+                        className='w-[133px] h-[76px] flex justify-center items-center bg-gray-100 rounded-lg'
+                      >
+                        <img
+                          src={emotion?.icon}
+                          alt='감정 이모지'
+                          className='w-[44px] mr-4'
+                        />
+                        <div className='flex flex-col font-sans font-medium text-sm'>
+                          <p className='text-gray-900'>{emo.emotionName}</p>
+                          <p className='text-gray-700'>{emo.score}점</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </>
             {item.content ? (
               <p className='mt-4 font-sans text-gray-900 text-base'>{item.content}</p>
             ) : (
@@ -274,6 +272,29 @@ export default function ReadPage() {
           ''
         )}
       </div>
+      {showDeleteModal && (
+        <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-30'>
+          <div className='w-[413px] h-[288px] flex flex-col items-center justify-center bg-background-input rounded-2xl px-14 py-12'>
+            <h2 className='font-sans font-semibold text-xl text-gray-900 mb-4'>
+              기록을 삭제하시겠어요?
+            </h2>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              onClick={handleClickDeleteBtn}
+            >
+              삭제
+            </button>
+            <button
+              type='button'
+              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+              onClick={() => setShowDeleteModal(false)}
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

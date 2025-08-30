@@ -7,16 +7,6 @@ export default function DeskSkeleton() {
           <p className='font-sans leading-[25px] tracking-wide text-gray-700'>
             지금 읽고 있는 책과 추천 책을 책상 위에 올려놔 보았어요
           </p>
-          <button
-            type='button'
-            className='flex cursor-pointer'
-          >
-            <p className='font-sans text-xs text-gray-500 mr-2'>더 보기</p>
-            <img
-              src='/icons/arrowRight.svg'
-              alt='오른쪽 화살표'
-            />
-          </button>
         </div>
       </div>
       <div>

@@ -61,6 +61,11 @@ export default function IndexRecord({
     );
   };
 
+  // 감정 삭제
+  const handleClickDeleteEmotion = (index: number) => {
+    setEmotionData((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // 글자 제한
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > 1000) {
@@ -86,8 +91,18 @@ export default function IndexRecord({
           return (
             <div
               key={index}
-              className='relative flex items-center px-8 py-6 bg-gray-100 rounded-2xl mb-6'
+              className='relative group flex items-center px-8 py-6 bg-gray-100 rounded-2xl mb-6'
             >
+              <button
+                type='button'
+                className='absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity'
+                onClick={() => handleClickDeleteEmotion(index)}
+              >
+                <img
+                  src='/icons/closeIcon2.svg'
+                  alt='삭제 아이콘'
+                />
+              </button>
               <button
                 type='button'
                 className='w-[83px] flex flex-col justify-center items-center pr-[18px] border-r-1 border-r-gray-300'
@@ -114,45 +129,54 @@ export default function IndexRecord({
                 )}
               </button>
               {showSelectEmotion && selectedIndex === index && (
-                <div className='absolute box-border top-0 left-[103px] w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg z-10 pl-6 pr-[17.5px] py-4 flex flex-col justify-between'>
-                  <div className='w-full flex justify-between items-start'>
-                    <div className='flex flex-col'>
-                      <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
-                        긍정
-                      </p>
-                      <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
-                        부정
-                      </p>
-                      <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
-                        중립
-                      </p>
-                      <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px]'>
-                        사고기반
-                      </p>
-                    </div>
-                    <div className='grid grid-cols-5 grid-rows-4 gap-x-[9px] gap-y-2'>
-                      {emotions.map((item) => {
-                        return (
-                          <button
-                            type='button'
-                            key={item.id}
-                            onClick={() => handleClickEmotion(item.id)}
-                            className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
-                          >
-                            <img
-                              src={item.icon}
-                              alt='아이콘'
-                              className='w-[60px] h-[60px] mb-2'
-                            />
-                            <p className='font-sans text-sm text-gray-500 group-hover:text-gray-900'>
-                              {item.name}
-                            </p>
-                          </button>
-                        );
-                      })}
+                <>
+                  <div
+                    className='fixed inset-0 z-10'
+                    onClick={() => {
+                      setShowSelectEmotion(false);
+                      setSelectedIndex(null);
+                    }}
+                  />
+                  <div className='absolute box-border top-0 left-[103px] w-[528px] h-[460px] bg-background-input drop-shadow-sm rounded-lg pl-6 pr-[17.5px] py-4 flex flex-col justify-between z-20'>
+                    <div className='w-full flex justify-between items-start'>
+                      <div className='flex flex-col'>
+                        <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                          긍정
+                        </p>
+                        <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                          부정
+                        </p>
+                        <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px] mb-5'>
+                          중립
+                        </p>
+                        <p className='flex items-center justify-center font-sans font-medium text-base text-gray-700 text-center w-[56px] h-[85px]'>
+                          사고기반
+                        </p>
+                      </div>
+                      <div className='grid grid-cols-5 grid-rows-4 gap-x-[9px] gap-y-2'>
+                        {emotions.map((item) => {
+                          return (
+                            <button
+                              type='button'
+                              key={item.id}
+                              onClick={() => handleClickEmotion(item.id)}
+                              className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
+                            >
+                              <img
+                                src={item.icon}
+                                alt='아이콘'
+                                className='w-[60px] h-[60px] mb-2'
+                              />
+                              <p className='font-sans text-sm text-gray-500 group-hover:text-gray-900'>
+                                {item.name}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </>
               )}
               <div className='w-[601px] px-6'>
                 <input

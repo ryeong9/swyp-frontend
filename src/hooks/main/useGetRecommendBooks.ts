@@ -1,14 +1,15 @@
-import { getOnlyDeskData } from '@/apis/book/bookApi';
+import { getRecommendBooks } from '@/apis/book/bookApi';
 import useAuthStore from '@/stores/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
 
-const useGetOnlyDeskData = () => {
+const useGetRecommendBooks = () => {
   const isLogin = useAuthStore((state) => state.isLogin);
+
   return useQuery({
-    queryKey: ['OnlyDeskData'],
-    queryFn: getOnlyDeskData,
+    queryKey: ['recommendData'],
+    queryFn: getRecommendBooks,
     enabled: isLogin,
   });
 };
 
-export default useGetOnlyDeskData;
+export default useGetRecommendBooks;

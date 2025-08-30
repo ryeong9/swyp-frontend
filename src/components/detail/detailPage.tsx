@@ -7,10 +7,10 @@ import Header from '@/components/header/header';
 import EmotionSwiper from './emotionSlide';
 import { useState } from 'react';
 import usePostAddDesk from '@/hooks/detail/usePostAddDesk';
-import { useGetBookHeartStatus } from '@/hooks/detail/useBookHeart';
 import { AddDeskData, Book, mapAddDeskToBook } from '@/types';
 import { BookHeartButton } from './bookHeart';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import BackButton from '../backButton/backButton';
 interface DetailPageProps {
   isbn: string;
 }
@@ -84,8 +84,11 @@ export default function DetailPage({ isbn }: DetailPageProps) {
   return (
     <div className='flex flex-col items-center'>
       <Header />
+      <div className='w-[1030px] flex justify-start'>
+        <BackButton />
+      </div>
       <div className='relative flex justify-center items-center'>
-        <div className='w-[1030px] max-w-full flex flex-col gap-14 pb-14 mt-[125px]'>
+        <div className='w-[1030px] max-w-full flex flex-col gap-14 pb-14 mt-8'>
           {/* 책 소개 부분 */}
           <div className='bg-white w-[1030px] max-w-full h-[326px] rounded-2xl p-10 flex flex-row gap-4'>
             <div className='bg-white w-[170px] h-[240px] rounded-lg flex items-center justify-center overflow-hidden'>

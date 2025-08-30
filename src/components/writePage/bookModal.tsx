@@ -25,7 +25,7 @@ export default function BookModal({
   };
 
   return (
-    <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-20'>
+    <div className='fixed inset-0 flex justify-center items-center bg-black/50 z-40'>
       <div className='w-[763px] h-[740px] bg-background-input rounded-2xl'>
         <div className='relative pt-[58px] px-[56px] pb-2 bg-background-input drop-shadow-sm rounded-t-2xl'>
           <button

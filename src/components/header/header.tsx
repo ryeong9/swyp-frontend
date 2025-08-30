@@ -3,16 +3,16 @@
 import { Suspense, useState } from 'react';
 import SearchBar from './searchBar';
 import ProfileDropDown from './profileDropDwon';
-// import NotificationDropDown from './notificationDropDown';
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const router = useRouter();
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
-  // const [showNotificationDropDown, setShowNotificationDropDown] = useState(false);
+
   const handleClickMain = () => {
     router.push('/');
   };
+
   return (
     <div className='fixed w-full pt-6 pb-4 flex justify-center items-center z-20 bg-background'>
       <img
@@ -25,17 +25,6 @@ export default function Header() {
         <SearchBar />
       </Suspense>
       <div className='relative flex ml-[23px] pr-[23px] items-center'>
-        {/* <button
-          type='button'
-          className='w-[20px] h-[20px] mr-[18px] cursor-pointer'
-          onClick={() => setShowNotificationDropDown((prev) => !prev)}
-        >
-          <img
-            src='/icons/notification.svg'
-            alt='알림함 아이콘'
-          />
-        </button>
-        {showNotificationDropDown && <NotificationDropDown />} */}
         <button
           type='button'
           className='w-[20px] h-[20px] cursor-pointer'
