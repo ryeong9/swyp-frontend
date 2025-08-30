@@ -7,8 +7,10 @@ import Header from '@/components/header/header';
 import EmotionSwiper from './emotionSlide';
 import { useState } from 'react';
 import usePostAddDesk from '@/hooks/detail/usePostAddDesk';
+import { useGetBookHeartStatus } from '@/hooks/detail/useBookHeart';
 import { AddDeskData, Book, mapAddDeskToBook } from '@/types';
-
+import { BookHeartButton } from './bookHeart';
+import { ToastContainer, toast } from 'react-toastify';
 interface DetailPageProps {
   isbn: string;
 }
@@ -33,8 +35,42 @@ export default function DetailPage({ isbn }: DetailPageProps) {
         setBookData(mapAddDeskToBook(data));
         setShowPopup(true);
       },
-      onError: (err) => {
-        alert('책장 등록 실패');
+      onError: (err: any) => {
+        const errorData = err.response?.data;
+
+        if (errorData?.status === 409) {
+          toast.error('이미 책상에 올려져 있는 책이에요.', {
+            position: 'top-center',
+            autoClose: 300,
+            hideProgressBar: true,
+            closeButton: false,
+            style: {
+              marginTop: '86px',
+              width: 'fit-content',
+              borderRadius: '8px',
+              border: '1px solid #F56767',
+              padding: '24px 32px',
+              color: '#000000',
+              boxShadow: 'none',
+            },
+          });
+        } else {
+          toast.error('책상 등록 중 오류가 발생했습니다', {
+            position: 'top-center',
+            autoClose: 300,
+            hideProgressBar: true,
+            closeButton: false,
+            style: {
+              marginTop: '86px',
+              width: 'fit-content',
+              borderRadius: '8px',
+              border: '1px solid #F56767',
+              padding: '24px 32px',
+              color: '#000000',
+              boxShadow: 'none',
+            },
+          });
+        }
         console.error(err);
       },
     });
@@ -78,13 +114,14 @@ export default function DetailPage({ isbn }: DetailPageProps) {
               <p className='text-gray-700 text-sm line-clamp-4 overflow-hidden'>
                 {book.description || '설명이 없습니다.'}
               </p>
-              <div className='flex flex-row justify-between'>
+              <div className='flex flex-row justify-start gap-4'>
                 <button
                   onClick={handleClickAddDesk}
                   className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'
                 >
                   책상에 올리기
                 </button>
+                <BookHeartButton isbn={isbn} />
               </div>
             </div>
           </div>

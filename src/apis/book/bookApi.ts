@@ -1,6 +1,7 @@
 import { RecommendBooks, Wishlist } from './../../types/index';
 //bookApi.ts
 import { authInstance } from '@/lib/axios';
+
 import {
   Book,
   CalendarData,
@@ -17,6 +18,8 @@ import {
   ReadRecordData,
   UpdateFormReading,
   UpdateFormFinished,
+  BookHeartData,
+  BookHeartStatus,
 } from '@/types';
 
 // 책장 api
@@ -177,5 +180,21 @@ export const getWishList = async (): Promise<Wishlist> => {
 // 추천 도서 불러오기
 export const getRecommendBooks = async (): Promise<RecommendBooks> => {
   const response = await authInstance.get<RecommendBooks>('/api/recommendations');
+  return response.data;
+};
+
+//찜목록에 도서 추가
+export const postAddBookHeart = async (isbn: string) => {
+  const response = await authInstance.post<BookHeartData>('/api/wishlist', { isbn });
+  return response.data;
+};
+//찜목록에서 도서 삭제
+export const deleteBookHeart = async (isbn: string) => {
+  const response = await authInstance.delete(`/api/wishlist/${isbn}`);
+  return response.data;
+};
+//특정 책 찜상태 조회
+export const getBookHeartStatus = async (isbn: string): Promise<BookHeartStatus> => {
+  const response = await authInstance.get(`/api/wishlist/status/${isbn}`);
   return response.data;
 };

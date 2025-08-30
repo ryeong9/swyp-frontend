@@ -255,3 +255,14 @@ export type Wishlist = {
   category: string;
   publishedDate: string;
 }[];
+
+export type BookHeartData = {
+  status: number;
+  code: string;
+  message: string;
+  timestamp: string;
+};
+
+export type BookHeartStatus = {
+  wished: boolean;
+};
