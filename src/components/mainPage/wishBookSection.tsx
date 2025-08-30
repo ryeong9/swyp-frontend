@@ -1,74 +1,21 @@
+import useGetWishlist from '@/hooks/main/useGetWishlist';
 import { Wishlist } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
-const data: Wishlist = [
-  {
-    isbn: '9791191136979',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/31221/53/coversum/k392832962_1.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    isbn: '9791191136974',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/31221/53/coversum/k392832962_1.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    isbn: '9791191136973',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/31221/53/coversum/k392832962_1.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    isbn: '9791191136971',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/31221/53/coversum/k392832962_1.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    isbn: '9791191136972',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/31221/53/coversum/k392832962_1.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-  {
-    isbn: '9791191136975',
-    title: '이처럼 사소한 것들',
-    author: '클레어 키건',
-    coverImageUrl: 'https://image.aladin.co.kr/product/31221/53/coversum/k392832962_1.jpg',
-    publisher: '다산책방',
-    category: '소설',
-    publishedDate: '2023-04-10',
-  },
-];
+import DeskSkeleton from '../skeleton/deskSkeleton';
 
 export default function WishBookSection() {
   const router = useRouter();
+
+  const { data: wishlist, isLoading } = useGetWishlist();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerView = 5;
   const gap = 24;
 
   const next = () => {
-    if (!data) return;
-    const maxIndex = Math.ceil(data.length / itemsPerView) - 1;
+    if (!wishlist) return;
+    const maxIndex = Math.ceil(wishlist.length / itemsPerView) - 1;
     setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   };
 
@@ -79,6 +26,10 @@ export default function WishBookSection() {
   const handleClickBook = (isbn: string) => {
     router.push(`/detail?isbn=${isbn}`);
   };
+
+  if (isLoading) {
+    return <DeskSkeleton />;
+  }
 
   return (
     <div className='flex flex-col mb-14'>
@@ -92,7 +43,7 @@ export default function WishBookSection() {
           </p>
         </div>
       </div>
-      {data.length === 0 ? (
+      {wishlist?.length === 0 ? (
         <div className='flex flex-col h-[246px] justify-center items-center'>
           <img
             src='/icons/noEmotionData.svg'
@@ -113,7 +64,7 @@ export default function WishBookSection() {
                 gap: `${gap}px`,
               }}
             >
-              {data?.map((item) => (
+              {wishlist?.map((item) => (
                 <div
                   key={item.isbn}
                   className='relative flex flex-col justify-end w-[172px] h-[258px] cursor-pointer'
@@ -121,7 +72,7 @@ export default function WishBookSection() {
                 >
                   <div className='w-[172px] h-[246px]'>
                     <img
-                      // src={item.coverImageUrl}
+                      src={item.coverImageUrl}
                       alt='도서 이미지'
                       className='w-full h-full rounded-lg bg-gray-200'
                     />
@@ -137,7 +88,7 @@ export default function WishBookSection() {
             </div>
 
             {/* 화살표 및 닷 */}
-            {data && data.length > itemsPerView && (
+            {wishlist && wishlist.length > itemsPerView && (
               <>
                 <button
                   onClick={prev}
@@ -151,7 +102,7 @@ export default function WishBookSection() {
                 </button>
                 <button
                   onClick={next}
-                  disabled={currentIndex >= data.length - itemsPerView}
+                  disabled={currentIndex >= wishlist.length - itemsPerView}
                   className='absolute right-4 top-[40%] disabled:opacity-30'
                 >
                   <img
@@ -162,9 +113,9 @@ export default function WishBookSection() {
                 </button>
               </>
             )}
-            {data && data.length > itemsPerView && (
+            {wishlist && wishlist.length > itemsPerView && (
               <div className='absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2'>
-                {Array.from({ length: Math.ceil(data.length / itemsPerView) }).map((_, idx) => (
+                {Array.from({ length: Math.ceil(wishlist.length / itemsPerView) }).map((_, idx) => (
                   <div
                     key={idx}
                     className={`w-[10px] h-[10px] rounded-full cursor-pointer ${
