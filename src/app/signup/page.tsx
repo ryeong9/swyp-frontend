@@ -127,6 +127,8 @@ export default function SignUpPage() {
 
     try {
       const result = await sendVerificationMutation.mutateAsync(email);
+      setIsCheckVerification(false);
+      setVerificationStatus(null);
       startTimer();
     } catch (error) {
       console.error('Send Verification Error:', error);
@@ -255,21 +257,28 @@ export default function SignUpPage() {
               inputSize='md'
               {...register('verificationCode')}
               hasError={!!errors.verificationCode}
-              isSuccess={!!verificationCode && !errors.verificationCode}
+              isSuccess={isCheckVerification} //인증 성공시, 이전 코드 !!verificationCode && !errors.verificationCode
+              showStatusIcon
+              showTimer
+              isActive={isActive && !isCheckVerification}
+              timeLeft={timeLeft}
+              formatTime={formatTime}
               onDelete={() => {
                 setValue('verificationCode', '');
                 clearErrors('verificationCode');
+                setIsCheckVerification(false);
+                setVerificationStatus(null);
               }}
             />
-            {isActive && (
-              <span className='absolute inset-x-80 top-1/2 transform -translate-y-1/2 flex gap-2 items-center text-sm font-medium text-state-error '>
+            {/* {isActive && (
+              <span className='absolute inset-x-80 top-1/2 transform -translate-y-1/2 flex gap-2 items-center text-sm font-medium text-state-error '>
                 {formatTime(timeLeft)}
               </span>
-            )}
+            )} */}
             <Button
               type='button'
               size='sm'
-              disabled={!isEmailChecked || hasEmailError}
+              disabled={!isEmailChecked || hasEmailError || isCheckVerification}
               onClick={handleSendVerificationCode}
             >
               인증코드 발송

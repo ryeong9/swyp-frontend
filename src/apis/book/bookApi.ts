@@ -1,5 +1,6 @@
 //bookApi.ts
 import { authInstance } from '@/lib/axios';
+
 import {
   Book,
   CalendarData,
@@ -16,6 +17,8 @@ import {
   ReadRecordData,
   UpdateFormReading,
   UpdateFormFinished,
+  BookHeartData,
+  BookHeartStatus,
 } from '@/types';
 
 // 책장 api
@@ -164,5 +167,21 @@ export const deleteReadingRecord = async (recordId: number) => {
 // 하나의 기록 삭제 (다 읽음)
 export const deleteFinishedRecord = async (bookshelfId: number) => {
   const response = await authInstance.delete(`/api/records/completion/${bookshelfId}`);
+  return response.data;
+};
+
+//찜목록에 도서 추가
+export const postAddBookHeart = async (isbn: string) => {
+  const response = await authInstance.post<BookHeartData>('/api/wishlist', { isbn });
+  return response.data;
+};
+//찜목록에서 도서 삭제
+export const deleteBookHeart = async (isbn: string) => {
+  const response = await authInstance.delete(`/api/wishlist/${isbn}`);
+  return response.data;
+};
+//특정 책 찜상태 조회
+export const getBookHeartStatus = async (isbn: string): Promise<BookHeartStatus> => {
+  const response = await authInstance.get(`/api/wishlist/status/${isbn}`);
   return response.data;
 };

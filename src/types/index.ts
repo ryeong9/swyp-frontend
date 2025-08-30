@@ -234,3 +234,14 @@ export type UpdateFormFinished = {
   finalNote: string | null;
   emotions: Emotions[];
 };
+
+export type BookHeartData = {
+  status: number;
+  code: string;
+  message: string;
+  timestamp: string;
+};
+
+export type BookHeartStatus = {
+  wished: boolean;
+};
