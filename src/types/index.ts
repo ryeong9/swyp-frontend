@@ -87,6 +87,7 @@ export type TitleSearch = {
     publishedDate: string;
     publisher: string;
     totalEmotionCount?: number;
+    userCount?: number;
     emotions?: Array<{
       id: number;
       name: string;
