@@ -1,27 +1,14 @@
 import useGetWishlist from '@/hooks/main/useGetWishlist';
-import { Wishlist } from '@/types';
+
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import DeskSkeleton from '../skeleton/deskSkeleton';
+import Swiper from '../swiper/swiper';
+import { WishlistItem } from '@/types';
 
 export default function WishBookSection() {
   const router = useRouter();
 
   const { data: wishlist, isLoading } = useGetWishlist();
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerView = 5;
-  const gap = 24;
-
-  const next = () => {
-    if (!wishlist) return;
-    const maxIndex = Math.ceil(wishlist.length / itemsPerView) - 1;
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
-  };
-
-  const prev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  };
 
   const handleClickBook = (isbn: string) => {
     router.push(`/detail?isbn=${isbn}`);
@@ -55,78 +42,31 @@ export default function WishBookSection() {
           </p>
         </div>
       ) : (
-        <div className='relative flex justify-center px-5 w-full h-[290px] overflow-hidden'>
-          <div className='w-[956px] overflow-hidden'>
-            <div
-              className='flex transition-transform duration-500'
-              style={{
-                transform: `translateX(-${currentIndex * itemsPerView * (172 + gap)}px)`,
-                gap: `${gap}px`,
-              }}
-            >
-              {wishlist?.map((item) => (
-                <div
-                  key={item.isbn}
-                  className='relative flex flex-col justify-end w-[172px] h-[258px] cursor-pointer'
-                  onClick={() => handleClickBook(item.isbn)}
-                >
-                  <div className='w-[172px] h-[246px]'>
-                    <img
-                      src={item.coverImageUrl}
-                      alt='도서 이미지'
-                      className='w-full h-full rounded-lg bg-gray-200'
-                    />
-                    <div
-                      className='absolute flex justify-center w-[46px] h-[65px] top-0 right-4 bg-[#D2DEF4]/80 z-10 rounded-t-[2px]'
-                      style={{
-                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%)',
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* 화살표 및 닷 */}
-            {wishlist && wishlist.length > itemsPerView && (
-              <>
-                <button
-                  onClick={prev}
-                  disabled={currentIndex === 0}
-                  className='absolute left-4 top-[40%] disabled:opacity-30'
-                >
+        <div className='flex justify-center w-full h-[295px]'>
+          <Swiper
+            items={wishlist!}
+            renderItem={(item: WishlistItem) => (
+              <div
+                key={item.isbn}
+                className='relative flex flex-col justify-end w-[172px] h-[258px] cursor-pointer'
+                onClick={() => handleClickBook(item.isbn)}
+              >
+                <div className='w-[172px] h-[246px]'>
                   <img
-                    src='/icons/arrowLeft.svg'
-                    alt='왼쪽 화살표'
+                    src={item.coverImageUrl}
+                    alt='도서 이미지'
+                    className='w-full h-full rounded-lg bg-gray-200'
                   />
-                </button>
-                <button
-                  onClick={next}
-                  disabled={currentIndex >= wishlist.length - itemsPerView}
-                  className='absolute right-4 top-[40%] disabled:opacity-30'
-                >
-                  <img
-                    src='/icons/arrowLeft.svg'
-                    alt='오른쪽 화살표'
-                    className='rotate-180'
-                  />
-                </button>
-              </>
-            )}
-            {wishlist && wishlist.length > itemsPerView && (
-              <div className='absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2'>
-                {Array.from({ length: Math.ceil(wishlist.length / itemsPerView) }).map((_, idx) => (
                   <div
-                    key={idx}
-                    className={`w-[10px] h-[10px] rounded-full cursor-pointer ${
-                      idx === currentIndex ? 'bg-[#5a5a5a]' : 'bg-gray-300'
-                    }`}
-                    onClick={() => setCurrentIndex(idx)}
+                    className='absolute flex justify-center w-[46px] h-[65px] top-0 right-4 bg-[#D2DEF4]/80 z-10 rounded-t-[2px]'
+                    style={{
+                      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%)',
+                    }}
                   />
-                ))}
+                </div>
               </div>
             )}
-          </div>
+          />
         </div>
       )}
     </div>

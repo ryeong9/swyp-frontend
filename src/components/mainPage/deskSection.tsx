@@ -1,34 +1,18 @@
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useGetOnlyDeskData from '@/hooks/write/useGetOnlyDeskData';
 import DeskSkeleton from '../skeleton/deskSkeleton';
 import { Book } from '@/types';
+import Swiper from '../swiper/swiper';
 
 export default function DeskSection() {
   const router = useRouter();
   const { data: deskData, isLoading } = useGetOnlyDeskData();
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerView = 5;
-  const gap = 24;
-
   if (isLoading) return <DeskSkeleton />;
-
-  const isEmpty = deskData?.length === 0;
 
   const handleClickGotoRead = (item: Book) => {
     const encodedBook = encodeURIComponent(JSON.stringify(item));
     router.push(`/read?book=${encodedBook}`);
-  };
-
-  const next = () => {
-    if (!deskData) return;
-    const maxIndex = Math.ceil(deskData.length / itemsPerView) - 1;
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
-  };
-
-  const prev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
   return (
@@ -42,7 +26,7 @@ export default function DeskSection() {
         </div>
       </div>
 
-      {isEmpty ? (
+      {deskData?.length === 0 ? (
         <div className='flex flex-col h-[246px] justify-center items-center'>
           <img
             src='/icons/noEmotionData.svg'
@@ -56,70 +40,23 @@ export default function DeskSection() {
           </p>
         </div>
       ) : (
-        <div className='relative flex justify-center px-5 w-full h-[280px] overflow-hidden'>
-          <div className='w-[956px] overflow-hidden'>
-            <div
-              className='flex transition-transform duration-500'
-              style={{
-                transform: `translateX(-${currentIndex * itemsPerView * (172 + gap)}px)`,
-                gap: `${gap}px`,
-              }}
-            >
-              {deskData?.map((item) => (
-                <div
-                  key={item.isbn}
-                  className='flex-shrink-0 w-[172px] h-[246px] cursor-pointer'
-                  onClick={() => handleClickGotoRead(item)}
-                >
-                  <img
-                    src={item.coverImageUrl}
-                    alt='도서 이미지'
-                    className='w-full h-full rounded-lg'
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* 화살표 및 닷 */}
-            {deskData && deskData.length > itemsPerView && (
-              <>
-                <button
-                  onClick={prev}
-                  disabled={currentIndex === 0}
-                  className='absolute left-4 top-[40%] disabled:opacity-30'
-                >
-                  <img
-                    src='/icons/arrowLeft.svg'
-                    alt='왼쪽 화살표'
-                  />
-                </button>
-                <button
-                  onClick={next}
-                  disabled={currentIndex >= deskData.length - itemsPerView}
-                  className='absolute right-4 top-[40%] disabled:opacity-30'
-                >
-                  <img
-                    src='/icons/arrowLeft.svg'
-                    alt='오른쪽 화살표'
-                    className='rotate-180'
-                  />
-                </button>
-              </>
-            )}
-            {deskData && deskData.length > itemsPerView && (
-              <div className='absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2'>
-                {Array.from({ length: Math.ceil(deskData.length / itemsPerView) }).map((_, idx) => (
-                  <div
-                    key={idx}
-                    className={`w-[10px] h-[10px] rounded-full cursor-pointer ${
-                      idx === currentIndex ? 'bg-[#5a5a5a]' : 'bg-gray-300'
-                    }`}
-                    onClick={() => setCurrentIndex(idx)}
-                  />
-                ))}
+        <div className='flex justify-center w-full h-[280px]'>
+          <Swiper
+            items={deskData!}
+            renderItem={(item: Book) => (
+              <div
+                key={item.isbn}
+                className='flex-shrink-0 w-[172px] h-[246px] cursor-pointer'
+                onClick={() => handleClickGotoRead(item)}
+              >
+                <img
+                  src={item.coverImageUrl}
+                  alt='도서 이미지'
+                  className='w-full h-full rounded-lg'
+                />
               </div>
             )}
-          </div>
+          />
         </div>
       )}
     </div>

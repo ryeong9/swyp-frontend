@@ -26,12 +26,6 @@ export default function ProfileDropDown() {
         className='absolute -top-[18px] right-[40px] w-[24px] h-[20px]'
       />
       <div className='flex flex-col items-center w-[104px] h-[50px] bg-background-input rounded-[10px] px-2 py-[7px]'>
-        {/* <button
-          type='button'
-          className='w-[88px] font-sans font-semibold text-sm text-gray-900 px-4 py-2 cursor-pointer hover:bg-gray-200 rounded-[4px]'
-        >
-          내 정보
-        </button> */}
         <button
           type='button'
           className='w-[88px] font-sans font-semibold text-sm text-gray-500 px-4 py-2 cursor-pointer hover:bg-gray-200 rounded-[4px]'

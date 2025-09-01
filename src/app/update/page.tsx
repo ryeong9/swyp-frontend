@@ -227,13 +227,6 @@ export default function UpdatePage() {
             >
               확인
             </button>
-            {/* <button
-              type='button'
-              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
-              onClick={handleClickGotoMain}
-            >
-              닫기
-            </button> */}
           </div>
         </div>
       )}

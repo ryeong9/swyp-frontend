@@ -92,7 +92,10 @@ export default function ReadPage() {
               {book?.title}
             </h2>
             <p className='font-sans font-medium text-base text-gray-700 mb-4'>{book?.author}</p>
-            <div className='w-[224px] h-[327px] rounded-lg overflow-hidden mb-4'>
+            <div
+              className='w-[224px] h-[327px] rounded-lg overflow-hidden mb-4'
+              onClick={() => router.push(`/detail?isbn=${book?.isbn}`)}
+            >
               <img
                 src={book?.coverImageUrl}
                 alt='도서 표지'

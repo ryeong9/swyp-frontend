@@ -146,7 +146,7 @@ export default function MainPage() {
           © 2025 INDEX. All rights reserved.
         </p>
       </div>
-      <div className='fixed bottom-[60px] right-[205px] flex flex-col items-end drop-shadow-sm'>
+      <div className='fixed bottom-[60px] right-[205px] flex flex-col items-end drop-shadow-sm z-10'>
         {showSpeechBubble && (
           <div className='flex flex-col items-end relative -top-4 -right-3'>
             <div className='relative w-[288px] h-[140px] bg-background-input rounded-2xl p-8'>

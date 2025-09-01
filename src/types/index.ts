@@ -33,7 +33,16 @@ export type LoginResponse = {
   };
 };
 
-// 감정 제외 상태관리 타입
+// 공통 기록 응답값
+export type BaseRecord = {
+  isbn: string;
+  status: 'READING' | 'FINISHED';
+  content?: string | null;
+  finalNote?: string | null;
+  emotions: Emotions[];
+};
+
+// 프론트 상태 관리용 (감정 제외)
 export type RecordDataState = {
   isbn: string;
   status: string;
@@ -62,10 +71,8 @@ export type RecordFinishedData = {
   emotions: Emotions[];
 };
 
-// 도서 응답값
-export type Book = {
-  bookshelfId: number;
-  status: string;
+// 도서관련 공통 응답값
+export type BaseBook = {
   isbn: string;
   title: string;
   author: string;
@@ -75,25 +82,23 @@ export type Book = {
   publishedDate: string;
 };
 
+// 도서 응답값
+export type Book = BaseBook & {
+  bookshelfId: number;
+  status: string;
+};
+
 //제목 검색
 export type TitleSearch = {
   page: number;
   totalResults: number;
-  books: Array<{
-    isbn: string;
-    title: string;
-    author: string;
-    coverImageUrl: string;
-    publishedDate: string;
-    publisher: string;
-    totalEmotionCount?: number;
-    emotions?: Array<{
-      id: number;
-      name: string;
-      scoreSum?: number;
-      percentage: number;
-    }>;
-  }>;
+  books: Array<
+    BaseBook & {
+      totalEmotionCount?: number;
+      userCount?: number;
+      emotions?: Emotion[];
+    }
+  >;
 };
 
 // 달력 데이터 응답값
@@ -126,20 +131,15 @@ export type EmotionState = {
   emotionName: string;
   percentage: number;
 };
-export type RecordedData = {
-  title: string;
-  author: string;
-  isbn: string;
-  coverImageUrl: string;
-  publisher: string;
-  category: string;
-  pubDate: string;
-  status: string;
-  createdAt: string;
-  finishedAt: string | null;
-  currentPage: number | null;
-  emotionStats: EmotionState[];
-}[];
+export type RecordedData = Array<
+  BaseBook & {
+    status: string;
+    createdAt: string;
+    finishedAt: string | null;
+    currentPage: number | null;
+    emotionStats: EmotionState[];
+  }
+>;
 
 //상세페이지
 export type Emotion = {
@@ -149,15 +149,8 @@ export type Emotion = {
   percentage: number;
 };
 
-export type BookDetail = {
-  isbn: string;
-  title: string;
-  author: string;
-  coverImageUrl: string;
-  publishedDate: string;
+export type BookDetail = BaseBook & {
   description: string;
-  publisher: string;
-  category: string;
   totalEmotionCount: number;
   emotions: Emotion[];
 };
@@ -166,35 +159,22 @@ export type BookStatus = {
   status: 'NONE' | 'WISH' | 'READING' | 'FINISHED';
 };
 
+// 책상에 올리기
 export type AddDeskData = {
   bookshelfId: number;
   status: string;
   createdAt: string;
   finishedAt: string | null;
   finalNote: string;
-  book: {
-    isbn: string;
-    title: string;
-    author: string;
-    coverImageUrl: string;
-    publishedDate: string;
+  book: BaseBook & {
     description: string;
-    publisher: string;
-    category: string;
     totalEmotionCount: number;
   };
 };
-
 export const mapAddDeskToBook = (d: AddDeskData): Book => ({
   bookshelfId: d.bookshelfId,
   status: d.status,
-  isbn: d.book.isbn,
-  title: d.book.title,
-  author: d.book.author,
-  coverImageUrl: d.book.coverImageUrl,
-  publisher: d.book.publisher,
-  category: d.book.category,
-  publishedDate: d.book.publishedDate,
+  ...d.book,
 });
 
 // 하나의 도서에 대한 내 모든 기록 조회
@@ -235,26 +215,15 @@ export type UpdateFormFinished = {
   emotions: Emotions[];
 };
 
-export type RecommendBooks = {
+// 추천 도서 목록 응답값
+export type RecommendBook = BaseBook & {
   emotionName: string;
-  isbn: string;
-  title: string;
-  author: string;
-  coverImageUrl: string;
-  publisher: string;
-  category: string;
-  publishedDate: string;
-}[];
+};
+export type RecommendBooks = RecommendBook[];
 
-export type Wishlist = {
-  isbn: string;
-  title: string;
-  author: string;
-  coverImageUrl: string;
-  publisher: string;
-  category: string;
-  publishedDate: string;
-}[];
+// 찜한 도서 목록 응답값
+export type WishlistItem = BaseBook;
+export type Wishlist = WishlistItem[];
 
 export type BookHeartData = {
   status: number;

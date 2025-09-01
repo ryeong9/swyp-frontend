@@ -71,7 +71,7 @@ export default function RecommendSection() {
                         {postposition}
                         <br /> 바탕으로 추천해드려요.
                       </p>
-                      <p className='text-sm text-gray-700'>{item.title}</p>
+                      <p className='text-sm text-gray-700 truncate max-w-[196px]'>{item.title}</p>
                     </div>
                     <img
                       src={emotion?.icon}

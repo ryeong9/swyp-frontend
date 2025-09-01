@@ -90,7 +90,7 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
                           <p className='text-sm'>
                             "이 책에{' '}
                             <span className='text-state-success font-semibold'>
-                              {book.totalEmotionCount}
+                              {book.userCount}
                             </span>
                             명이 감정을 기록했어요"
                           </p>

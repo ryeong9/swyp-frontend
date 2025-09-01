@@ -270,11 +270,6 @@ export default function SignUpPage() {
                 setVerificationStatus(null);
               }}
             />
-            {/* {isActive && (
-              <span className='absolute inset-x-80 top-1/2 transform -translate-y-1/2 flex gap-2 items-center text-sm font-medium text-state-error '>
-                {formatTime(timeLeft)}
-              </span>
-            )} */}
             <Button
               type='button'
               size='sm'
