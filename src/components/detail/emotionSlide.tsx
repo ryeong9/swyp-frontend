@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { emotions } from '@/constants/emotion';
-import { useState } from 'react';
+import { useSwiper } from '../swiper/useSwiper';
 
 interface EmotionData {
   id: number;
@@ -21,24 +21,21 @@ function formatScore(score: number): string {
 }
 
 export default function EmotionSwiper({ emotionList, emotionLength }: EmotionSwiperProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
   // 점수 순 정렬
   const sortedEmotions = [...emotionList].sort((a, b) => (b.scoreSum ?? 0) - (a.scoreSum ?? 0));
 
   // 6개씩 페이지 나누기
-  const pageSize = 6;
-  const emotionPages = Array.from({ length: Math.ceil(sortedEmotions.length / pageSize) }).map(
-    (_, idx) => sortedEmotions.slice(idx * pageSize, idx * pageSize + pageSize),
+  const groupSize = 6;
+  const { currentIndex, setCurrentIndex, pageCount, next, prev } = useSwiper(
+    sortedEmotions.length,
+    {
+      groupSize,
+    },
   );
 
-  const next = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, emotionPages.length - 1));
-  };
-
-  const prev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  };
+  const pages = Array.from({ length: pageCount }).map((_, idx) =>
+    sortedEmotions.slice(idx * groupSize, idx * groupSize + groupSize),
+  );
 
   return (
     <div className='relative w-full h-[240px] overflow-hidden'>
@@ -46,14 +43,14 @@ export default function EmotionSwiper({ emotionList, emotionLength }: EmotionSwi
         className='flex transition-transform duration-500'
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {emotionPages.map((page, pageIndex) => (
+        {pages.map((page, pageIndex) => (
           <div
             key={pageIndex}
             className='grid grid-cols-6 gap-x-[33.2px] min-w-full'
           >
             {page.map((emotionData, index) => {
               const emotion = emotions.find((em) => em.id === emotionData.id);
-              const globalRank = pageIndex * pageSize + index + 1;
+              const globalRank = pageIndex * groupSize + index + 1;
               if (!emotion) return null;
 
               let badgeColor = 'text-gray-700';
@@ -88,12 +85,10 @@ export default function EmotionSwiper({ emotionList, emotionLength }: EmotionSwi
       </div>
 
       {/* 화살표 및 닷 */}
-      {emotionPages.length > 1 && (
+      {pageCount > 1 && (
         <>
           <button
-            className={`absolute left-0 bottom-0 p-2 ${
-              currentIndex === 0 ? 'opacity-30' : 'opacity-100'
-            }`}
+            className='absolute left-0 bottom-0 p-2 disabled:opacity-30'
             onClick={prev}
             disabled={currentIndex === 0}
           >
@@ -104,11 +99,9 @@ export default function EmotionSwiper({ emotionList, emotionLength }: EmotionSwi
             />
           </button>
           <button
-            className={`absolute right-0 bottom-0 p-2 ${
-              currentIndex === emotionPages.length - 1 ? 'opacity-30' : 'opacity-100'
-            }`}
             onClick={next}
-            disabled={currentIndex === emotionPages.length - 1}
+            disabled={currentIndex === pageCount - 1}
+            className='absolute right-0 bottom-0 p-2 disabled:opacity-30'
           >
             <img
               src='/icons/arrowLeft.svg'
@@ -116,8 +109,8 @@ export default function EmotionSwiper({ emotionList, emotionLength }: EmotionSwi
               className='rotate-180 w-[13px]'
             />
           </button>
-          <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-2'>
-            {emotionPages.map((_, idx) => (
+          <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2'>
+            {pages.map((_, idx) => (
               <div
                 key={idx}
                 className={`w-[10px] h-[10px] rounded-full cursor-pointer ${

@@ -1,18 +1,26 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useGetRecordedData from '@/hooks/report/useGetRecordedData';
 import { emotions } from '@/constants/emotion';
+import { useSwiper } from '../swiper/useSwiper';
 
 export default function MyBookHistory() {
   const router = useRouter();
   const { data: historyData } = useGetRecordedData();
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleClickWriteBtn = () => {
     router.push('/write');
   };
+
+  const groupSize = 3;
+
+  const { currentIndex, setCurrentIndex, pageCount, next, prev } = useSwiper(
+    historyData?.length ?? 0,
+    {
+      groupSize,
+    },
+  );
 
   if (!historyData || historyData.length === 0) {
     return (
@@ -36,18 +44,9 @@ export default function MyBookHistory() {
     );
   }
 
-  const groupSize = 3;
-  const groups = Array.from({ length: Math.ceil(historyData.length / groupSize) }).map((_, idx) =>
+  const pages = Array.from({ length: pageCount }).map((_, idx) =>
     historyData.slice(idx * groupSize, idx * groupSize + groupSize),
   );
-
-  const next = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, groups.length - 1));
-  };
-
-  const prev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  };
 
   return (
     <div className='relative w-full overflow-hidden'>
@@ -55,7 +54,7 @@ export default function MyBookHistory() {
         className='flex transition-transform duration-500'
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {groups.map((group, groupIndex) => (
+        {pages.map((group, groupIndex) => (
           <div
             key={groupIndex}
             className='flex flex-col min-w-full pb-8'
@@ -156,14 +155,14 @@ export default function MyBookHistory() {
       </div>
 
       {/* 화살표 및 닷 */}
-      {groups.length > 1 && (
+      {pageCount > 1 && (
         <>
           <button
+            onClick={prev}
+            disabled={currentIndex === 0}
             className={`absolute left-0 bottom-0 p-2 ${
               currentIndex === 0 ? 'opacity-30' : 'opacity-100'
             }`}
-            onClick={prev}
-            disabled={currentIndex === 0}
           >
             <img
               src='/icons/arrowLeft.svg'
@@ -172,11 +171,11 @@ export default function MyBookHistory() {
             />
           </button>
           <button
-            className={`absolute right-0 bottom-0 p-2 ${
-              currentIndex === groups.length - 1 ? 'opacity-30' : 'opacity-100'
-            }`}
             onClick={next}
-            disabled={currentIndex === groups.length - 1}
+            disabled={currentIndex === pageCount - 1}
+            className={`absolute right-0 bottom-0 p-2 ${
+              currentIndex === pageCount - 1 ? 'opacity-30' : 'opacity-100'
+            }`}
           >
             <img
               src='/icons/arrowLeft.svg'
@@ -184,13 +183,11 @@ export default function MyBookHistory() {
               className='rotate-180 w-[13px]'
             />
           </button>
-          <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex justify-center space-x-2'>
-            {groups.map((_, idx) => (
+          <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2'>
+            {pages.map((_, idx) => (
               <div
                 key={idx}
-                className={`w-[10px] h-[10px] rounded-full ${
-                  idx === currentIndex ? 'bg-[#5a5a5a]' : 'bg-gray-300'
-                }`}
+                className={`w-[10px] h-[10px] rounded-full cursor-pointer ${idx === currentIndex ? 'bg-[#5a5a5a]' : 'bg-gray-300'}`}
                 onClick={() => setCurrentIndex(idx)}
               />
             ))}
