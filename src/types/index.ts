@@ -247,7 +247,7 @@ export type RecommendBooks = {
   publishedDate: string;
 }[];
 
-export type Wishlist = {
+export type WishlistItem = {
   isbn: string;
   title: string;
   author: string;
@@ -255,7 +255,9 @@ export type Wishlist = {
   publisher: string;
   category: string;
   publishedDate: string;
-}[];
+};
+
+export type Wishlist = WishlistItem[];
 
 export type BookHeartData = {
   status: number;
