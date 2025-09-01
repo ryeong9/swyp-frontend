@@ -1,5 +1,4 @@
 import { RecommendBooks, Wishlist } from './../../types/index';
-//bookApi.ts
 import { authInstance } from '@/lib/axios';
 
 import {

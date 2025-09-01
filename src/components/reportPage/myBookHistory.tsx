@@ -83,7 +83,7 @@ export default function MyBookHistory() {
                       {item.author}
                     </p>
                     <p className='font-sans text-xs text-gray-500 truncate max-w-[105px]'>
-                      {item.category} &middot; {item.publisher} &middot; {item.pubDate}
+                      {item.category} &middot; {item.publisher} &middot; {item.publishedDate}
                     </p>
                   </div>
                 </section>
