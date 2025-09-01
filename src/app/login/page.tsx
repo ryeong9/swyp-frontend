@@ -7,7 +7,6 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
-// import AutoLoginCheckbox from '@/components/checkbox/page';
 import { BASE_URL } from '@/constants/env';
 import { useLogin } from '@/hooks/login/useLogin';
 import { LoginErrorModal, LoginAlreadyModal } from '@/components/modal/login/page';
@@ -28,7 +27,6 @@ export default function LoginPage() {
   const router = useRouter();
   const [isEmailDeleted, setIsEmailDeleted] = useState(false);
   const [isPasswordDeleted, setIsPasswordDeleted] = useState(false);
-  const [isShowLoginError, setIsShowLoginError] = useState(true);
   const [modalType, setModalType] = useState<
     'none' | 'loginError' | 'loginAlready' | 'loginDuplicate'
   >('none');
