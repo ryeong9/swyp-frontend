@@ -27,7 +27,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={` ${buttonClass} text-sm rounded-lg  ${disabled ? disabledStyle : activeStyle}`}
+      className={` ${buttonClass} text-sm rounded-lg  ${disabled ? disabledStyle : activeStyle} ${className || ''}`}
       disabled={disabled}
       onClick={onClick}
     >

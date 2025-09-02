@@ -7,6 +7,7 @@ import Header from '@/components/header/header';
 import { emotions } from '@/constants/emotion';
 import { useRouter } from 'next/navigation';
 import BackButton from '../backButton/backButton';
+import Spinner from '../spinner/page';
 export default function ResultSearchPage({ keyword, type }: { keyword: string; type: string }) {
   const router = useRouter();
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
@@ -32,8 +33,14 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  if (isLoading) return <div>로딩 중....</div>;
-  if (isError) return <div>오류 발생: {error?.message}</div>;
+  if (isLoading)
+    return (
+      <div className='fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50'>
+        <div className='flex flex-col items-center gap-4'>
+          <Spinner size='lg' />
+        </div>
+      </div>
+    );
 
   const rawBooks = data?.pages.flatMap((page) => page.books || []) || [];
 
@@ -150,11 +157,11 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
                       ) : (
                         // 감정 데이터 없을 때
                         <div className='flex flex-col items-center justify-center gap-4'>
-                          <img
+                          <Image
                             src='/icons/noEmotionData.svg'
                             alt='감정 없음'
                             width={60}
-                            height={57.17}
+                            height={57}
                           />
                           <div className='flex flex-col font-serif  text-gray-700 font-bold text-xs  '>
                             <p>아직 감정 데이터가 없어요.</p>
@@ -181,7 +188,7 @@ export default function ResultSearchPage({ keyword, type }: { keyword: string; t
               </div>
             </div>
           )}
-          {isFetchingNextPage && <div>로딩 중...</div>}
+
           <div ref={loadMoreRef} />
         </div>
       </div>

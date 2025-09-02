@@ -5,7 +5,7 @@ export default async function Page({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const params = await searchParams; // ✅ 반드시 await
+  const params = await searchParams;
   const keyword = typeof params.keyword === 'string' ? params.keyword : '';
   const type = typeof params.type === 'string' ? params.type : 'title';
 

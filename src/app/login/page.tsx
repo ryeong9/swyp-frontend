@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
+
 import { BASE_URL } from '@/constants/env';
 import { useLogin } from '@/hooks/login/useLogin';
 import { LoginErrorModal, LoginAlreadyModal } from '@/components/modal/login/page';
@@ -27,6 +29,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [isEmailDeleted, setIsEmailDeleted] = useState(false);
   const [isPasswordDeleted, setIsPasswordDeleted] = useState(false);
+
   const [modalType, setModalType] = useState<
     'none' | 'loginError' | 'loginAlready' | 'loginDuplicate'
   >('none');
@@ -61,6 +64,7 @@ export default function LoginPage() {
     const { email, password } = data;
     try {
       const result = await loginMutation.mutateAsync({ email, password });
+
       router.push('/');
     } catch (error) {
       //에러상황 useLogin에서 구현
@@ -141,6 +145,7 @@ export default function LoginPage() {
           type='submit'
           disabled={!isValid}
           size='md'
+          className='cursor-pointer'
         >
           로그인
         </Button>
@@ -157,9 +162,9 @@ export default function LoginPage() {
         <button
           type='button'
           onClick={() => handleSocialLogin('google')}
-          className='flex items-center justify-center gap-3 bg-[#F2F2F2] text-black w-[400px] h-[50px] text-base rounded-lg'
+          className='flex items-center justify-center gap-3 bg-[#F2F2F2] text-black w-[400px] h-[50px] text-base rounded-lg cursor-pointer'
         >
-          <img
+          <Image
             src='/icons/google.svg'
             alt='google icon'
             width={20}
@@ -171,9 +176,9 @@ export default function LoginPage() {
         <button
           type='button'
           onClick={() => handleSocialLogin('kakao')}
-          className='flex items-center justify-center gap-3 bg-[#FFE812] text-black w-[400px] h-[50px] text-base rounded-lg'
+          className='flex items-center justify-center gap-3 bg-[#FFE812] text-black w-[400px] h-[50px] text-base rounded-lg cursor-pointer'
         >
-          <img
+          <Image
             src='/icons/kakao.svg'
             alt='kakao icon'
             width={20}
@@ -185,15 +190,15 @@ export default function LoginPage() {
         <button
           type='button'
           onClick={() => handleSocialLogin('naver')}
-          className='flex items-center justify-center gap-3 bg-[#00DE5A] text-black w-[400px] h-[50px] text-base rounded-lg'
+          className='flex items-center justify-center gap-3 bg-[#03C75A] text-black w-[400px] h-[50px] text-base rounded-lg cursor-pointer'
         >
-          <img
+          <Image
             src='/icons/naver.svg'
             alt='naver icon'
             width={20}
             height={20}
           />
-          <span>네이버로 시작하기</span>
+          <span className='text-white'>네이버로 시작하기</span>
         </button>
       </form>
     </div>
