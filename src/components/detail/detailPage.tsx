@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useDetail } from '@/hooks/detail/useDetail';
 import Header from '@/components/header/header';
 import EmotionSwiper from './emotionSlide';
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import usePostAddDesk from '@/hooks/detail/usePostAddDesk';
 import { AddDeskData, Book, mapAddDeskToBook } from '@/types';
 import { BookHeartButton } from './bookHeart';
@@ -23,13 +23,25 @@ export default function DetailPage({ isbn }: DetailPageProps) {
 
   const { mutate } = usePostAddDesk();
 
-  if (isLoading) return <div className='text-center mt-10'>로딩 중...</div>;
-  if (isError || !book)
-    return <div className='text-center mt-10'>도서 정보를 불러오지 못했습니다.</div>;
+  const hasEmotion = useMemo(() => book?.emotions && book.emotions.length > 0, [book?.emotions]);
 
-  const hasEmotion = book?.emotions && book.emotions.length > 0;
+  const toastStyle = useMemo(() => ({
+    position: 'top-center' as const,
+    autoClose: 300,
+    hideProgressBar: true,
+    closeButton: false,
+    style: {
+      marginTop: '86px',
+      width: 'fit-content',
+      borderRadius: '8px',
+      border: '1px solid #F56767',
+      padding: '24px 32px',
+      color: '#000000',
+      boxShadow: 'none',
+    },
+  }), []);
 
-  const handleClickAddDesk = () => {
+  const handleClickAddDesk = useCallback(() => {
     mutate(isbn, {
       onSuccess: (data: AddDeskData) => {
         setBookData(mapAddDeskToBook(data));
@@ -39,47 +51,23 @@ export default function DetailPage({ isbn }: DetailPageProps) {
         const errorData = err.response?.data;
 
         if (errorData?.status === 409) {
-          toast.error('이미 책상에 올려져 있는 책이에요.', {
-            position: 'top-center',
-            autoClose: 300,
-            hideProgressBar: true,
-            closeButton: false,
-            style: {
-              marginTop: '86px',
-              width: 'fit-content',
-              borderRadius: '8px',
-              border: '1px solid #F56767',
-              padding: '24px 32px',
-              color: '#000000',
-              boxShadow: 'none',
-            },
-          });
+          toast.error('이미 책상에 올려져 있는 책이에요.', toastStyle);
         } else {
-          toast.error('책상 등록 중 오류가 발생했습니다', {
-            position: 'top-center',
-            autoClose: 300,
-            hideProgressBar: true,
-            closeButton: false,
-            style: {
-              marginTop: '86px',
-              width: 'fit-content',
-              borderRadius: '8px',
-              border: '1px solid #F56767',
-              padding: '24px 32px',
-              color: '#000000',
-              boxShadow: 'none',
-            },
-          });
+          toast.error('책상 등록 중 오류가 발생했습니다', toastStyle);
         }
         console.error(err);
       },
     });
-  };
+  }, [isbn, mutate, toastStyle]);
 
-  const handleClickGotoWrite = () => {
+  const handleClickGotoWrite = useCallback(() => {
     const encodedBook = encodeURIComponent(JSON.stringify(bookData));
     router.push(`/write?book=${encodedBook}`);
-  };
+  }, [bookData, router]);
+
+  if (isLoading) return <div className='text-center mt-10'>로딩 중...</div>;
+  if (isError || !book)
+    return <div className='text-center mt-10'>도서 정보를 불러오지 못했습니다.</div>;
 
   return (
     <div className='flex flex-col items-center'>
@@ -99,6 +87,8 @@ export default function DetailPage({ isbn }: DetailPageProps) {
                   width={172}
                   height={246}
                   className='rounded-lg object-cover'
+                  priority
+                  sizes='172px'
                   onError={(e) => {
                     console.error('이미지 로드 실패:', e, book.coverImageUrl);
                     (e.target as HTMLImageElement).src = '/placeholder.png';
@@ -120,7 +110,7 @@ export default function DetailPage({ isbn }: DetailPageProps) {
               <div className='flex flex-row justify-start gap-4'>
                 <button
                   onClick={handleClickAddDesk}
-                  className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm'
+                  className='w-[300px] h-[50px] bg-state-success text-white px-4 py-2 gap-2.5 text-base rounded-sm cursor-pointer'
                 >
                   책상에 올리기
                 </button>
@@ -144,9 +134,11 @@ export default function DetailPage({ isbn }: DetailPageProps) {
               />
             ) : (
               <div className='bg-white w-full h-[184px] rounded-3xl p-10 flex flex-col justify-center items-center gap-2'>
-                <img
+                <Image
                   src='/icons/noEmotionData.svg'
                   alt='emotionIcon'
+                  width={24}
+                  height={24}
                 />
                 <p className='text-gray-700 font-serif font-bold text-base'>
                   이 책의 감정 기록이 아직 없어요.
@@ -164,14 +156,14 @@ export default function DetailPage({ isbn }: DetailPageProps) {
               </p>
               <button
                 type='button'
-                className='w-[300px] h-[50px] bg-state-success text-background-input text-base rounded-lg mb-2'
+                className='w-[300px] h-[50px] bg-state-success text-background-input text-base rounded-lg mb-2 cursor-pointer'
                 onClick={handleClickGotoWrite}
               >
                 기록하기
               </button>
               <button
                 type='button'
-                className='w-[300px] h-[50px] bg-gray-300 text-gray-700 text-base rounded-lg'
+                className='w-[300px] h-[50px] bg-gray-300 text-gray-700 text-base rounded-lg cursor-pointer'
                 onClick={() => setShowPopup(false)}
               >
                 돌아가기

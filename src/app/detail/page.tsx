@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import DetailPage from '@/components/detail/detailPage';
+import Spinner from '@/components/spinner/page';
 
 export default async function Page({ searchParams }: any) {
   const params = await searchParams;
@@ -10,7 +11,7 @@ export default async function Page({ searchParams }: any) {
   }
 
   return (
-    <Suspense fallback={<div>로딩 중...</div>}>
+    <Suspense fallback={<Spinner size='lg' />}>
       <DetailPage isbn={isbn} />
     </Suspense>
   );

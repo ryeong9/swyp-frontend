@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Button from '@/components/button/page';
 import Input from '@/components/input/page';
+
 import { useVerificationTimer } from '@/hooks/signup/useVerificationTimer';
 import {
   useCheckVerificationCode,
@@ -40,18 +41,36 @@ const schema = z
     path: ['confirmPassword'],
   });
 
+// 상태 통합을 위한 타입 정의
+interface ValidationState {
+  nickname: {
+    isChecked: boolean;
+    hasError: boolean;
+    message: string | null;
+  };
+  email: {
+    isChecked: boolean;
+    hasError: boolean;
+    message: string | null;
+  };
+  verification: {
+    isVerified: boolean;
+    message: string | null;
+  };
+}
+
+const initialValidationState: ValidationState = {
+  nickname: { isChecked: false, hasError: false, message: null },
+  email: { isChecked: false, hasError: false, message: null },
+  verification: { isVerified: false, message: null },
+};
+
 export default function SignUpPage() {
   const router = useRouter();
   const { timeLeft, isActive, startTimer, stopTimer, formatTime } = useVerificationTimer(300);
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [nicknameStatus, setNicknameStatus] = useState<string | null>(null);
-  const [emailStatus, setEmailStatus] = useState<string | null>(null);
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
-  const [hasNicknameError, setHasNicknameError] = useState(false);
-  const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [hasEmailError, setHasEmailError] = useState(false);
-  const [isCheckVerification, setIsCheckVerification] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState<string | null>(null);
+
+  const [validationState, setValidationState] = useState<ValidationState>(initialValidationState);
   const {
     register,
     handleSubmit,
@@ -72,11 +91,12 @@ export default function SignUpPage() {
     },
   });
 
+  // 필요한 필드만 watch (성능 최적화)
   const nickname = watch('nickname');
   const email = watch('email');
-  const verificationCode = watch('verificationCode');
   const password = watch('password');
   const confirmPassword = watch('confirmPassword');
+  const verificationCode = watch('verificationCode');
 
   // react-query hooks
   const { refetch: refetchNicknameCheck } = useNicknameCheck(nickname, false);
@@ -84,26 +104,70 @@ export default function SignUpPage() {
   const sendVerificationMutation = useSendVerificationCode();
   const checkVerificationMutation = useCheckVerificationCode();
   const signupMutation = useSignup();
-  /**닉네임 중복 확인 */
-  const handleNicknameDuplication = async () => {
+
+  // 디바운싱을 위한 타이머 상태
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+
+  // 상태 업데이트 헬퍼 함수들 (메모화)
+  const updateNicknameValidation = useCallback((updates: Partial<ValidationState['nickname']>) => {
+    setValidationState((prev) => ({
+      ...prev,
+      nickname: { ...prev.nickname, ...updates },
+    }));
+  }, []);
+
+  const updateEmailValidation = useCallback((updates: Partial<ValidationState['email']>) => {
+    setValidationState((prev) => ({
+      ...prev,
+      email: { ...prev.email, ...updates },
+    }));
+  }, []);
+
+  const updateVerificationState = useCallback(
+    (updates: Partial<ValidationState['verification']>) => {
+      setValidationState((prev) => ({
+        ...prev,
+        verification: { ...prev.verification, ...updates },
+      }));
+    },
+    [],
+  );
+
+  /**닉네임 중복 확인 (디바운싱 적용) */
+  const handleNicknameDuplication = useCallback(async () => {
     if (!nickname || errors.nickname) return;
-    try {
-      const { data } = await refetchNicknameCheck();
-      if (!data) return;
 
-      const available = data.available;
-      setIsNicknameChecked(true);
-      setHasNicknameError(!available);
-      setNicknameStatus(available ? null : '중복되는 닉네임입니다');
-    } catch (error) {
-      console.error('닉네임 중복 확인 실패:', error);
-      setHasNicknameError(true);
-      setNicknameStatus('중복 확인 중 오류 발생');
+    // 기존 타이머 취소
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
     }
-  };
 
-  /**이메일 중복 확인 */
-  const handleEmailDuplication = async () => {
+    // 500ms 후에 API 호출
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await refetchNicknameCheck();
+        if (!data) return;
+
+        const available = data.available;
+        updateNicknameValidation({
+          isChecked: true,
+          hasError: !available,
+          message: available ? null : '중복되는 닉네임입니다',
+        });
+      } catch (error) {
+        console.error('닉네임 중복 확인 실패:', error);
+        updateNicknameValidation({
+          hasError: true,
+          message: '중복 확인 중 오류 발생',
+        });
+      }
+    }, 500);
+
+    setDebounceTimer(timer);
+  }, [nickname, errors.nickname, refetchNicknameCheck, debounceTimer, updateNicknameValidation]);
+
+  /**이메일 중복 확인 (메모화) */
+  const handleEmailDuplication = useCallback(async () => {
     if (!email || errors.email) return;
 
     try {
@@ -111,32 +175,54 @@ export default function SignUpPage() {
       if (!data) return;
 
       const available = data.available;
-      setIsEmailChecked(true);
-      setHasEmailError(!available);
-      setEmailStatus(available ? null : '이미 사용 중인 이메일입니다');
+      updateEmailValidation({
+        isChecked: true,
+        hasError: !available,
+        message: available ? null : '이미 사용 중인 이메일입니다',
+      });
     } catch (error) {
       console.error('이메일 중복 확인 실패:', error);
-      setHasEmailError(true);
-      setEmailStatus('이메일 확인 중 오류 발생');
+      updateEmailValidation({
+        hasError: true,
+        message: '이메일 확인 중 오류 발생',
+      });
     }
-  };
+  }, [email, errors.email, refetchEmailCheck, updateEmailValidation]);
 
-  /**이메일 인증코드 발송 */
-  const handleSendVerificationCode = async () => {
-    if (!email || errors.email || !isEmailChecked || hasEmailError) return;
+  /**이메일 인증코드 발송 (메모화) */
+  const handleSendVerificationCode = useCallback(async () => {
+    if (
+      !email ||
+      errors.email ||
+      !validationState.email.isChecked ||
+      validationState.email.hasError
+    )
+      return;
 
     try {
       const result = await sendVerificationMutation.mutateAsync(email);
-      setIsCheckVerification(false);
-      setVerificationStatus(null);
+      updateVerificationState({
+        isVerified: false,
+        message: null,
+      });
       startTimer();
     } catch (error) {
       console.error('Send Verification Error:', error);
-      setVerificationStatus('인증코드 전송 중 오류 발생');
+      updateVerificationState({
+        message: '인증코드 전송 중 오류 발생',
+      });
     }
-  };
-  //인증코드 확인
-  const handleCheckVerificationCode = async () => {
+  }, [
+    email,
+    errors.email,
+    validationState.email,
+    sendVerificationMutation,
+    startTimer,
+    updateVerificationState,
+  ]);
+
+  //인증코드 확인 (메모화)
+  const handleCheckVerificationCode = useCallback(async () => {
     if (!email || !verificationCode || errors.verificationCode) return;
 
     try {
@@ -146,28 +232,54 @@ export default function SignUpPage() {
       });
 
       if (status === 200) {
-        setVerificationStatus(null);
-        setIsCheckVerification(true);
+        updateVerificationState({
+          isVerified: true,
+          message: null,
+        });
         stopTimer();
       } else {
-        setVerificationStatus('인증코드를 다시 확인해주세요');
+        updateVerificationState({
+          message: '인증코드를 다시 확인해주세요',
+        });
       }
     } catch (error) {
       console.error('Check Verification Error:', error);
-      setVerificationStatus('인증코드 확인 중 오류 발생');
+      updateVerificationState({
+        message: '인증코드 확인 중 오류 발생',
+      });
     }
-  };
+  }, [
+    email,
+    verificationCode,
+    errors.verificationCode,
+    checkVerificationMutation,
+    stopTimer,
+    updateVerificationState,
+  ]);
 
-  /**폼 제출 */
-  const onSubmit = async (data: any) => {
-    const { email, password, nickname } = data;
-    try {
-      await signupMutation.mutateAsync({ email, password, nickname });
-      router.push('/login');
-    } catch (error) {
-      setShowErrorModal(true);
-    }
-  };
+  /**폼 제출 (메모화) */
+  const onSubmit = useCallback(
+    async (data: any) => {
+      const { email, password, nickname } = data;
+      try {
+        await signupMutation.mutateAsync({ email, password, nickname });
+
+        router.push('/login');
+      } catch (error) {
+        setShowErrorModal(true);
+      }
+    },
+    [signupMutation, router],
+  );
+
+  // 정리 함수 - 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+    };
+  }, [debounceTimer]);
 
   return (
     <div className='flex flex-col items-center justify-center h-screen font-sans'>
@@ -187,15 +299,18 @@ export default function SignUpPage() {
               placeholder='특수문자 및 공백 제외 2~10자'
               inputSize='md'
               {...register('nickname')}
-              hasError={hasNicknameError || !!errors.nickname}
-              isSuccess={isNicknameChecked && !!nickname && !errors.nickname && !nicknameStatus}
+              hasError={validationState.nickname.hasError || !!errors.nickname}
+              isSuccess={
+                validationState.nickname.isChecked &&
+                !!nickname &&
+                !errors.nickname &&
+                !validationState.nickname.message
+              }
               showStatusIcon
               onDelete={() => {
                 setValue('nickname', '');
                 clearErrors('nickname');
-                setNicknameStatus(null);
-                setIsNicknameChecked(false);
-                setHasNicknameError(false);
+                updateNicknameValidation({ isChecked: false, hasError: false, message: null });
               }}
             />
             <Button
@@ -203,12 +318,15 @@ export default function SignUpPage() {
               size='sm'
               disabled={!nickname || !!errors.nickname}
               onClick={handleNicknameDuplication}
+              className='cursor-pointer'
             >
               중복 확인
             </Button>
           </div>
           {errors.nickname && <p className='text-state-error text-sm'>{errors.nickname.message}</p>}
-          {nicknameStatus && <p className='text-state-error text-sm'>{nicknameStatus}</p>}
+          {validationState.nickname.message && (
+            <p className='text-state-error text-sm'>{validationState.nickname.message}</p>
+          )}
         </div>
 
         {/* 이메일 */}
@@ -223,17 +341,19 @@ export default function SignUpPage() {
               autoComplete='email'
               autoFocus
               {...register('email')}
-              hasError={hasEmailError || !!errors.email}
+              hasError={validationState.email.hasError || !!errors.email}
               isSuccess={
-                isEmailChecked && !!email && !errors.email && !emailStatus && !hasEmailError
+                validationState.email.isChecked &&
+                !!email &&
+                !errors.email &&
+                !validationState.email.message &&
+                !validationState.email.hasError
               }
               showStatusIcon
               onDelete={() => {
                 setValue('email', '');
                 clearErrors('email');
-                setEmailStatus(null);
-                setIsEmailChecked(false);
-                setHasEmailError(false);
+                updateEmailValidation({ isChecked: false, hasError: false, message: null });
               }}
             />
             <Button
@@ -241,12 +361,15 @@ export default function SignUpPage() {
               size='sm'
               disabled={!email || !!errors.email}
               onClick={handleEmailDuplication}
+              className='cursor-pointer'
             >
               중복 확인
             </Button>
           </div>
           {errors.email && <p className='text-state-error text-sm'>{errors.email.message}</p>}
-          {emailStatus && <p className='text-state-error text-sm'>{emailStatus}</p>}
+          {validationState.email.message && (
+            <p className='text-state-error text-sm'>{validationState.email.message}</p>
+          )}
 
           {/* 인증코드 */}
           <div className='flex items-center justify-between gap-2 relative'>
@@ -257,31 +380,35 @@ export default function SignUpPage() {
               inputSize='md'
               {...register('verificationCode')}
               hasError={!!errors.verificationCode}
-              isSuccess={isCheckVerification} //인증 성공시, 이전 코드 !!verificationCode && !errors.verificationCode
+              isSuccess={validationState.verification.isVerified}
               showStatusIcon
               showTimer
-              isActive={isActive && !isCheckVerification}
+              isActive={isActive && !validationState.verification.isVerified}
               timeLeft={timeLeft}
               formatTime={formatTime}
               onDelete={() => {
                 setValue('verificationCode', '');
                 clearErrors('verificationCode');
-                setIsCheckVerification(false);
-                setVerificationStatus(null);
+                updateVerificationState({ isVerified: false, message: null });
               }}
             />
             <Button
               type='button'
               size='sm'
-              disabled={!isEmailChecked || hasEmailError || isCheckVerification}
+              disabled={
+                !validationState.email.isChecked ||
+                validationState.email.hasError ||
+                validationState.verification.isVerified
+              }
               onClick={handleSendVerificationCode}
+              className='cursor-pointer'
             >
               인증코드 발송
             </Button>
           </div>
           <div className='flex justify-between w-[400px]'>
             <p className='text-sm text-state-error'>
-              {errors.verificationCode?.message || verificationStatus || '\u00A0'}
+              {errors.verificationCode?.message || validationState.verification.message || '\u00A0'}
             </p>
 
             <p
@@ -298,6 +425,7 @@ export default function SignUpPage() {
               size='sm'
               disabled={!verificationCode || !!errors.verificationCode}
               onClick={handleCheckVerificationCode}
+              className='cursor-pointer'
             >
               확인
             </Button>
@@ -336,6 +464,7 @@ export default function SignUpPage() {
           type='submit'
           size='lg'
           disabled={!isValid}
+          className='cursor-pointer'
         >
           가입하기
         </Button>
