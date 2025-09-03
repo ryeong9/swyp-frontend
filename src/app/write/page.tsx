@@ -174,7 +174,7 @@ export default function WritePage() {
             <div className='relative h-[528px] flex flex-col justify-center items-center bg-background-input rounded-3xl mt-14 group'>
               <button
                 onClick={() => setShowDeleteModal(true)}
-                className='absolute top-4 right-4 opacity-0 group-hover:opacity-100'
+                className='absolute top-4 right-4 opacity-0 group-hover:opacity-100 cursor-pointer'
               >
                 <img
                   src='/icons/closeIcon2.svg'
@@ -211,7 +211,7 @@ export default function WritePage() {
                 </p>
                 <button
                   type='button'
-                  className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+                  className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2 cursor-pointer'
                   onClick={() => {
                     setSelectedBook(null);
                     setFormData({
@@ -229,7 +229,7 @@ export default function WritePage() {
                 </button>
                 <button
                   type='button'
-                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500 cursor-pointer'
                   onClick={() => setShowDeleteModal(false)}
                 >
                   취소
@@ -367,7 +367,7 @@ export default function WritePage() {
             </p>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2 cursor-pointer'
               onClick={() => {
                 setShowGotoBackModal(false);
                 router.back();
@@ -377,7 +377,7 @@ export default function WritePage() {
             </button>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500 cursor-pointer'
               onClick={() => setShowGotoBackModal(false)}
             >
               계속 기록하기

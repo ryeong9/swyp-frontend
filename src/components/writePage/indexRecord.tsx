@@ -95,7 +95,7 @@ export default function IndexRecord({
             >
               <button
                 type='button'
-                className='absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity'
+                className='absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer'
                 onClick={() => handleClickDeleteEmotion(index)}
               >
                 <img
@@ -105,7 +105,7 @@ export default function IndexRecord({
               </button>
               <button
                 type='button'
-                className='w-[83px] flex flex-col justify-center items-center pr-[18px] border-r-1 border-r-gray-300'
+                className='w-[83px] flex flex-col justify-center items-center pr-[18px] border-r-1 border-r-gray-300 cursor-pointer'
                 onClick={() => handleClickSelectBtn(index)}
               >
                 {item.emotionId === 0 ? (
@@ -160,7 +160,7 @@ export default function IndexRecord({
                               type='button'
                               key={item.id}
                               onClick={() => handleClickEmotion(item.id)}
-                              className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
+                              className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group cursor-pointer'
                             >
                               <img
                                 src={item.icon}

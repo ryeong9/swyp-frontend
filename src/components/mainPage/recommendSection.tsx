@@ -58,7 +58,7 @@ export default function RecommendSection() {
             return (
               <div
                 key={item.isbn}
-                className={`relative w-[320px] h-[410px] flex flex-col items-center p-8 rounded-2xl overflow-hidden`}
+                className={`relative w-[320px] h-[410px] flex flex-col items-center p-8 rounded-2xl overflow-hidden cursor-pointer`}
                 onClick={() => handleClickBook(item.isbn)}
               >
                 <div className={`absolute inset-0 ${emotion ? bgColorMap[emotion.type] : ''}`} />

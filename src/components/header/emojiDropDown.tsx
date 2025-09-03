@@ -42,7 +42,7 @@ export default function EmojiDropDown({
                 type='button'
                 key={item.id}
                 onClick={() => handleClickEmotion(item.name)}
-                className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group'
+                className='w-[76px] h-[101px] flex flex-col items-center justify-center hover:bg-[#E6F2E6] rounded-lg group cursor-pointer'
               >
                 <img
                   src={item.icon}

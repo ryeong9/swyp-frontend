@@ -147,7 +147,7 @@ export default function ReadPage() {
                 <div className='relative group mr-4'>
                   <button
                     type='button'
-                    className='p-2'
+                    className='p-2 cursor-pointer'
                     onClick={() =>
                       handleClickUpdateBtn(
                         item.recordId,
@@ -176,7 +176,7 @@ export default function ReadPage() {
                 <div className='relative group'>
                   <button
                     type='button'
-                    className='p-2'
+                    className='p-2 cursor-pointer'
                     onClick={() =>
                       handleClickDeleteConfirm(item.status, item.recordId, book!.bookshelfId)
                     }
@@ -283,14 +283,14 @@ export default function ReadPage() {
             </h2>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2 cursor-pointer'
               onClick={handleClickDeleteBtn}
             >
               삭제
             </button>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500 cursor-pointer'
               onClick={() => setShowDeleteModal(false)}
             >
               취소

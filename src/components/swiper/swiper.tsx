@@ -43,7 +43,7 @@ export default function Swiper<T>({ items, renderItem }: SwiperProps<T>) {
             <button
               onClick={prev}
               disabled={currentIndex === 0}
-              className='absolute left-4 top-[40%] disabled:opacity-30'
+              className='absolute left-4 top-[40%] disabled:opacity-30 cursor-pointer'
             >
               <img
                 src='/icons/arrowLeft.svg'
@@ -53,7 +53,7 @@ export default function Swiper<T>({ items, renderItem }: SwiperProps<T>) {
             <button
               onClick={next}
               disabled={currentIndex >= pageCount - 1}
-              className='absolute right-4 top-[40%] disabled:opacity-30'
+              className='absolute right-4 top-[40%] disabled:opacity-30 cursor-pointer'
             >
               <img
                 src='/icons/arrowLeft.svg'

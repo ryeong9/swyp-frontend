@@ -29,14 +29,14 @@ export default function RoutingPopUp({ setShowSuccessModal, handleReset }: Routi
         </p>
         <button
           type='button'
-          className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'
+          className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2 cursor-pointer'
           onClick={handleClickGotoNewRecord}
         >
           다른 책 기록하기
         </button>
         <button
           type='button'
-          className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+          className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500 cursor-pointer'
           onClick={handleClickGotoMain}
         >
           닫기

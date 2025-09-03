@@ -226,7 +226,7 @@ export default function AddIndexPage() {
                 </p>
                 <button
                   type='button'
-                  className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'
+                  className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2 cursor-pointer'
                   onClick={() => {
                     setShowSuccessModal(false);
                     setFormData((prev) => ({
@@ -243,7 +243,7 @@ export default function AddIndexPage() {
                 </button>
                 <button
                   type='button'
-                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+                  className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500 cursor-pointer'
                   onClick={() => router.back()}
                 >
                   이전 페이지로 이동
@@ -256,7 +256,7 @@ export default function AddIndexPage() {
                 </p>
                 <button
                   type='button'
-                  className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input'
+                  className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input cursor-pointer'
                   onClick={() => router.push('/')}
                 >
                   메인으로 이동
@@ -277,7 +277,7 @@ export default function AddIndexPage() {
             </p>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2 cursor-pointer'
               onClick={() => {
                 setShowGotoBackModal(false);
                 router.back();
@@ -287,7 +287,7 @@ export default function AddIndexPage() {
             </button>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500 cursor-pointer'
               onClick={() => setShowGotoBackModal(false)}
             >
               계속 기록하기

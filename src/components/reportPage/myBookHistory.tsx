@@ -160,7 +160,7 @@ export default function MyBookHistory() {
           <button
             onClick={prev}
             disabled={currentIndex === 0}
-            className={`absolute left-0 bottom-0 p-2 ${
+            className={`absolute left-0 bottom-0 p-2 cursor-pointer ${
               currentIndex === 0 ? 'opacity-30' : 'opacity-100'
             }`}
           >
@@ -173,7 +173,7 @@ export default function MyBookHistory() {
           <button
             onClick={next}
             disabled={currentIndex === pageCount - 1}
-            className={`absolute right-0 bottom-0 p-2 ${
+            className={`absolute right-0 bottom-0 p-2 cursor-pointer ${
               currentIndex === pageCount - 1 ? 'opacity-30' : 'opacity-100'
             }`}
           >

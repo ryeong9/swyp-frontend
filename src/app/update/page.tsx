@@ -222,7 +222,7 @@ export default function UpdatePage() {
             </p>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              className='w-[300px] h-[50px] bg-primary rounded-lg font-sans font-medium text-base text-background-input mb-2 cursor-pointer'
               onClick={() => router.back()}
             >
               확인
@@ -241,7 +241,7 @@ export default function UpdatePage() {
             </p>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2'
+              className='w-[300px] h-[50px] bg-state-error rounded-lg font-sans font-medium text-base text-background-input mb-2 cursor-pointer'
               onClick={() => {
                 setShowGotoBackModal(false);
                 router.back();
@@ -251,7 +251,7 @@ export default function UpdatePage() {
             </button>
             <button
               type='button'
-              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500'
+              className='w-[300px] h-[50px] bg-gray-200 rounded-lg font-sans text-base text-gray-500 cursor-pointer'
               onClick={() => setShowGotoBackModal(false)}
             >
               계속 수정하기

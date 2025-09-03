@@ -152,7 +152,7 @@ export default function MainPage() {
             <div className='relative w-[288px] h-[140px] bg-background-input rounded-2xl p-8'>
               <button
                 type='button'
-                className='w-[10px] absolute top-4 right-4'
+                className='w-[10px] absolute top-4 right-4 cursor-pointer'
                 onClick={handleClickCloseBubble}
               >
                 <img
@@ -178,7 +178,7 @@ export default function MainPage() {
         <button
           type='button'
           onClick={() => router.push('/write')}
-          className='z-50'
+          className='z-50 cursor-pointer'
         >
           <img
             src='icons/plusIcon.svg'
