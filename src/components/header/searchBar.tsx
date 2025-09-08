@@ -69,6 +69,7 @@ export default function SearchBar() {
       <img
         src='/icons/bar.svg'
         className='ml-3 mr-5 block'
+        alt='barIcon'
       />
       <input
         className='w-[540px] outline-none leading-none text-sm placeholder-gray-500'
