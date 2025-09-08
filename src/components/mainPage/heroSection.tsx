@@ -30,8 +30,15 @@ export default function HeroSection() {
   if (isHeroLoading) return <HeroSkeleton />;
 
   return (
-    <section className='flex flex-col justify-end w-full h-[462px] bg-[url(/icons/heroHeader.svg)] bg-cover rounded-3xl mt-[88px] mb-14 px-12 pt-10 pb-[89px]'>
-      <div className='flex flex-col w-[400px]'>
+    <section className='flex flex-col justify-end w-full h-[462px] rounded-3xl mt-[88px] mb-14 px-12 pt-10 pb-[89px] relative overflow-hidden'>
+      <img
+        src='/icons/heroHeader.svg'
+        alt='Hero Header'
+        fetchPriority='high'
+        className='absolute inset-0 w-full h-full object-cover -z-10 rounded-3xl'
+      />
+
+      <div className='flex flex-col w-[400px] relative z-10'>
         <h1 className='mb-4 font-serif font-bold text-[32px]'>
           {user?.nickname}님, 이번 달에는 <br /> 총 {totalBooks}권의 책을 읽었어요.
         </h1>
