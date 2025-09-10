@@ -6,6 +6,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import { emotions } from '@/constants/emotion';
 import useGetCalendarData from '@/hooks/report/useGetCalendarData';
 import { useEffect, useState } from 'react';
+import Rectangle from '@/assets/icons/Rectangle.svg';
 
 export default function Calendar() {
   const [year, setYear] = useState<number>(new Date().getFullYear());
@@ -130,23 +131,23 @@ export default function Calendar() {
           return `${year}.${month}`;
         }}
       />
-      <div className='flex pl-2 mt-5'>
-        <img
-          src='/icons/RectangleStart.svg'
-          alt='독서 시작 표시 색상'
-          className='mr-2'
+      <div className='flex pl-2 mt-5 items-center'>
+        <Rectangle
+          width={18}
+          height={18}
+          className='mr-2 text-primary'
         />
         <span className='mr-8'>독서 시작</span>
-        <img
-          src='/icons/RectangleFinish.svg'
-          alt='독서 완료 표시 색상'
-          className='mr-2'
+        <Rectangle
+          width={18}
+          height={18}
+          className='mr-2 text-secondary'
         />
         <span className='mr-8'>독서 완료</span>
-        <img
-          src='/icons/RectangleWrite.svg'
-          alt='감정 기록 표시 색상'
-          className='mr-2'
+        <Rectangle
+          width={18}
+          height={18}
+          className='mr-2 text-primary-light'
         />
         <span className='mr-8'>감정 기록</span>
         <img
