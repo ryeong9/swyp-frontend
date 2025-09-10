@@ -9,6 +9,7 @@ import { Book, Emotions, RecordDataState } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
+import PlusIcon from '@/assets/icons/plusIcon.svg';
 
 // useSearchParams를 사용하는 부분 분리
 function WritePageContent({
@@ -158,10 +159,7 @@ export default function WritePage() {
                 onClick={() => setShowSelectModal((prev) => !prev)}
                 className='w-[145px] h-[46px] flex items-center justify-center bg-gray-700 mb-4 rounded-lg cursor-pointer'
               >
-                <img
-                  src='/icons/plusIcon.svg'
-                  alt='플러스 아이콘'
-                />
+                <PlusIcon className='text-background-input' />
                 <p className='font-sans font-medium leading-[30px] text-base text-background-input ml-2'>
                   책 추가하기
                 </p>

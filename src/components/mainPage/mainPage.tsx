@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import RecommendSection from './recommendSection';
 import WishBookSection from './wishBookSection';
 import Logo from '@/assets/icons/logoEntry.svg';
+import PlusIcon from '@/assets/icons/plusIcon.svg';
 
 export default function MainPage() {
   const router = useRouter();
@@ -181,10 +182,10 @@ export default function MainPage() {
           onClick={() => router.push('/write')}
           className='z-50 cursor-pointer'
         >
-          <img
-            src='icons/plusIcon.svg'
-            alt='글쓰기 버튼'
-            className='w-[60px] h-[60px] bg-primary rounded-full p-[15px]'
+          <PlusIcon
+            width={60}
+            height={60}
+            className='text-background-input bg-primary rounded-full p-[15px]'
           />
         </button>
       </div>

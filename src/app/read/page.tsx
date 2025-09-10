@@ -6,6 +6,7 @@ import useGetAllRecords from '@/hooks/read/useGetAllRecords';
 import { Book } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
+import PlusIcon from '@/assets/icons/plusIcon.svg';
 
 function ReadPageContent({ setBook }: { setBook: (b: Book) => void }) {
   const searchParams = useSearchParams();
@@ -263,10 +264,7 @@ export default function ReadPage() {
             className='w-[172px] h-[46px] flex items-center justify-center bg-gray-700 mb-4 rounded-lg cursor-pointer'
             onClick={() => handleClickAddIndex(book.isbn)}
           >
-            <img
-              src='/icons/plusIcon.svg'
-              alt='플러스 아이콘'
-            />
+            <PlusIcon className='text-background-input' />
             <p className='font-sans font-medium leading-[30px] text-base text-background-input ml-2'>
               인덱스 추가하기
             </p>

@@ -11,6 +11,7 @@ import { emotions } from '@/constants/emotion';
 import { Emotions, RecordDataState } from '@/types';
 import { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
+import PlusIcon from '@/assets/icons/plusIcon.svg';
 
 export default function IndexRecord({
   emotionData,
@@ -110,20 +111,28 @@ export default function IndexRecord({
               >
                 {item.emotionId === 0 ? (
                   <>
-                    <img
-                      src='/icons/plusIcon.svg'
-                      alt='플러스 아이콘'
-                      className='w-[44px] h-[44px] p-3 rounded-full bg-gray-300 mb-2'
+                    <PlusIcon
+                      width={44}
+                      height={44}
+                      className='text-background-input p-3 rounded-full bg-gray-300 mb-2'
                     />
                     <p className='font-sans text-sm text-gray-500'>감정 선택</p>
                   </>
                 ) : (
                   <>
-                    <img
-                      src={emotionInfo?.icon || '/icons/plusIcon.svg'}
-                      alt={emotionInfo?.name || '감정'}
-                      className='w-[44px] h-[44px] mb-2'
-                    />
+                    {emotionInfo ? (
+                      <img
+                        src={emotionInfo.icon}
+                        alt={emotionInfo.name}
+                        className='w-[44px] h-[44px] mb-2'
+                      />
+                    ) : (
+                      <PlusIcon
+                        width={44}
+                        height={44}
+                        className='text-background-input mb-2'
+                      />
+                    )}
                     <p className='font-sans text-sm text-gray-900'>{emotionInfo?.name}</p>
                   </>
                 )}
@@ -220,11 +229,19 @@ export default function IndexRecord({
         onClick={handleClickPlusBtn}
         disabled={emotionData.length >= 5}
       >
-        <img
-          src={emotionData.length >= 5 ? '/icons/plusIconDisabled.svg' : '/icons/plusIcon.svg'}
-          alt='플러스 아이콘'
-          className='mr-2'
-        />
+        {emotionData.length >= 5 ? (
+          <PlusIcon
+            className='mr-2 text-gray-500'
+            width={15}
+            height={15}
+          />
+        ) : (
+          <PlusIcon
+            className='mr-2 text-background-input'
+            width={15}
+            height={15}
+          />
+        )}
         <p
           className={`font-sans font-medium ${
             emotionData.length >= 5 ? 'text-gray-500' : 'text-background-input'
