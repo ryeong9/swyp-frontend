@@ -1,5 +1,6 @@
 'use client';
 
+import Logo from '@/assets/icons/logoEntry.svg';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -43,11 +44,7 @@ export default function EntryAuthModal() {
           ></div>
         </section>
         <section className='w-1/2 flex flex-col justify-center items-center py-12 px-[55px] bg-gray-200 rounded-r-2xl'>
-          <img
-            src='/icons/logoEntry.svg'
-            alt='로고'
-            className='mb-[31px]'
-          />
+          <Logo className='mb-[31px]' />
           <img
             src='/icons/entryModal.svg'
             alt='비회원 모달 일러스트'

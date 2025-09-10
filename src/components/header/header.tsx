@@ -4,6 +4,7 @@ import { Suspense, useState } from 'react';
 import SearchBar from './searchBar';
 import ProfileDropDown from './profileDropDwon';
 import { useRouter } from 'next/navigation';
+import Logo from '@/assets/icons/logoEntry.svg';
 
 export default function Header() {
   const router = useRouter();
@@ -15,10 +16,10 @@ export default function Header() {
 
   return (
     <div className='fixed w-full pt-6 pb-4 flex justify-center items-center z-20 bg-background'>
-      <img
-        src='/icons/logo.svg'
-        alt='로고'
-        className='w-[190px] h-[50px] mr-5'
+      <Logo
+        width={167}
+        height={38}
+        className='mr-5'
         onClick={handleClickMain}
       />
       <Suspense fallback={null}>

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import RecommendSection from './recommendSection';
 import WishBookSection from './wishBookSection';
+import Logo from '@/assets/icons/logoEntry.svg';
 
 export default function MainPage() {
   const router = useRouter();
@@ -56,10 +57,10 @@ export default function MainPage() {
       <div className='w-full h-[371px] pt-14 px-[100px] border-t border-t-gray-300'>
         <div className='flex justify-between mb-10'>
           <div>
-            <img
-              src='/icons/logoFooter.svg'
-              alt='로고 초록색'
-              className='mb-4'
+            <Logo
+              width={137}
+              height={33}
+              className='mb-4 text-primary'
             />
             <p className='mb-[60px] font-serif font-bold leading-[25px] text-base text-gray-900'>
               찰나의 감정을 오래 꺼내볼 수 있도록 기록해요.
