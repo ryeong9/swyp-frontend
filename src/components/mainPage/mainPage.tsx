@@ -11,6 +11,7 @@ import RecommendSection from './recommendSection';
 import WishBookSection from './wishBookSection';
 import Logo from '@/assets/icons/logoEntry.svg';
 import PlusIcon from '@/assets/icons/plusIcon.svg';
+import CloseIcon from '@/assets/icons/closeIcon.svg';
 
 export default function MainPage() {
   const router = useRouter();
@@ -157,9 +158,10 @@ export default function MainPage() {
                 className='w-[10px] absolute top-4 right-4 cursor-pointer'
                 onClick={handleClickCloseBubble}
               >
-                <img
-                  src='/icons/closeIcon.svg'
-                  alt='닫기 아이콘'
+                <CloseIcon
+                  width={10}
+                  height={10}
+                  className='text-gray-300'
                 />
               </button>
               <h2 className='font-serif font-bold text-lg text-gray-900'>

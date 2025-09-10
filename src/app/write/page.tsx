@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import PlusIcon from '@/assets/icons/plusIcon.svg';
+import CloseIcon from '@/assets/icons/closeIcon.svg';
 
 // useSearchParams를 사용하는 부분 분리
 function WritePageContent({
@@ -174,9 +175,10 @@ export default function WritePage() {
                 onClick={() => setShowDeleteModal(true)}
                 className='absolute top-4 right-4 opacity-0 group-hover:opacity-100 cursor-pointer'
               >
-                <img
-                  src='/icons/closeIcon2.svg'
-                  alt='닫기 아이콘'
+                <CloseIcon
+                  width={25}
+                  height={25}
+                  className='p-[6px] bg-gray-300 rounded-full text-background-input'
                 />
               </button>
               <h2 className='font-sans font-semibold text-2xl text-gray-900 mb-2 truncate max-w-[600px]'>

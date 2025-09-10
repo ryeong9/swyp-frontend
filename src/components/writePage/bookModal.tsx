@@ -3,6 +3,7 @@
 import useGetOnlyDeskData from '@/hooks/write/useGetOnlyDeskData';
 import { Book, RecordDataState } from '@/types';
 import { useState } from 'react';
+import CloseIcon from '@/assets/icons/closeIcon.svg';
 
 interface BookModalProps {
   setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
@@ -33,9 +34,10 @@ export default function BookModal({
             className='absolute top-6 right-6 cursor-pointer'
             onClick={() => setShowSelectModal((prev) => !prev)}
           >
-            <img
-              src='/icons/closeIcon.svg'
-              alt='닫기 아이콘'
+            <CloseIcon
+              width={15}
+              height={15}
+              className='text-gray-300'
             />
           </button>
           <h2 className='font-sans font-semibold text-2xl text-gray-900 leading-[30px] mb-2'>

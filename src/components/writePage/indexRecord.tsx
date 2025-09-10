@@ -12,6 +12,7 @@ import { Emotions, RecordDataState } from '@/types';
 import { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import PlusIcon from '@/assets/icons/plusIcon.svg';
+import CloseIcon from '@/assets/icons/closeIcon.svg';
 
 export default function IndexRecord({
   emotionData,
@@ -99,9 +100,10 @@ export default function IndexRecord({
                 className='absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer'
                 onClick={() => handleClickDeleteEmotion(index)}
               >
-                <img
-                  src='/icons/closeIcon2.svg'
-                  alt='삭제 아이콘'
+                <CloseIcon
+                  width={25}
+                  height={25}
+                  className='p-[6px] bg-gray-300 rounded-full text-background-input'
                 />
               </button>
               <button
